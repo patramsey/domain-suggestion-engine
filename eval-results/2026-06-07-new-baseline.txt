@@ -1,0 +1,85 @@
+=== Prompt Evaluation ===
+Model: gemini-3.1-flash-lite | 3 variants × 8 queries = 24 LLM call groups
+
+  [1/24] both                 vintage clothing resale marketplace
+  [2/24] anchored-examples    indie game developer community and showcase
+  [3/24] both                 yoga studio
+  [4/24] anchored-examples    patspizza.com
+  [5/24] anchored-examples    craft beer subscription box monthly delivery
+  [6/24] anchored-examples    a denver based coffee shop that serves bee...
+  [7/24] both                 patspizza.com
+  [8/24] both                 AI-powered legal document review tool for ...
+  [9/24] both                 a denver based coffee shop that serves bee...
+  [10/24] both                 meditation and mindfulness app for anxiety
+  [11/24] both                 craft beer subscription box monthly delivery
+  [12/24] anchored-examples    yoga studio
+  [13/24] current              meditation and mindfulness app for anxiety
+  [14/24] current              vintage clothing resale marketplace
+  [15/24] current              indie game developer community and showcase
+  [16/24] current              AI-powered legal document review tool for ...
+  [17/24] current              yoga studio
+  [18/24] current              patspizza.com
+  [19/24] current              craft beer subscription box monthly delivery
+  [20/24] current              a denver based coffee shop that serves bee...
+  [21/24] anchored-examples    meditation and mindfulness app for anxiety
+  [22/24] both                 indie game developer community and showcase
+  [23/24] anchored-examples    AI-powered legal document review tool for ...
+  [24/24] anchored-examples    vintage clothing resale marketplace
+
+
+=== AGGREGATE SUMMARY (8 queries) ===
+
+Variant               Results   TLD Div    Avg SLD   Generic SLDs      ms/q     $/query
+------------------------------------------------------------------------------------------
+current                    50        26        6.3      6 (   5%)      1719    0.000516
+anchored-examples          52        26        6.3      6 (   5%)      1771    0.000509
+both                       53        25        6.4     11 (   9%)      1809    0.000518
+
+
+=== CROSS-QUERY GENERIC SLDs (appeared in 3+ queries) ===
+  current               aether, ember, haven, hearth, mellow, zenith
+  anchored-examples     coda, haven, mellow, nexus, tether, zenith
+  both                  ascent, aura, cinder, kismet, mellow, meridian, solace, tempo, tether, umbra, zenith
+
+
+=== TOP 5 SUGGESTIONS PER QUERY ===
+
+Query: yoga studio
+  current               ascent.studio  prana.studio  lumen.me  ethos.academy  kinesis.fitness
+  anchored-examples     asana.studio  prana.life  equise.co  vinyasa.academy  serene.io
+  both                  ascent.studio  meridian.life  serene.academy  kinesis.cloud  ether.studio
+
+Query: AI-powered legal document review tool for small law firms
+  current               verid.ai  justus.ai  aequitas.legal  claris.legal  sensus.cloud
+  anchored-examples     veritas.ai  clarus.legal  axiom.solutions  coda.expert  nexus.consulting
+  both                  veritas.legal  axiom.ai  scrivener.io  tenet.cloud  coda.legal
+
+Query: indie game developer community and showcase
+  current               ludo.studio  forge.gg  umbra.media  vivid.works  aether.cloud
+  anchored-examples     ludo.world  anima.studio  fable.build  forge.gg  nexus.dev
+  both                  ludic.studio  fable.gg  kismet.dev  umbra.gallery  vivid.works
+
+Query: patspizza.com
+  current               fermento.pizza  levito.co  embers.cafe  crusto.me  focale.studio
+  anchored-examples     tocco.pizza  focolare.cafe  amico.pizza  crepito.live  aurea.kitchen
+  both                  furnace.pizza  embers.cafe  hearth.live  blaze.works  kindle.bar
+
+Query: a denver based coffee shop that serves beer at night
+  current               vesper.cafe  umbra.coffee  solstice.pub  meridian.bar  kettle.beer
+  anchored-examples     umbra.cafe  crepuscule.coffee  solstice.pub  meridian.bar  noctis.co
+  both                  vesper.cafe  umbra.coffee  twilight.bar  solstice.pub  cinder.beer
+
+Query: craft beer subscription box monthly delivery
+  current               cask.beer  hearth.pub  ember.delivery  ferment.works  tide.community
+  anchored-examples     cask.beer  heir.beer  epoch.delivery  savor.pub  draught.live
+  both                  cask.beer  heirloom.delivery  lather.pub  savor.me  amber.works
+
+Query: meditation and mindfulness app for anxiety
+  current               halcyon.ai  respite.app  lull.fm  ether.cloud  mellow.io
+  anchored-examples     halcyon.ai  stilled.app  ether.cloud  amity.me  respite.studio
+  both                  halcyon.ai  atone.app  velvet.cloud  meridian.io  lull.fm
+
+Query: vintage clothing resale marketplace
+  current               relic.market  vestige.shop  patina.style  epoch.exchange  threadbare.gallery
+  anchored-examples     relic.market  vestige.shop  fable.clothing  patina.gallery  legacy.exchange
+  both                  relic.boutique  thrive.exchange  fable.market  epoque.gallery  patina.style

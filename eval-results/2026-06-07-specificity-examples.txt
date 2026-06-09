@@ -1,0 +1,104 @@
+=== Prompt Evaluation ===
+Model: gemini-3.1-flash-lite | 4 variants × 8 queries = 32 LLM call groups
+
+  [1/32] current              vintage clothing resale marketplace
+  [2/32] both                 vintage clothing resale marketplace
+  [3/32] specificity-check    vintage clothing resale marketplace
+  [4/32] anchored-examples    yoga studio
+  [5/32] anchored-examples    indie game developer community and showcase
+  [6/32] anchored-examples    AI-powered legal document review tool for ...
+  [7/32] anchored-examples    patspizza.com
+  [8/32] anchored-examples    a denver based coffee shop that serves bee...
+  [9/32] anchored-examples    craft beer subscription box monthly delivery
+  [10/32] anchored-examples    meditation and mindfulness app for anxiety
+  [11/32] anchored-examples    vintage clothing resale marketplace
+  [12/32] both                 yoga studio
+2026/06/07 11:27:22 WARN llm response parse failed err="parse JSON array: invalid character '}' after object key" response_preview="[\n  {\"sld\":\"legali\",\"tld\":\"ai\"},\n  {\"sld\":\"brief\",\"tld\":\"ly\"},\n  {\"sld\":\"verdict\",\"tld\":\"ai\"},\n  {\"sld\":\"codex\",\"tld\":\"legal\"},\n  {\"sld\":\"justi\",\"tld\":\"fy\"},\n  {\"sld\":\"statut\",\"tld\":\"e\"},\n  {\"sld\":\"clause\",\"tld\":\"legal\"},\n  {\"sld\":\"litig\",\"ate\"},\n  {\"sld\":\"firm\",\"tld\":\"ly\"},\n  {\"sld\":\"guarant\",\"ee\"}..."
+  [13/32] both                 indie game developer community and showcase
+  [14/32] both                 patspizza.com
+  [15/32] both                 AI-powered legal document review tool for ...
+  [16/32] both                 craft beer subscription box monthly delivery
+  [17/32] both                 a denver based coffee shop that serves bee...
+  [18/32] both                 meditation and mindfulness app for anxiety
+  [19/32] current              patspizza.com
+  [20/32] current              yoga studio
+  [21/32] current              AI-powered legal document review tool for ...
+  [22/32] current              indie game developer community and showcase
+  [23/32] specificity-check    meditation and mindfulness app for anxiety
+  [24/32] specificity-check    craft beer subscription box monthly delivery
+  [25/32] specificity-check    AI-powered legal document review tool for ...
+  [26/32] specificity-check    yoga studio
+  [27/32] specificity-check    a denver based coffee shop that serves bee...
+  [28/32] current              a denver based coffee shop that serves bee...
+  [29/32] specificity-check    indie game developer community and showcase
+  [30/32] current              meditation and mindfulness app for anxiety
+  [31/32] specificity-check    patspizza.com
+  [32/32] current              craft beer subscription box monthly delivery
+
+
+=== AGGREGATE SUMMARY (8 queries) ===
+
+Variant               Results   TLD Div    Avg SLD   Generic SLDs      ms/q     $/query
+------------------------------------------------------------------------------------------
+current                    51        26        6.2      9 (   7%)      1769    0.000508
+specificity-check          53        25        6.4      6 (   5%)      1723    0.000521
+anchored-examples          53        23        6.3     11 (   8%)      1774    0.000512
+both                       51        24        6.3      4 (   3%)      1959    0.000523
+
+
+=== CROSS-QUERY GENERIC SLDs (appeared in 3+ queries) ===
+  current               ascent, ember, epoch, haven, lumen, nexus, repose, solace, zenith
+  specificity-check     aether, hearth, mellow, solstice, vivid, zenith
+  anchored-examples     coda, epoch, fable, haven, hush, lumen, meridian, solace, umbra, verve, zenith
+  both                  ascent, repose, tether, zenith
+
+
+=== TOP 5 SUGGESTIONS PER QUERY ===
+
+Query: yoga studio
+  current               asana.studio  prana.life  ethos.academy  serene.center  repose.me
+  specificity-check     prana.studio  asana.studio  liminal.life  breath.academy  kinesis.fitness
+  anchored-examples     asana.studio  prana.life  vayu.cloud  dhyana.academy  ether.center
+  both                  unwind.studio  ascent.academy  aether.studio  serene.agency  zenith.works
+
+Query: AI-powered legal document review tool for small law firms
+  current               veritas.ai  clarus.legal  justa.io  aequitas.cloud  candid.dev
+  specificity-check     verity.ai  cedilla.legal  judex.app  axiom.io  argot.solutions
+  anchored-examples     veritas.legal  aequitas.ai  clarus.solutions  lexis.cloud  firmus.app
+  both                  verid.legal  claris.ai  aequitas.co  summa.solutions  certum.ai
+
+Query: indie game developer community and showcase
+  current               ludic.studio  kinetix.gg  fable.community  aether.dev  nexus.gallery
+  specificity-check     ludus.community  fable.studio  quarry.build  umbra.dev  kinship.gg
+  anchored-examples     ludo.world  fable.studio  nexus.gg  aura.build  kin.community
+  both                  ludic.gg  arcane.studio  fable.dev  kindle.community  epiphany.app
+
+Query: patspizza.com
+  current               focoso.pizza  calore.cafe  crepito.com  levare.studio  fornello.bar
+  specificity-check     rustica.pizza  embers.cafe  patera.me  focoso.co  levain.works
+  anchored-examples     tavola.pizza  focola.cafe  embers.works  crustace.co  ardent.kitchen
+  both                  patina.pizza  pater.cafe  patio.pub  patois.live  patron.works
+
+Query: a denver based coffee shop that serves beer at night
+  current               umbra.cafe  meridian.bar  dusk.coffee  verve.pub  solstice.live
+  specificity-check     twilight.cafe  solstice.pub  ember.coffee  daybreak.beer  meridian.bar
+  anchored-examples     vesper.cafe  umbra.coffee  meridian.bar  aurora.beer  solstice.pub
+  both                  vesper.coffee  umbra.pub  altos.beer  dusk.cafe  meridian.bar
+
+Query: craft beer subscription box monthly delivery
+  current               cask.beer  hearth.pub  savor.delivery  tether.world  amber.works
+  specificity-check     cask.beer  hops.bar  hearth.pub  gilded.delivery  ember.co
+  anchored-examples     cask.beer  hearth.pub  savor.co  revel.world  tether.delivery
+  both                  cask.beer  heirloom.beer  savor.delivery  hearth.pub  amber.works
+
+Query: meditation and mindfulness app for anxiety
+  current               halcyon.me  calm.ai  serene.io  luna.care  breath.life
+  specificity-check     ether.ai  hush.cloud  tempo.app  lucid.care  balm.studio
+  anchored-examples     halcyon.ai  stilled.app  ethos.life  lumen.care  amity.me
+  both                  halcyon.ai  respite.life  ascent.cloud  anchored.co  solace.center
+
+Query: vintage clothing resale marketplace
+  current               relic.market  provenance.gallery  vestige.shop  reverie.boutique  patina.exchange
+  specificity-check     relic.market  vestige.shop  patina.boutique  epoch.exchange  timeless.clothing
+  anchored-examples     vestige.market  relic.boutique  patina.shop  epoch.style  fable.exchange
+  both                  vestige.market  relic.boutique  patina.exchange  epoch.shop  faded.style

@@ -1,0 +1,149 @@
+=== Prompt Evaluation ===
+Model: gemini-3.1-flash-lite | 3 variants × 16 queries = 48 LLM call groups
+
+  [1/48] current-t1.0         neighborhood barbershop in brooklyn
+  [2/48] current-t0.9         personal finance and budgeting app for mil...
+  [3/48] no-ex-t1.0           sustainable outdoor gear and apparel brand
+  [4/48] current-t0.9         online learning platform for professional ...
+  [5/48] no-ex-t1.0           podcast hosting and analytics platform
+  [6/48] current-t0.9         sustainable outdoor gear and apparel brand
+  [7/48] no-ex-t1.0           yoga studio
+  [8/48] no-ex-t1.0           meditation and mindfulness app for anxiety
+  [9/48] no-ex-t1.0           AI-powered legal document review tool for ...
+  [10/48] no-ex-t1.0           developer tool for automating code reviews...
+  [11/48] no-ex-t1.0           team project management and async communic...
+  [12/48] no-ex-t1.0           indie game developer community and showcase
+  [13/48] current-t1.0         AI-powered legal document review tool for ...
+  [14/48] current-t1.0         meditation and mindfulness app for anxiety
+  [15/48] current-t1.0         yoga studio
+  [16/48] no-ex-t1.0           a denver based coffee shop that serves bee...
+  [17/48] no-ex-t1.0           craft beer subscription box monthly delivery
+  [18/48] no-ex-t1.0           freelance marketplace for creative profess...
+  [19/48] no-ex-t1.0           patspizza.com
+  [20/48] current-t0.9         indie game developer community and showcase
+  [21/48] no-ex-t1.0           vintage clothing resale marketplace
+  [22/48] current-t1.0         personal finance and budgeting app for mil...
+  [23/48] current-t1.0         online learning platform for professional ...
+  [24/48] current-t1.0         sustainable outdoor gear and apparel brand
+  [25/48] current-t0.9         meditation and mindfulness app for anxiety
+  [26/48] current-t0.9         yoga studio
+  [27/48] current-t0.9         AI-powered legal document review tool for ...
+  [28/48] current-t0.9         developer tool for automating code reviews...
+  [29/48] current-t0.9         team project management and async communic...
+  [30/48] no-ex-t1.0           online learning platform for professional ...
+  [31/48] no-ex-t1.0           personal finance and budgeting app for mil...
+  [32/48] no-ex-t1.0           neighborhood barbershop in brooklyn
+  [33/48] current-t1.0         a denver based coffee shop that serves bee...
+  [34/48] current-t1.0         craft beer subscription box monthly delivery
+  [35/48] current-t1.0         patspizza.com
+  [36/48] current-t1.0         vintage clothing resale marketplace
+  [37/48] current-t1.0         freelance marketplace for creative profess...
+  [38/48] current-t1.0         podcast hosting and analytics platform
+  [39/48] current-t1.0         developer tool for automating code reviews...
+  [40/48] current-t1.0         indie game developer community and showcase
+  [41/48] current-t1.0         team project management and async communic...
+  [42/48] current-t0.9         vintage clothing resale marketplace
+  [43/48] current-t0.9         patspizza.com
+  [44/48] current-t0.9         a denver based coffee shop that serves bee...
+  [45/48] current-t0.9         neighborhood barbershop in brooklyn
+  [46/48] current-t0.9         freelance marketplace for creative profess...
+  [47/48] current-t0.9         podcast hosting and analytics platform
+  [48/48] current-t0.9         craft beer subscription box monthly delivery
+
+
+=== AGGREGATE SUMMARY (16 queries) ===
+
+Variant               Results   TLD Div    Avg SLD   Generic SLDs      ms/q     $/query
+------------------------------------------------------------------------------------------
+current-t1.0               51        23        6.5     10 (   7%)      1717    0.000513
+current-t0.9               52        24        6.4     11 (   8%)      1709    0.000516
+no-ex-t1.0                 52        24        6.4     13 (   9%)      2024    0.000601
+
+
+=== CROSS-QUERY GENERIC SLDs (appeared in 3+ queries) ===
+  current-t1.0          anchor, aura, fathom, haven, meridian, nexus, tempo, tether, vivid, zenith
+  current-t0.9          anchor, epoch, fathom, haven, hearth, merit, tempo, tether, verve, vivid, zenith
+  no-ex-t1.0            aether, ascent, echo, haven, kinesis, lumen, meridian, nexus, solace, tether, umbra, vantage, zenith
+
+
+=== TOP 5 SUGGESTIONS PER QUERY ===
+
+Query: yoga studio
+  current-t1.0          prana.studio  asana.studio  ethos.academy  limber.me  vivid.live
+  current-t0.9          prana.studio  asana.academy  respite.me  limber.co  ether.studio
+  no-ex-t1.0            prana.studio  ascent.me  ethos.studio  vinyasa.me  calm.center
+
+Query: meditation and mindfulness app for anxiety
+  current-t1.0          halcyon.ai  amity.cloud  levity.app  ether.guru  solace.io
+  current-t0.9          halcyon.ai  amity.life  mellow.cloud  lucid.app  serene.io
+  no-ex-t1.0            halcyon.me  aether.ai  quiesce.io  solace.app  tranquil.cloud
+
+Query: AI-powered legal document review tool for small law firms
+  current-t1.0          juris.ai  verdict.ai  claris.legal  veritas.cloud  praxis.agency
+  current-t0.9          juris.ai  verdict.ai  argus.legal  clarion.legal  gavel.dev
+  no-ex-t1.0            veritas.legal  clarion.ai  aequitas.ai  tenet.io  ponder.legal
+
+Query: developer tool for automating code reviews with AI
+  current-t1.0          sentinel.ai  lucid.dev  verity.software  curator.io  scribe.build
+  current-t0.9          sentinel.ai  veritas.dev  vigil.software  lucid.systems  cinder.build
+  no-ex-t1.0            velox.dev  savant.ai  clarity.build  flux.run  sentinel.io
+
+Query: team project management and async communication tool
+  current-t1.0          tempo.works  chorus.ai  haven.io  meridian.co  stasis.app
+  current-t0.9          fluent.io  tempo.works  chorus.community  meridian.ai  haven.cloud
+  no-ex-t1.0            flux.ai  chorus.community  tempo.works  fathom.solutions  tide.cloud
+
+Query: indie game developer community and showcase
+  current-t1.0          ludic.community  fable.works  nexus.gg  verve.studio  umbra.dev
+  current-t0.9          ludic.studio  fable.gg  umbra.dev  nexus.community  vivid.works
+  no-ex-t1.0            ludo.community  epiphany.dev  umbra.studio  verve.gg  forge.builders
+
+Query: podcast hosting and analytics platform
+  current-t1.0          echo.fm  vocal.fm  reson.ai  aura.media  tempo.cloud
+  current-t0.9          echo.fm  vocal.ai  tempo.fm  cadence.media  resonance.studio
+  no-ex-t1.0            echo.fm  resonance.studio  aura.fm  pulse.media  fluent.systems
+
+Query: a denver based coffee shop that serves beer at night
+  current-t1.0          twilight.cafe  solstice.pub  embers.coffee  dusk.beer  meridian.bar
+  current-t0.9          umbra.coffee  solstice.pub  vesper.cafe  dusk.bar  ember.beer
+  no-ex-t1.0            vesper.coffee  dusk.cafe  solstice.pub  alpenglow.bar  umbra.beer
+
+Query: craft beer subscription box monthly delivery
+  current-t1.0          fermenta.academy  caskbound.delivery  tapped.community  mellows.beer  solstice.works
+  current-t0.9          cask.beer  hearth.pub  ember.beer  savor.me  revel.pub
+  no-ex-t1.0            drafted.beer  cask.delivery  hearth.pub  fermenta.world  alembic.studio
+
+Query: patspizza.com
+  current-t1.0          furnace.pizza  ember.cafe  focosa.me  crustace.co  levain.pub
+  current-t0.9          ember.pizza  focola.co  tavola.me  sapor.agency  blaze.bar
+  no-ex-t1.0            embers.pizza  veludo.cafe  kinfolk.pizza  mora.bar  cinder.studio
+
+Query: vintage clothing resale marketplace
+  current-t1.0          relic.market  vestige.shop  epoc.exchange  patina.style  legacy.boutique
+  current-t0.9          vestige.market  relic.shop  aether.clothing  provenance.agency  patina.boutique
+  no-ex-t1.0            relic.boutique  vestige.market  patina.style  heirloom.shop  aeon.exchange
+
+Query: freelance marketplace for creative professionals
+  current-t1.0          artisan.agency  curio.market  fluent.works  nexus.studio  tether.community
+  current-t0.9          artisan.market  curio.agency  lumina.studio  fathom.works  nexus.community
+  no-ex-t1.0            curate.agency  nexus.market  velvet.studio  fluent.expert  meridian.exchange
+
+Query: neighborhood barbershop in brooklyn
+  current-t1.0          taper.bar  hearth.community  razor.salon  vestige.me  steward.works
+  current-t0.9          taper.bar  hearth.community  sunder.studio  anchor.me  kindred.cafe
+  no-ex-t1.0            velvet.bar  taper.city  heirloom.me  brim.community  foundry.style
+
+Query: personal finance and budgeting app for millennials
+  current-t1.0          ledger.me  parlay.finance  steward.app  merit.fund  tether.io
+  current-t0.9          libra.me  frugal.life  tempo.money  haven.capital  merit.finance
+  no-ex-t1.0            frugal.me  equinox.finance  tenet.capital  sovereign.app  merit.fund
+
+Query: online learning platform for professional photography
+  current-t1.0          lumen.academy  aperure.vision  captura.photos  glimmer.education  refract.studio
+  current-t0.9          lucid.photography  shutter.academy  gaze.vision  aperture.education  frame.school
+  no-ex-t1.0            lumen.academy  velox.studio  aether.photography  iris.vision  umbra.gallery
+
+Query: sustainable outdoor gear and apparel brand
+  current-t1.0          everwild.co  perennial.world  terrae.life  solstice.camp  ascenta.academy
+  current-t0.9          everwild.camp  perennial.life  terrae.works  sojourn.world  aeterna.clothing
+  no-ex-t1.0            everwild.camp  terra.world  vivid.life  solstice.rocks  pristine.studio

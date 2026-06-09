@@ -1,0 +1,104 @@
+=== Prompt Evaluation ===
+Model: gemini-3.1-flash-lite | 4 variants × 8 queries = 32 LLM call groups
+
+  [1/32] current              vintage clothing resale marketplace
+  [2/32] no-examples          vintage clothing resale marketplace
+  [3/32] temp-1.0             vintage clothing resale marketplace
+  [4/32] current              yoga studio
+2026/06/07 11:35:41 WARN llm response parse failed err="parse JSON array: invalid character ',' after object key" response_preview="[\n  {\"sld\":\"verdict\",\"tld\":\"ai\"},\n  {\"sld\":\"clause\",\"tld\":\"ai\"},\n  {\"sld\":\"legali\",\"tld\":\"ty\"},\n  {\"sld\":\"bar\",\"tld\":\"codes\"},\n  {\"sld\":\"brief\",\"tld\":\"ly\"},\n  {\"sld\":\"defens\",\"e\",\"tld\":\"software\"},\n  {\"sld\":\"proof\",\"tld\":\"legal\"},\n  {\"sld\":\"cit\",\"tld\":\"ation\"},\n  {\"sld\":\"justi\",\"tld\":\"fy\"},\n  {\"sld\"..."
+  [5/32] current              indie game developer community and showcase
+  [6/32] current              patspizza.com
+  [7/32] current              AI-powered legal document review tool for ...
+  [8/32] current              a denver based coffee shop that serves bee...
+  [9/32] current              craft beer subscription box monthly delivery
+  [10/32] current              meditation and mindfulness app for anxiety
+  [11/32] no-examples          patspizza.com
+  [12/32] no-examples          yoga studio
+  [13/32] no-examples          AI-powered legal document review tool for ...
+  [14/32] no-examples          indie game developer community and showcase
+  [15/32] temp-1.0             yoga studio
+  [16/32] tld-hints            yoga studio
+  [17/32] tld-hints            AI-powered legal document review tool for ...
+  [18/32] tld-hints            indie game developer community and showcase
+  [19/32] tld-hints            patspizza.com
+  [20/32] tld-hints            a denver based coffee shop that serves bee...
+  [21/32] tld-hints            craft beer subscription box monthly delivery
+  [22/32] tld-hints            meditation and mindfulness app for anxiety
+  [23/32] tld-hints            vintage clothing resale marketplace
+  [24/32] no-examples          craft beer subscription box monthly delivery
+  [25/32] no-examples          a denver based coffee shop that serves bee...
+  [26/32] temp-1.0             a denver based coffee shop that serves bee...
+  [27/32] temp-1.0             AI-powered legal document review tool for ...
+  [28/32] temp-1.0             patspizza.com
+  [29/32] temp-1.0             craft beer subscription box monthly delivery
+  [30/32] temp-1.0             meditation and mindfulness app for anxiety
+  [31/32] temp-1.0             indie game developer community and showcase
+  [32/32] no-examples          meditation and mindfulness app for anxiety
+
+
+=== AGGREGATE SUMMARY (8 queries) ===
+
+Variant               Results   TLD Div    Avg SLD   Generic SLDs      ms/q     $/query
+------------------------------------------------------------------------------------------
+current                    51        23        6.5      6 (   4%)      1955    0.000519
+no-examples                53        24        6.5      5 (   4%)      1933    0.000578
+tld-hints                  54        23        6.4      7 (   5%)      1672    0.000533
+temp-1.0                   53        26        6.2      4 (   3%)      2152    0.000515
+
+
+=== CROSS-QUERY GENERIC SLDs (appeared in 3+ queries) ===
+  current               hearth, mellow, solace, tether, vivid, zenith
+  no-examples           cinder, ethos, hearth, mellow, vivid
+  tld-hints             cinder, haven, hearth, kindle, mellow, solace, zenith
+  temp-1.0              aura, ground, mellow, zenith
+
+
+=== TOP 5 SUGGESTIONS PER QUERY ===
+
+Query: yoga studio
+  current               asana.studio  prana.me  vinyasa.academy  ether.cloud  solace.center
+  no-examples           asana.studio  prana.live  krama.studio  dhyana.me  vayu.cloud
+  tld-hints             ethos.studio  aliv.studio  asana.academy  mora.life  prana.center
+  temp-1.0              prana.studio  asana.studio  aliv.me  ethos.guru  flux.fitness
+
+Query: AI-powered legal document review tool for small law firms
+  current               veridict.ai  clarus.legal  aequitas.co  solace.solutions  tenet.io
+  no-examples           veritas.ai  aequitas.legal  clarion.solutions  sentinel.ai  ponder.legal
+  tld-hints             veritas.legal  candid.ai  tenet.run  clarion.guide  axiom.cloud
+  temp-1.0              juris.ai  verdict.ai  codex.legal  sift.expert  axiom.cloud
+
+Query: indie game developer community and showcase
+  current               ludic.gg  fable.studio  kinship.community  kindle.works  nexus.dev
+  no-examples           ludic.studio  verve.dev  umbra.gg  nexus.community  kindle.works
+  tld-hints             ludo.studio  fable.works  vivid.gg  aether.dev  marrow.build
+  temp-1.0              ludic.studio  fable.gg  umbra.media  kismet.dev  vivid.gallery
+
+Query: patspizza.com
+  current               embers.pizza  focola.cafe  cinder.kitchen  levain.co  solstice.pizza
+  no-examples           oventide.pizza  embers.cafe  solstice.kitchen  hearth.me  flamecraft.co
+  tld-hints             fermento.pizza  ardore.kitchen  sapor.co  fornello.restaurant  levare.me
+  temp-1.0              furnace.pizza  ember.cafe  hearth.kitchen  levain.co  blaze.bar
+
+Query: a denver based coffee shop that serves beer at night
+  current               umbra.coffee  dusk.cafe  vesper.bar  solis.am  nocturne.beer
+  no-examples           vesper.cafe  alpenglow.beer  meridian.pub  umbra.coffee  solstice.bar
+  tld-hints             vesper.coffee  umbra.cafe  solstice.bar  dusk.works  meridian.beer
+  temp-1.0              umbra.cafe  dusk.coffee  alpen.pub  vesper.coffee  solis.beer
+
+Query: craft beer subscription box monthly delivery
+  current               cask.beer  heirloom.delivery  ferment.pub  mellow.bar  harvest.co
+  no-examples           cask.beer  savor.beer  mellow.pub  hearth.community  amber.works
+  tld-hints             cask.bar  hearth.beer  savor.delivery  mellow.pub  ember.works
+  temp-1.0              ferment.beer  kegs.delivery  draught.works  malted.pub  hopvine.co
+
+Query: meditation and mindfulness app for anxiety
+  current               halcyon.ai  ascent.cloud  mellow.app  sunder.io  respite.center
+  no-examples           halcyon.ai  tenet.app  aether.cloud  serene.io  mora.life
+  tld-hints             halcyon.ai  repose.cloud  amity.academy  ether.guide  mellow.studio
+  temp-1.0              halcyon.ai  ascent.cloud  lull.fm  tenet.coach  serene.app
+
+Query: vintage clothing resale marketplace
+  current               vestige.market  relic.boutique  patina.exchange  epoch.gallery  hallow.shop
+  no-examples           relic.boutique  vestige.market  provenance.gallery  ethos.exchange  epoque.style
+  tld-hints             vestige.market  patina.studio  relic.exchange  hallow.boutique  epoch.gallery
+  temp-1.0              relique.market  vestige.boutique  thrice.shop  patina.gallery  reverie.clothing

@@ -1,0 +1,81 @@
+=== Prompt Evaluation ===
+Model: gemini-3.1-flash-lite | 1 variants × 16 queries = 16 LLM call groups
+
+  [1/16] current              sustainable outdoor gear and apparel brand
+  [2/16] current              a denver based coffee shop that serves bee...
+  [3/16] current              freelance marketplace for creative profess...
+  [4/16] current              personal finance and budgeting app for mil...
+  [5/16] current              team project management and async communic...
+  [6/16] current              neighborhood barbershop in brooklyn
+  [7/16] current              yoga studio
+  [8/16] current              meditation and mindfulness app for anxiety
+  [9/16] current              AI-powered legal document review tool for ...
+  [10/16] current              developer tool for automating code reviews...
+  [11/16] current              podcast hosting and analytics platform
+  [12/16] current              indie game developer community and showcase
+  [13/16] current              online learning platform for professional ...
+  [14/16] current              craft beer subscription box monthly delivery
+  [15/16] current              patspizza.com
+  [16/16] current              vintage clothing resale marketplace
+
+
+=== AGGREGATE SUMMARY (16 queries) ===
+
+Variant               Results   TLD Div    Avg SLD   Generic SLDs      ms/q     $/query
+------------------------------------------------------------------------------------------
+current                    50        26        6.7      1 (   1%)      1789    0.000521
+
+
+=== CROSS-QUERY GENERIC SLDs (appeared in 3+ queries) ===
+  current               flow
+
+
+=== TOP 5 SUGGESTIONS PER QUERY ===
+
+Query: yoga studio
+  current               asama.studio  prana.studio  dharana.academy  vritti.me  bandha.co
+
+Query: meditation and mindfulness app for anxiety
+  current               atara.org  sati.ai  anava.me  hush.app  pneuma.care
+
+Query: AI-powered legal document review tool for small law firms
+  current               juris.ai  verdict.cloud  testify.legal  codex.ai  summa.expert
+
+Query: developer tool for automating code reviews with AI
+  current               linten.ai  vetted.dev  prune.dev  merit.codes  revis.io
+
+Query: team project management and async communication tool
+  current               syncopate.app  asynchronous.systems  concord.ai  huddle.io  tapestry.media
+
+Query: indie game developer community and showcase
+  current               ludology.community  sprite.build  pixel.gg  artifact.studio  sandbox.io
+
+Query: podcast hosting and analytics platform
+  current               reson.fm  echo.ai  voxen.io  audible.media  diapason.studio
+
+Query: a denver based coffee shop that serves beer at night
+  current               alembic.cafe  daybreak.pub  brewhouse.coffee  twilight.cafe  roast.beer
+
+Query: craft beer subscription box monthly delivery
+  current               hopbound.beer  fermently.app  maltship.delivery  grainbox.pub  caskflow.beer
+
+Query: patspizza.com
+  current               fermento.pizza  crustace.cafe  kneadly.pizza  woodfire.works  embers.bar
+
+Query: vintage clothing resale marketplace
+  current               vestige.market  relic.shop  thrifta.agency  loom.exchange  fallow.style
+
+Query: freelance marketplace for creative professionals
+  current               artisan.market  curate.agency  guild.works  canvas.gallery  folio.studio
+
+Query: neighborhood barbershop in brooklyn
+  current               razorstrop.bar  shearside.me  brimshear.shop  crownfold.studio  taperloft.community
+
+Query: personal finance and budgeting app for millennials
+  current               frugal.me  ledger.ai  solvent.life  balance.money  parsimony.io
+
+Query: online learning platform for professional photography
+  current               apercure.academy  shutterwise.education  lucidframe.photography  iso.vision  bokeh.guru
+
+Query: sustainable outdoor gear and apparel brand
+  current               perma.camp  evertrail.world  rootbound.life  wilder.works  terra.clothing

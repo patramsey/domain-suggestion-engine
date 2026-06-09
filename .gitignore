@@ -1,0 +1,14 @@
+bin/
+*.test
+
+# Compiled binaries from old root-level locations (moved to cmd/gen/)
+build-glove
+build-ngrams
+build-tld-scores
+eval
+
+# Secrets
+.env
+*.
+
+RESEARCH.md

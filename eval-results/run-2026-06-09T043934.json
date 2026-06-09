@@ -1,0 +1,5764 @@
+{
+  "date": "2026-06-09T04:39:34Z",
+  "model": "gemini-3.1-flash-lite",
+  "variants": [
+    "current"
+  ],
+  "queries": [
+    "yoga studio",
+    "meditation and mindfulness app for anxiety",
+    "AI-powered legal document review tool for small law firms",
+    "developer tool for automating code reviews with AI",
+    "team project management and async communication tool",
+    "indie game developer community and showcase",
+    "podcast hosting and analytics platform",
+    "a denver based coffee shop that serves beer at night",
+    "craft beer subscription box monthly delivery",
+    "patspizza.com",
+    "vintage clothing resale marketplace",
+    "freelance marketplace for creative professionals",
+    "neighborhood barbershop in brooklyn",
+    "personal finance and budgeting app for millennials",
+    "online learning platform for professional photography",
+    "sustainable outdoor gear and apparel brand"
+  ],
+  "results": [
+    {
+      "query": "freelance marketplace for creative professionals",
+      "variant": "current",
+      "suggestions": [
+        {
+          "name": "curation.agency",
+          "sld": "curation",
+          "tld": "agency",
+          "score": 0.8978300617917442,
+          "source": "llm"
+        },
+        {
+          "name": "guild.works",
+          "sld": "guild",
+          "tld": "works",
+          "score": 0.7351778047229198,
+          "source": "llm"
+        },
+        {
+          "name": "talent.market",
+          "sld": "talent",
+          "tld": "market",
+          "score": 1,
+          "source": "llm"
+        },
+        {
+          "name": "atelier.studio",
+          "sld": "atelier",
+          "tld": "studio",
+          "score": 0.9213452857845964,
+          "source": "llm"
+        },
+        {
+          "name": "artifact.gallery",
+          "sld": "artifact",
+          "tld": "gallery",
+          "score": 0.8887392393484825,
+          "source": "llm"
+        },
+        {
+          "name": "merit.exchange",
+          "sld": "merit",
+          "tld": "exchange",
+          "score": 0.9256166848521763,
+          "source": "llm"
+        },
+        {
+          "name": "nomad.ventures",
+          "sld": "nomad",
+          "tld": "ventures",
+          "score": 0.8145450096023734,
+          "source": "llm"
+        },
+        {
+          "name": "vessel.media",
+          "sld": "vessel",
+          "tld": "media",
+          "score": 0.8972110801675586,
+          "source": "llm"
+        },
+        {
+          "name": "provenance.capital",
+          "sld": "provenance",
+          "tld": "capital",
+          "score": 0.870044244707908,
+          "source": "llm"
+        },
+        {
+          "name": "modality.solutions",
+          "sld": "modality",
+          "tld": "solutions",
+          "score": 0.8128272280564022,
+          "source": "llm"
+        },
+        {
+          "name": "nexus.community",
+          "sld": "nexus",
+          "tld": "community",
+          "score": 0.6289128945098074,
+          "source": "llm"
+        },
+        {
+          "name": "folio.vision",
+          "sld": "folio",
+          "tld": "vision",
+          "score": 0.7206384591731393,
+          "source": "llm"
+        },
+        {
+          "name": "aspect.expert",
+          "sld": "aspect",
+          "tld": "expert",
+          "score": 0.852033589284865,
+          "source": "llm"
+        },
+        {
+          "name": "vector.design",
+          "sld": "vector",
+          "tld": "design",
+          "score": 0.8432331027918355,
+          "source": "llm"
+        },
+        {
+          "name": "foundry.digital",
+          "sld": "foundry",
+          "tld": "digital",
+          "score": 0.864399105175069,
+          "source": "llm"
+        },
+        {
+          "name": "tether.consulting",
+          "sld": "tether",
+          "tld": "consulting",
+          "score": 0.9203466666666668,
+          "source": "llm"
+        },
+        {
+          "name": "summit.management",
+          "sld": "summit",
+          "tld": "management",
+          "score": 0.7934165799076255,
+          "source": "llm"
+        },
+        {
+          "name": "motive.engineering",
+          "sld": "motive",
+          "tld": "engineering",
+          "score": 0.8605527529620612,
+          "source": "llm"
+        },
+        {
+          "name": "freelanc.ee",
+          "sld": "freelanc",
+          "tld": "ee",
+          "score": 0.8726171607836046,
+          "source": "llm"
+        },
+        {
+          "name": "creativ.me",
+          "sld": "creativ",
+          "tld": "me",
+          "score": 0.8413510498609239,
+          "source": "llm"
+        },
+        {
+          "name": "artis.am",
+          "sld": "artis",
+          "tld": "am",
+          "score": 0.9278072316015608,
+          "source": "llm"
+        },
+        {
+          "name": "pro.works",
+          "sld": "pro",
+          "tld": "works",
+          "score": 0.9385005190086365,
+          "source": "llm"
+        },
+        {
+          "name": "gild.studio",
+          "sld": "gild",
+          "tld": "studio",
+          "score": 0.670254936528799,
+          "source": "llm"
+        },
+        {
+          "name": "vivid.gallery",
+          "sld": "vivid",
+          "tld": "gallery",
+          "score": 0.8402996831206553,
+          "source": "llm"
+        },
+        {
+          "name": "maker.solutions",
+          "sld": "maker",
+          "tld": "solutions",
+          "score": 0.9141109592396689,
+          "source": "llm"
+        },
+        {
+          "name": "prime.market",
+          "sld": "prime",
+          "tld": "market",
+          "score": 0.9188465839050287,
+          "source": "llm"
+        },
+        {
+          "name": "modul.app",
+          "sld": "modul",
+          "tld": "app",
+          "score": 0.74959453719779,
+          "source": "llm"
+        },
+        {
+          "name": "vantage.digital",
+          "sld": "vantage",
+          "tld": "digital",
+          "score": 0.8656796503235236,
+          "source": "llm"
+        },
+        {
+          "name": "pivots.company",
+          "sld": "pivots",
+          "tld": "company",
+          "score": 0.5961829909393116,
+          "source": "llm"
+        },
+        {
+          "name": "artizan.agency",
+          "sld": "artizan",
+          "tld": "agency",
+          "score": 0.9124415735480096,
+          "source": "llm"
+        },
+        {
+          "name": "versaflow.works",
+          "sld": "versaflow",
+          "tld": "works",
+          "score": 0.8421979073031987,
+          "source": "llm"
+        },
+        {
+          "name": "moduvate.studio",
+          "sld": "moduvate",
+          "tld": "studio",
+          "score": 0.757744899529045,
+          "source": "llm"
+        },
+        {
+          "name": "creativia.market",
+          "sld": "creativia",
+          "tld": "market",
+          "score": 0.9297563493849567,
+          "source": "llm"
+        },
+        {
+          "name": "talentom.io",
+          "sld": "talentom",
+          "tld": "io",
+          "score": 0.9637058470984003,
+          "source": "llm"
+        },
+        {
+          "name": "kinetisk.digital",
+          "sld": "kinetisk",
+          "tld": "digital",
+          "score": 0.7502123406890595,
+          "source": "llm"
+        },
+        {
+          "name": "flowbase.cloud",
+          "sld": "flowbase",
+          "tld": "cloud",
+          "score": 0.8597912768220536,
+          "source": "llm"
+        },
+        {
+          "name": "fructus.ventures",
+          "sld": "fructus",
+          "tld": "ventures",
+          "score": 0.6245877822982429,
+          "source": "llm"
+        },
+        {
+          "name": "voxality.media",
+          "sld": "voxality",
+          "tld": "media",
+          "score": 0.7466600327916062,
+          "source": "llm"
+        },
+        {
+          "name": "guilder.community",
+          "sld": "guilder",
+          "tld": "community",
+          "score": 0.8083825008532429,
+          "source": "llm"
+        },
+        {
+          "name": "syncora.expert",
+          "sld": "syncora",
+          "tld": "expert",
+          "score": 0.7646593194197174,
+          "source": "llm"
+        },
+        {
+          "name": "proximia.zone",
+          "sld": "proximia",
+          "tld": "zone",
+          "score": 0.8264214320512902,
+          "source": "llm"
+        },
+        {
+          "name": "cogentia.solutions",
+          "sld": "cogentia",
+          "tld": "solutions",
+          "score": 0.7807849376014075,
+          "source": "llm"
+        },
+        {
+          "name": "meritise.exchange",
+          "sld": "meritise",
+          "tld": "exchange",
+          "score": 0.8819658912013827,
+          "source": "llm"
+        },
+        {
+          "name": "evolvea.vision",
+          "sld": "evolvea",
+          "tld": "vision",
+          "score": 0.7600380131639448,
+          "source": "llm"
+        },
+        {
+          "name": "tectonic.builders",
+          "sld": "tectonic",
+          "tld": "builders",
+          "score": 0.748455637203864,
+          "source": "llm"
+        },
+        {
+          "name": "nexuspace.me",
+          "sld": "nexuspace",
+          "tld": "me",
+          "score": 0.8161617754670022,
+          "source": "llm"
+        },
+        {
+          "name": "curatech.design",
+          "sld": "curatech",
+          "tld": "design",
+          "score": 0.8789287790294366,
+          "source": "llm"
+        },
+        {
+          "name": "pulsare.academy",
+          "sld": "pulsare",
+          "tld": "academy",
+          "score": 0.6963546915747568,
+          "source": "llm"
+        },
+        {
+          "name": "vectara.systems",
+          "sld": "vectara",
+          "tld": "systems",
+          "score": 0.7404427727619033,
+          "source": "llm"
+        },
+        {
+          "name": "ideascape.co",
+          "sld": "ideascape",
+          "tld": "co",
+          "score": 0.8691789166068311,
+          "source": "llm"
+        }
+      ],
+      "dur_ms": 1888,
+      "tokens": 3908,
+      "est_cost_usd": 0.00051045
+    },
+    {
+      "query": "a denver based coffee shop that serves beer at night",
+      "variant": "current",
+      "suggestions": [
+        {
+          "name": "perkbrew.pub",
+          "sld": "perkbrew",
+          "tld": "pub",
+          "score": 0.8377846269479287,
+          "source": "llm"
+        },
+        {
+          "name": "roastdraft.beer",
+          "sld": "roastdraft",
+          "tld": "beer",
+          "score": 0.7992321104959316,
+          "source": "llm"
+        },
+        {
+          "name": "duskbean.cafe",
+          "sld": "duskbean",
+          "tld": "cafe",
+          "score": 0.8451879696125059,
+          "source": "llm"
+        },
+        {
+          "name": "nocturn.coffee",
+          "sld": "nocturn",
+          "tld": "coffee",
+          "score": 0.7342789809867306,
+          "source": "llm"
+        },
+        {
+          "name": "mugmalt.bar",
+          "sld": "mugmalt",
+          "tld": "bar",
+          "score": 0.6001036365094824,
+          "source": "llm"
+        },
+        {
+          "name": "shadecup.beer",
+          "sld": "shadecup",
+          "tld": "beer",
+          "score": 0.9356315252009935,
+          "source": "llm"
+        },
+        {
+          "name": "groundtap.pub",
+          "sld": "groundtap",
+          "tld": "pub",
+          "score": 0.8564601326936165,
+          "source": "llm"
+        },
+        {
+          "name": "twilightbrew.cafe",
+          "sld": "twilightbrew",
+          "tld": "cafe",
+          "score": 0.71809316282526,
+          "source": "llm"
+        },
+        {
+          "name": "embersip.coffee",
+          "sld": "embersip",
+          "tld": "coffee",
+          "score": 0.7030134911506254,
+          "source": "llm"
+        },
+        {
+          "name": "darkpour.bar",
+          "sld": "darkpour",
+          "tld": "bar",
+          "score": 0.8174962294134774,
+          "source": "llm"
+        },
+        {
+          "name": "crushgrain.co",
+          "sld": "crushgrain",
+          "tld": "co",
+          "score": 0.814968071771324,
+          "source": "llm"
+        },
+        {
+          "name": "starlightpress.agency",
+          "sld": "starlightpress",
+          "tld": "agency",
+          "score": 0.8017482748788599,
+          "source": "llm"
+        },
+        {
+          "name": "beanhopped.shop",
+          "sld": "beanhopped",
+          "tld": "shop",
+          "score": 0.8787087266536181,
+          "source": "llm"
+        },
+        {
+          "name": "midnightroast.works",
+          "sld": "midnightroast",
+          "tld": "works",
+          "score": 0.770590138462606,
+          "source": "llm"
+        },
+        {
+          "name": "javafoam.live",
+          "sld": "javafoam",
+          "tld": "live",
+          "score": 0.7574212294342376,
+          "source": "llm"
+        },
+        {
+          "name": "afterglow.coffee",
+          "sld": "afterglow",
+          "tld": "coffee",
+          "score": 0.8421696631213438,
+          "source": "llm"
+        },
+        {
+          "name": "presspint.media",
+          "sld": "presspint",
+          "tld": "media",
+          "score": 0.9125960027310583,
+          "source": "llm"
+        },
+        {
+          "name": "steepedhop.zone",
+          "sld": "steepedhop",
+          "tld": "zone",
+          "score": 0.8025850571612705,
+          "source": "llm"
+        },
+        {
+          "name": "shadowgrind.ventures",
+          "sld": "shadowgrind",
+          "tld": "ventures",
+          "score": 0.7595771132831513,
+          "source": "llm"
+        },
+        {
+          "name": "evebloom.studio",
+          "sld": "evebloom",
+          "tld": "studio",
+          "score": 0.8169632434679853,
+          "source": "llm"
+        },
+        {
+          "name": "perk.pub",
+          "sld": "perk",
+          "tld": "pub",
+          "score": 0.8474351807701516,
+          "source": "llm"
+        },
+        {
+          "name": "brew.cafe",
+          "sld": "brew",
+          "tld": "cafe",
+          "score": 0.8371877614618227,
+          "source": "llm"
+        },
+        {
+          "name": "day.beer",
+          "sld": "day",
+          "tld": "beer",
+          "score": 0.8311168106154894,
+          "source": "llm"
+        },
+        {
+          "name": "roast.bar",
+          "sld": "roast",
+          "tld": "bar",
+          "score": 0.8567953853908264,
+          "source": "llm"
+        },
+        {
+          "name": "moon.coffee",
+          "sld": "moon",
+          "tld": "coffee",
+          "score": 0.8910024074209766,
+          "source": "llm"
+        },
+        {
+          "name": "alt.cafe",
+          "sld": "alt",
+          "tld": "cafe",
+          "score": 0.6334088534730081,
+          "source": "llm"
+        },
+        {
+          "name": "summit.pub",
+          "sld": "summit",
+          "tld": "pub",
+          "score": 0.8310383993105322,
+          "source": "llm"
+        },
+        {
+          "name": "dusk.bar",
+          "sld": "dusk",
+          "tld": "bar",
+          "score": 0.747518201174849,
+          "source": "llm"
+        },
+        {
+          "name": "alpine.shop",
+          "sld": "alpine",
+          "tld": "shop",
+          "score": 0.8554209041588493,
+          "source": "llm"
+        },
+        {
+          "name": "bean.works",
+          "sld": "bean",
+          "tld": "works",
+          "score": 0.9070972947759979,
+          "source": "llm"
+        },
+        {
+          "name": "tap.house",
+          "sld": "tap",
+          "tld": "house",
+          "score": 0.8478612126084152,
+          "source": "llm"
+        },
+        {
+          "name": "poured.live",
+          "sld": "poured",
+          "tld": "live",
+          "score": 0.9273160368336788,
+          "source": "llm"
+        },
+        {
+          "name": "mellow.market",
+          "sld": "mellow",
+          "tld": "market",
+          "score": 0.8656098776643109,
+          "source": "llm"
+        },
+        {
+          "name": "dark.gallery",
+          "sld": "dark",
+          "tld": "gallery",
+          "score": 0.777915314397781,
+          "source": "llm"
+        },
+        {
+          "name": "wake.catering",
+          "sld": "wake",
+          "tld": "catering",
+          "score": 0.8664133368969986,
+          "source": "llm"
+        },
+        {
+          "name": "bold.agency",
+          "sld": "bold",
+          "tld": "agency",
+          "score": 0.72570346798244,
+          "source": "llm"
+        },
+        {
+          "name": "brewlight.cafe",
+          "sld": "brewlight",
+          "tld": "cafe",
+          "score": 0.8369159562851803,
+          "source": "llm"
+        },
+        {
+          "name": "roastglow.bar",
+          "sld": "roastglow",
+          "tld": "bar",
+          "score": 0.7643735547164259,
+          "source": "llm"
+        },
+        {
+          "name": "caffeinight.beer",
+          "sld": "caffeinight",
+          "tld": "beer",
+          "score": 0.6877482147453942,
+          "source": "llm"
+        },
+        {
+          "name": "elevbrew.pub",
+          "sld": "elevbrew",
+          "tld": "pub",
+          "score": 0.5875150033512485,
+          "source": "llm"
+        },
+        {
+          "name": "peakpour.co",
+          "sld": "peakpour",
+          "tld": "co",
+          "score": 0.8134556232752066,
+          "source": "llm"
+        },
+        {
+          "name": "moodmorn.me",
+          "sld": "moodmorn",
+          "tld": "me",
+          "score": 0.7269757073367544,
+          "source": "llm"
+        },
+        {
+          "name": "shiftmugs.live",
+          "sld": "shiftmugs",
+          "tld": "live",
+          "score": 0.6953398600998083,
+          "source": "llm"
+        },
+        {
+          "name": "sunlitdraught.com",
+          "sld": "sunlitdraught",
+          "tld": "com",
+          "score": 0.7092201869636136,
+          "source": "llm"
+        },
+        {
+          "name": "middayfoam.info",
+          "sld": "middayfoam",
+          "tld": "info",
+          "score": 0.7722108104105891,
+          "source": "llm"
+        },
+        {
+          "name": "alpinemalt.net",
+          "sld": "alpinemalt",
+          "tld": "net",
+          "score": 0.7900033167171052,
+          "source": "llm"
+        },
+        {
+          "name": "steepedhour.ai",
+          "sld": "steepedhour",
+          "tld": "ai",
+          "score": 0.8158971806102905,
+          "source": "llm"
+        },
+        {
+          "name": "highlandsips.io",
+          "sld": "highlandsips",
+          "tld": "io",
+          "score": 0.6880395830075943,
+          "source": "llm"
+        },
+        {
+          "name": "grindflow.am",
+          "sld": "grindflow",
+          "tld": "am",
+          "score": 0.7972161895080072,
+          "source": "llm"
+        },
+        {
+          "name": "starlitbrew.studio",
+          "sld": "starlitbrew",
+          "tld": "studio",
+          "score": 0.8019655773075729,
+          "source": "llm"
+        },
+        {
+          "name": "crestcups.agency",
+          "sld": "crestcups",
+          "tld": "agency",
+          "score": 0.7981426891333371,
+          "source": "llm"
+        },
+        {
+          "name": "nocturnemill.solutions",
+          "sld": "nocturnemill",
+          "tld": "solutions",
+          "score": 0.6600777048738582,
+          "source": "llm"
+        },
+        {
+          "name": "vertexdraft.events",
+          "sld": "vertexdraft",
+          "tld": "events",
+          "score": 0.6667335606722002,
+          "source": "llm"
+        },
+        {
+          "name": "slumberhops.city",
+          "sld": "slumberhops",
+          "tld": "city",
+          "score": 0.7341265437673763,
+          "source": "llm"
+        }
+      ],
+      "dur_ms": 1936,
+      "tokens": 4041,
+      "est_cost_usd": 0.00053685
+    },
+    {
+      "query": "sustainable outdoor gear and apparel brand",
+      "variant": "current",
+      "suggestions": [
+        {
+          "name": "perma.camp",
+          "sld": "perma",
+          "tld": "camp",
+          "score": 0.900200151930696,
+          "source": "llm"
+        },
+        {
+          "name": "terrene.world",
+          "sld": "terrene",
+          "tld": "world",
+          "score": 0.7684500960611546,
+          "source": "llm"
+        },
+        {
+          "name": "summit.works",
+          "sld": "summit",
+          "tld": "works",
+          "score": 0.8212061575083166,
+          "source": "llm"
+        },
+        {
+          "name": "verdan.clothing",
+          "sld": "verdan",
+          "tld": "clothing",
+          "score": 0.8341025617599489,
+          "source": "llm"
+        },
+        {
+          "name": "fallow.land",
+          "sld": "fallow",
+          "tld": "land",
+          "score": 0.8624898262784623,
+          "source": "llm"
+        },
+        {
+          "name": "ascent.guide",
+          "sld": "ascent",
+          "tld": "guide",
+          "score": 0.8279480740150269,
+          "source": "llm"
+        },
+        {
+          "name": "root.academy",
+          "sld": "root",
+          "tld": "academy",
+          "score": 0.7944179612910613,
+          "source": "llm"
+        },
+        {
+          "name": "wilder.zone",
+          "sld": "wilder",
+          "tld": "zone",
+          "score": 0.7773858223528909,
+          "source": "llm"
+        },
+        {
+          "name": "tundra.co",
+          "sld": "tundra",
+          "tld": "co",
+          "score": 0.7459968129148126,
+          "source": "llm"
+        },
+        {
+          "name": "bramble.shop",
+          "sld": "bramble",
+          "tld": "shop",
+          "score": 0.8265190981011378,
+          "source": "llm"
+        },
+        {
+          "name": "crag.rocks",
+          "sld": "crag",
+          "tld": "rocks",
+          "score": 0.6394877696894039,
+          "source": "llm"
+        },
+        {
+          "name": "gorge.boutique",
+          "sld": "gorge",
+          "tld": "boutique",
+          "score": 0.7079790141685125,
+          "source": "llm"
+        },
+        {
+          "name": "biota.ventures",
+          "sld": "biota",
+          "tld": "ventures",
+          "score": 0.8111487969280079,
+          "source": "llm"
+        },
+        {
+          "name": "lithos.center",
+          "sld": "lithos",
+          "tld": "center",
+          "score": 0.8267097351508881,
+          "source": "llm"
+        },
+        {
+          "name": "thicket.community",
+          "sld": "thicket",
+          "tld": "community",
+          "score": 0.8455930377193313,
+          "source": "llm"
+        },
+        {
+          "name": "ridge.live",
+          "sld": "ridge",
+          "tld": "live",
+          "score": 0.7788131613581123,
+          "source": "llm"
+        },
+        {
+          "name": "moss.studio",
+          "sld": "moss",
+          "tld": "studio",
+          "score": 0.8383068904289742,
+          "source": "llm"
+        },
+        {
+          "name": "talus.design",
+          "sld": "talus",
+          "tld": "design",
+          "score": 0.7133554377828245,
+          "source": "llm"
+        },
+        {
+          "name": "esker.media",
+          "sld": "esker",
+          "tld": "media",
+          "score": 0.710208125538163,
+          "source": "llm"
+        },
+        {
+          "name": "alpine.agency",
+          "sld": "alpine",
+          "tld": "agency",
+          "score": 0.8499002461521813,
+          "source": "llm"
+        },
+        {
+          "name": "ever.camp",
+          "sld": "ever",
+          "tld": "camp",
+          "score": 0.9429523517195825,
+          "source": "llm"
+        },
+        {
+          "name": "wild.works",
+          "sld": "wild",
+          "tld": "works",
+          "score": 0.7853403383106066,
+          "source": "llm"
+        },
+        {
+          "name": "terra.zone",
+          "sld": "terra",
+          "tld": "zone",
+          "score": 0.8527327800177118,
+          "source": "llm"
+        },
+        {
+          "name": "base.life",
+          "sld": "base",
+          "tld": "life",
+          "score": 0.9164574168310793,
+          "source": "llm"
+        },
+        {
+          "name": "verdant.world",
+          "sld": "verdant",
+          "tld": "world",
+          "score": 0.8235276878103689,
+          "source": "llm"
+        },
+        {
+          "name": "path.guide",
+          "sld": "path",
+          "tld": "guide",
+          "score": 0.8996014451949154,
+          "source": "llm"
+        },
+        {
+          "name": "tempo.rocks",
+          "sld": "tempo",
+          "tld": "rocks",
+          "score": 0.8541362947557117,
+          "source": "llm"
+        },
+        {
+          "name": "trace.studio",
+          "sld": "trace",
+          "tld": "studio",
+          "score": 0.8485634547574665,
+          "source": "llm"
+        },
+        {
+          "name": "kind.co",
+          "sld": "kind",
+          "tld": "co",
+          "score": 0.9647373773215799,
+          "source": "llm"
+        },
+        {
+          "name": "bloom.solar",
+          "sld": "bloom",
+          "tld": "solar",
+          "score": 0.8013787844654535,
+          "source": "llm"
+        },
+        {
+          "name": "boreal.design",
+          "sld": "boreal",
+          "tld": "design",
+          "score": 0.805111578579735,
+          "source": "llm"
+        },
+        {
+          "name": "peak.ventures",
+          "sld": "peak",
+          "tld": "ventures",
+          "score": 0.728022842717479,
+          "source": "llm"
+        },
+        {
+          "name": "flora.management",
+          "sld": "flora",
+          "tld": "management",
+          "score": 0.850182819736201,
+          "source": "llm"
+        },
+        {
+          "name": "evertrail.camp",
+          "sld": "evertrail",
+          "tld": "camp",
+          "score": 0.8728611973428577,
+          "source": "llm"
+        },
+        {
+          "name": "wildspun.clothing",
+          "sld": "wildspun",
+          "tld": "clothing",
+          "score": 0.8227109468533972,
+          "source": "llm"
+        },
+        {
+          "name": "verdantgear.life",
+          "sld": "verdantgear",
+          "tld": "life",
+          "score": 0.8436659833341041,
+          "source": "llm"
+        },
+        {
+          "name": "terraweave.works",
+          "sld": "terraweave",
+          "tld": "works",
+          "score": 0.7119200894754001,
+          "source": "llm"
+        },
+        {
+          "name": "peakly.co",
+          "sld": "peakly",
+          "tld": "co",
+          "score": 0.7749800636160508,
+          "source": "llm"
+        },
+        {
+          "name": "roamcraft.studio",
+          "sld": "roamcraft",
+          "tld": "studio",
+          "score": 0.7138951840257135,
+          "source": "llm"
+        },
+        {
+          "name": "earthflow.systems",
+          "sld": "earthflow",
+          "tld": "systems",
+          "score": 0.738422328360884,
+          "source": "llm"
+        },
+        {
+          "name": "rootbound.community",
+          "sld": "rootbound",
+          "tld": "community",
+          "score": 0.7897306433974929,
+          "source": "llm"
+        },
+        {
+          "name": "solsticewear.boutique",
+          "sld": "solsticewear",
+          "tld": "boutique",
+          "score": 0.8144994802766129,
+          "source": "llm"
+        },
+        {
+          "name": "ridgeborn.agency",
+          "sld": "ridgeborn",
+          "tld": "agency",
+          "score": 0.7242816451613032,
+          "source": "llm"
+        },
+        {
+          "name": "baseflora.academy",
+          "sld": "baseflora",
+          "tld": "academy",
+          "score": 0.8639235235075844,
+          "source": "llm"
+        },
+        {
+          "name": "vastbound.rocks",
+          "sld": "vastbound",
+          "tld": "rocks",
+          "score": 0.8299989952367265,
+          "source": "llm"
+        },
+        {
+          "name": "permaworn.shop",
+          "sld": "permaworn",
+          "tld": "shop",
+          "score": 0.8566893221133053,
+          "source": "llm"
+        },
+        {
+          "name": "summitloom.style",
+          "sld": "summitloom",
+          "tld": "style",
+          "score": 0.7659142118892128,
+          "source": "llm"
+        },
+        {
+          "name": "fernkin.app",
+          "sld": "fernkin",
+          "tld": "app",
+          "score": 0.6946826070296148,
+          "source": "llm"
+        },
+        {
+          "name": "driftmade.solutions",
+          "sld": "driftmade",
+          "tld": "solutions",
+          "score": 0.7917737663026748,
+          "source": "llm"
+        },
+        {
+          "name": "mossyway.ventures",
+          "sld": "mossyway",
+          "tld": "ventures",
+          "score": 0.7627030653039691,
+          "source": "llm"
+        },
+        {
+          "name": "cladwild.digital",
+          "sld": "cladwild",
+          "tld": "digital",
+          "score": 0.7552619101319027,
+          "source": "llm"
+        },
+        {
+          "name": "havenpeak.world",
+          "sld": "havenpeak",
+          "tld": "world",
+          "score": 0.7679549285046933,
+          "source": "llm"
+        },
+        {
+          "name": "zenithknit.market",
+          "sld": "zenithknit",
+          "tld": "market",
+          "score": 0.7398075340653439,
+          "source": "llm"
+        }
+      ],
+      "dur_ms": 1950,
+      "tokens": 3951,
+      "est_cost_usd": 0.00052335
+    },
+    {
+      "query": "personal finance and budgeting app for millennials",
+      "variant": "current",
+      "suggestions": [
+        {
+          "name": "frugal.me",
+          "sld": "frugal",
+          "tld": "me",
+          "score": 0.6552827397340111,
+          "source": "llm"
+        },
+        {
+          "name": "ledger.ai",
+          "sld": "ledger",
+          "tld": "ai",
+          "score": 0.8538362826823965,
+          "source": "llm"
+        },
+        {
+          "name": "nest.fund",
+          "sld": "nest",
+          "tld": "fund",
+          "score": 0.8455244641778205,
+          "source": "llm"
+        },
+        {
+          "name": "accrue.app",
+          "sld": "accrue",
+          "tld": "app",
+          "score": 0.7196199884983054,
+          "source": "llm"
+        },
+        {
+          "name": "thrive.money",
+          "sld": "thrive",
+          "tld": "money",
+          "score": 0.8314970130614764,
+          "source": "llm"
+        },
+        {
+          "name": "solvency.life",
+          "sld": "solvency",
+          "tld": "life",
+          "score": 0.827171622970385,
+          "source": "llm"
+        },
+        {
+          "name": "budget.guru",
+          "sld": "budget",
+          "tld": "guru",
+          "score": 0.8535774864793388,
+          "source": "llm"
+        },
+        {
+          "name": "equity.academy",
+          "sld": "equity",
+          "tld": "academy",
+          "score": 0.8077613143478581,
+          "source": "llm"
+        },
+        {
+          "name": "fathom.finance",
+          "sld": "fathom",
+          "tld": "finance",
+          "score": 0.8853758203114609,
+          "source": "llm"
+        },
+        {
+          "name": "prudence.community",
+          "sld": "prudence",
+          "tld": "community",
+          "score": 0.7572830685610468,
+          "source": "llm"
+        },
+        {
+          "name": "margin.exchange",
+          "sld": "margin",
+          "tld": "exchange",
+          "score": 0.8795810944364011,
+          "source": "llm"
+        },
+        {
+          "name": "vestige.holdings",
+          "sld": "vestige",
+          "tld": "holdings",
+          "score": 0.7723532251053955,
+          "source": "llm"
+        },
+        {
+          "name": "balance.co",
+          "sld": "balance",
+          "tld": "co",
+          "score": 0.9529396622729589,
+          "source": "llm"
+        },
+        {
+          "name": "fisc.solutions",
+          "sld": "fisc",
+          "tld": "solutions",
+          "score": 0.7539716971433554,
+          "source": "llm"
+        },
+        {
+          "name": "interest.ventures",
+          "sld": "interest",
+          "tld": "ventures",
+          "score": 0.9636788888888889,
+          "source": "llm"
+        },
+        {
+          "name": "prospect.tips",
+          "sld": "prospect",
+          "tld": "tips",
+          "score": 0.8300301803755821,
+          "source": "llm"
+        },
+        {
+          "name": "yield.agency",
+          "sld": "yield",
+          "tld": "agency",
+          "score": 0.7248425614064236,
+          "source": "llm"
+        },
+        {
+          "name": "asset.center",
+          "sld": "asset",
+          "tld": "center",
+          "score": 0.8727029425628502,
+          "source": "llm"
+        },
+        {
+          "name": "balanc.me",
+          "sld": "balanc",
+          "tld": "me",
+          "score": 0.9098223339315358,
+          "source": "llm"
+        },
+        {
+          "name": "prosper.me",
+          "sld": "prosper",
+          "tld": "me",
+          "score": 0.8404200312410761,
+          "source": "llm"
+        },
+        {
+          "name": "moni.co",
+          "sld": "moni",
+          "tld": "co",
+          "score": 0.8061994031953813,
+          "source": "llm"
+        },
+        {
+          "name": "wealth.ai",
+          "sld": "wealth",
+          "tld": "ai",
+          "score": 0.8594139075376157,
+          "source": "llm"
+        },
+        {
+          "name": "flow.co",
+          "sld": "flow",
+          "tld": "co",
+          "score": 0.8061342938115923,
+          "source": "llm"
+        },
+        {
+          "name": "gains.io",
+          "sld": "gains",
+          "tld": "io",
+          "score": 0.8698409026448959,
+          "source": "llm"
+        },
+        {
+          "name": "fund.me",
+          "sld": "fund",
+          "tld": "me",
+          "score": 0.9543680875361753,
+          "source": "llm"
+        },
+        {
+          "name": "audit.io",
+          "sld": "audit",
+          "tld": "io",
+          "score": 0.818253724650263,
+          "source": "llm"
+        },
+        {
+          "name": "prosperly.me",
+          "sld": "prosperly",
+          "tld": "me",
+          "score": 0.7753204836635984,
+          "source": "llm"
+        },
+        {
+          "name": "budgify.app",
+          "sld": "budgify",
+          "tld": "app",
+          "score": 0.6718658484336357,
+          "source": "llm"
+        },
+        {
+          "name": "flowcent.io",
+          "sld": "flowcent",
+          "tld": "io",
+          "score": 0.8165238110199536,
+          "source": "llm"
+        },
+        {
+          "name": "wealthos.ai",
+          "sld": "wealthos",
+          "tld": "ai",
+          "score": 0.8693969846207376,
+          "source": "llm"
+        },
+        {
+          "name": "coinage.academy",
+          "sld": "coinage",
+          "tld": "academy",
+          "score": 0.8811670040243286,
+          "source": "llm"
+        },
+        {
+          "name": "frugalix.solutions",
+          "sld": "frugalix",
+          "tld": "solutions",
+          "score": 0.6992605686955959,
+          "source": "llm"
+        },
+        {
+          "name": "saveology.info",
+          "sld": "saveology",
+          "tld": "info",
+          "score": 0.8244678577721282,
+          "source": "llm"
+        },
+        {
+          "name": "thrifted.market",
+          "sld": "thrifted",
+          "tld": "market",
+          "score": 0.770869716405042,
+          "source": "llm"
+        },
+        {
+          "name": "pennymind.coach",
+          "sld": "pennymind",
+          "tld": "coach",
+          "score": 0.8358713984363857,
+          "source": "llm"
+        },
+        {
+          "name": "assetsway.money",
+          "sld": "assetsway",
+          "tld": "money",
+          "score": 0.8158108514538392,
+          "source": "llm"
+        },
+        {
+          "name": "ledgeria.cloud",
+          "sld": "ledgeria",
+          "tld": "cloud",
+          "score": 0.8248219972313171,
+          "source": "llm"
+        },
+        {
+          "name": "vaulted.ventures",
+          "sld": "vaulted",
+          "tld": "ventures",
+          "score": 0.7224739343094693,
+          "source": "llm"
+        },
+        {
+          "name": "stashed.dev",
+          "sld": "stashed",
+          "tld": "dev",
+          "score": 0.7483898089927797,
+          "source": "llm"
+        },
+        {
+          "name": "equityzen.life",
+          "sld": "equityzen",
+          "tld": "life",
+          "score": 0.8044683723342523,
+          "source": "llm"
+        },
+        {
+          "name": "growise.software",
+          "sld": "growise",
+          "tld": "software",
+          "score": 0.8373808040473772,
+          "source": "llm"
+        },
+        {
+          "name": "bilance.works",
+          "sld": "bilance",
+          "tld": "works",
+          "score": 0.7310161599755411,
+          "source": "llm"
+        },
+        {
+          "name": "fundwise.guide",
+          "sld": "fundwise",
+          "tld": "guide",
+          "score": 0.8967350159702413,
+          "source": "llm"
+        },
+        {
+          "name": "yieldy.exchange",
+          "sld": "yieldy",
+          "tld": "exchange",
+          "score": 0.6908301406576557,
+          "source": "llm"
+        }
+      ],
+      "dur_ms": 1859,
+      "tokens": 3885,
+      "est_cost_usd": 0.00050355
+    },
+    {
+      "query": "indie game developer community and showcase",
+      "variant": "current",
+      "suggestions": [
+        {
+          "name": "ludovox.community",
+          "sld": "ludovox",
+          "tld": "community",
+          "score": 0.6210549954565565,
+          "source": "llm"
+        },
+        {
+          "name": "playforge.build",
+          "sld": "playforge",
+          "tld": "build",
+          "score": 0.8336265458173373,
+          "source": "llm"
+        },
+        {
+          "name": "pixelroam.gg",
+          "sld": "pixelroam",
+          "tld": "gg",
+          "score": 0.5738800585777374,
+          "source": "llm"
+        },
+        {
+          "name": "glitchcraft.dev",
+          "sld": "glitchcraft",
+          "tld": "dev",
+          "score": 0.7089387418200641,
+          "source": "llm"
+        },
+        {
+          "name": "quirkloop.io",
+          "sld": "quirkloop",
+          "tld": "io",
+          "score": 0.714343501796756,
+          "source": "llm"
+        },
+        {
+          "name": "joyengine.academy",
+          "sld": "joyengine",
+          "tld": "academy",
+          "score": 0.8584086181671248,
+          "source": "llm"
+        },
+        {
+          "name": "fablebit.studio",
+          "sld": "fablebit",
+          "tld": "studio",
+          "score": 0.8896904348328152,
+          "source": "llm"
+        },
+        {
+          "name": "arcadehive.org",
+          "sld": "arcadehive",
+          "tld": "org",
+          "score": 0.8881420162497632,
+          "source": "llm"
+        },
+        {
+          "name": "tinkermaze.works",
+          "sld": "tinkermaze",
+          "tld": "works",
+          "score": 0.7869872902265151,
+          "source": "llm"
+        },
+        {
+          "name": "questverse.app",
+          "sld": "questverse",
+          "tld": "app",
+          "score": 0.8891589368636418,
+          "source": "llm"
+        },
+        {
+          "name": "mythbound.me",
+          "sld": "mythbound",
+          "tld": "me",
+          "score": 0.8309879650213138,
+          "source": "llm"
+        },
+        {
+          "name": "spritevault.gallery",
+          "sld": "spritevault",
+          "tld": "gallery",
+          "score": 0.6762483235034399,
+          "source": "llm"
+        },
+        {
+          "name": "cooldown.life",
+          "sld": "cooldown",
+          "tld": "life",
+          "score": 0.8001042055825605,
+          "source": "llm"
+        },
+        {
+          "name": "nerdlogic.agency",
+          "sld": "nerdlogic",
+          "tld": "agency",
+          "score": 0.7847664289705715,
+          "source": "llm"
+        },
+        {
+          "name": "driftnode.cloud",
+          "sld": "driftnode",
+          "tld": "cloud",
+          "score": 0.679920958985924,
+          "source": "llm"
+        },
+        {
+          "name": "wildlevel.design",
+          "sld": "wildlevel",
+          "tld": "design",
+          "score": 0.8591767260698401,
+          "source": "llm"
+        },
+        {
+          "name": "boldpatch.software",
+          "sld": "boldpatch",
+          "tld": "software",
+          "score": 0.7305044938909129,
+          "source": "llm"
+        },
+        {
+          "name": "dreamlogic.net",
+          "sld": "dreamlogic",
+          "tld": "net",
+          "score": 0.8538750240433158,
+          "source": "llm"
+        },
+        {
+          "name": "warpflow.computer",
+          "sld": "warpflow",
+          "tld": "computer",
+          "score": 0.7210049926425487,
+          "source": "llm"
+        },
+        {
+          "name": "vividquest.media",
+          "sld": "vividquest",
+          "tld": "media",
+          "score": 0.8107009488610872,
+          "source": "llm"
+        },
+        {
+          "name": "talismanic.co",
+          "sld": "talismanic",
+          "tld": "co",
+          "score": 0.8339897943492854,
+          "source": "llm"
+        },
+        {
+          "name": "gam.gg",
+          "sld": "gam",
+          "tld": "gg",
+          "score": 0.7251794052938942,
+          "source": "llm"
+        },
+        {
+          "name": "play.community",
+          "sld": "play",
+          "tld": "community",
+          "score": 0.886276605828392,
+          "source": "llm"
+        },
+        {
+          "name": "quest.dev",
+          "sld": "quest",
+          "tld": "dev",
+          "score": 0.9823973180007936,
+          "source": "llm"
+        },
+        {
+          "name": "pixel.studio",
+          "sld": "pixel",
+          "tld": "studio",
+          "score": 0.5766898979135253,
+          "source": "llm"
+        },
+        {
+          "name": "indie.academy",
+          "sld": "indie",
+          "tld": "academy",
+          "score": 0.9661729907764964,
+          "source": "llm"
+        },
+        {
+          "name": "level.codes",
+          "sld": "level",
+          "tld": "codes",
+          "score": 0.9064341347328126,
+          "source": "llm"
+        },
+        {
+          "name": "verse.works",
+          "sld": "verse",
+          "tld": "works",
+          "score": 0.8884164173316956,
+          "source": "llm"
+        },
+        {
+          "name": "bit.zone",
+          "sld": "bit",
+          "tld": "zone",
+          "score": 0.9236880066207994,
+          "source": "llm"
+        },
+        {
+          "name": "logic.systems",
+          "sld": "logic",
+          "tld": "systems",
+          "score": 0.8394351367170694,
+          "source": "llm"
+        },
+        {
+          "name": "engine.media",
+          "sld": "engine",
+          "tld": "media",
+          "score": 0.9049043443870545,
+          "source": "llm"
+        },
+        {
+          "name": "fable.gallery",
+          "sld": "fable",
+          "tld": "gallery",
+          "score": 0.9115896410428576,
+          "source": "llm"
+        },
+        {
+          "name": "nexus.net",
+          "sld": "nexus",
+          "tld": "net",
+          "score": 0.6524951167320295,
+          "source": "llm"
+        },
+        {
+          "name": "vivid.vision",
+          "sld": "vivid",
+          "tld": "vision",
+          "score": 0.8391205238227122,
+          "source": "llm"
+        },
+        {
+          "name": "atlas.cloud",
+          "sld": "atlas",
+          "tld": "cloud",
+          "score": 0.800977988574906,
+          "source": "llm"
+        },
+        {
+          "name": "meta.events",
+          "sld": "meta",
+          "tld": "events",
+          "score": 0.859781090310421,
+          "source": "llm"
+        },
+        {
+          "name": "tome.guide",
+          "sld": "tome",
+          "tld": "guide",
+          "score": 0.7990418263800523,
+          "source": "llm"
+        },
+        {
+          "name": "indieverse.gg",
+          "sld": "indieverse",
+          "tld": "gg",
+          "score": 0.9120699308646264,
+          "source": "llm"
+        },
+        {
+          "name": "ludicraft.studio",
+          "sld": "ludicraft",
+          "tld": "studio",
+          "score": 0.7699822924651941,
+          "source": "llm"
+        },
+        {
+          "name": "pixelvault.community",
+          "sld": "pixelvault",
+          "tld": "community",
+          "score": 0.681262524753364,
+          "source": "llm"
+        },
+        {
+          "name": "gameloft.network",
+          "sld": "gameloft",
+          "tld": "network",
+          "score": 0.8389490333136914,
+          "source": "llm"
+        },
+        {
+          "name": "joykernel.build",
+          "sld": "joykernel",
+          "tld": "build",
+          "score": 0.7493662902250469,
+          "source": "llm"
+        },
+        {
+          "name": "devsurge.app",
+          "sld": "devsurge",
+          "tld": "app",
+          "score": 0.7029194350773669,
+          "source": "llm"
+        },
+        {
+          "name": "spriteflow.io",
+          "sld": "spriteflow",
+          "tld": "io",
+          "score": 0.7818298021400424,
+          "source": "llm"
+        },
+        {
+          "name": "codehaven.life",
+          "sld": "codehaven",
+          "tld": "life",
+          "score": 0.8772645870113759,
+          "source": "llm"
+        },
+        {
+          "name": "venturequest.ai",
+          "sld": "venturequest",
+          "tld": "ai",
+          "score": 0.9107743809078297,
+          "source": "llm"
+        },
+        {
+          "name": "modmatrix.works",
+          "sld": "modmatrix",
+          "tld": "works",
+          "score": 0.7167162625852114,
+          "source": "llm"
+        },
+        {
+          "name": "questloom.digital",
+          "sld": "questloom",
+          "tld": "digital",
+          "score": 0.8343946224312128,
+          "source": "llm"
+        },
+        {
+          "name": "arcadepulse.am",
+          "sld": "arcadepulse",
+          "tld": "am",
+          "score": 0.8055503521234224,
+          "source": "llm"
+        },
+        {
+          "name": "metascript.academy",
+          "sld": "metascript",
+          "tld": "academy",
+          "score": 0.830900556133463,
+          "source": "llm"
+        },
+        {
+          "name": "bitfoundry.gallery",
+          "sld": "bitfoundry",
+          "tld": "gallery",
+          "score": 0.8036579859254518,
+          "source": "llm"
+        },
+        {
+          "name": "storyspawn.me",
+          "sld": "storyspawn",
+          "tld": "me",
+          "score": 0.8599832848837586,
+          "source": "llm"
+        },
+        {
+          "name": "glitchbound.codes",
+          "sld": "glitchbound",
+          "tld": "codes",
+          "score": 0.728698674422436,
+          "source": "llm"
+        },
+        {
+          "name": "nexusplay.software",
+          "sld": "nexusplay",
+          "tld": "software",
+          "score": 0.7703360261246954,
+          "source": "llm"
+        },
+        {
+          "name": "logicspire.cloud",
+          "sld": "logicspire",
+          "tld": "cloud",
+          "score": 0.7565339598487911,
+          "source": "llm"
+        },
+        {
+          "name": "fablemesh.center",
+          "sld": "fablemesh",
+          "tld": "center",
+          "score": 0.8644071698433294,
+          "source": "llm"
+        },
+        {
+          "name": "draftrealm.vision",
+          "sld": "draftrealm",
+          "tld": "vision",
+          "score": 0.7925136639629528,
+          "source": "llm"
+        }
+      ],
+      "dur_ms": 1821,
+      "tokens": 4069,
+      "est_cost_usd": 0.00055875
+    },
+    {
+      "query": "neighborhood barbershop in brooklyn",
+      "variant": "current",
+      "suggestions": [
+        {
+          "name": "razorway.community",
+          "sld": "razorway",
+          "tld": "community",
+          "score": 0.7479911789408441,
+          "source": "llm"
+        },
+        {
+          "name": "trimhouse.bar",
+          "sld": "trimhouse",
+          "tld": "bar",
+          "score": 0.8085231124924948,
+          "source": "llm"
+        },
+        {
+          "name": "cobblecut.city",
+          "sld": "cobblecut",
+          "tld": "city",
+          "score": 0.8343322677702315,
+          "source": "llm"
+        },
+        {
+          "name": "shearbrook.style",
+          "sld": "shearbrook",
+          "tld": "style",
+          "score": 0.7168802317293754,
+          "source": "llm"
+        },
+        {
+          "name": "brimfold.salon",
+          "sld": "brimfold",
+          "tld": "salon",
+          "score": 0.6686948260873833,
+          "source": "llm"
+        },
+        {
+          "name": "edgehaven.place",
+          "sld": "edgehaven",
+          "tld": "place",
+          "score": 0.855887453844733,
+          "source": "llm"
+        },
+        {
+          "name": "fadetown.shop",
+          "sld": "fadetown",
+          "tld": "shop",
+          "score": 0.9219275246213272,
+          "source": "llm"
+        },
+        {
+          "name": "brindlecut.me",
+          "sld": "brindlecut",
+          "tld": "me",
+          "score": 0.7746594492234261,
+          "source": "llm"
+        },
+        {
+          "name": "stroply.life",
+          "sld": "stroply",
+          "tld": "life",
+          "score": 0.7215433639344023,
+          "source": "llm"
+        },
+        {
+          "name": "bevelstone.works",
+          "sld": "bevelstone",
+          "tld": "works",
+          "score": 0.8562786011463345,
+          "source": "llm"
+        },
+        {
+          "name": "crestcut.zone",
+          "sld": "crestcut",
+          "tld": "zone",
+          "score": 0.8212576037409266,
+          "source": "llm"
+        },
+        {
+          "name": "ironhearth.care",
+          "sld": "ironhearth",
+          "tld": "care",
+          "score": 0.7842892877063107,
+          "source": "llm"
+        },
+        {
+          "name": "taperloft.studio",
+          "sld": "taperloft",
+          "tld": "studio",
+          "score": 0.6716421397812602,
+          "source": "llm"
+        },
+        {
+          "name": "giltedge.boutique",
+          "sld": "giltedge",
+          "tld": "boutique",
+          "score": 0.7473711428828105,
+          "source": "llm"
+        },
+        {
+          "name": "sharpening.academy",
+          "sld": "sharpening",
+          "tld": "academy",
+          "score": 0.7565236647945003,
+          "source": "llm"
+        },
+        {
+          "name": "pavecut.gallery",
+          "sld": "pavecut",
+          "tld": "gallery",
+          "score": 0.7796407417425456,
+          "source": "llm"
+        },
+        {
+          "name": "anchorpoint.company",
+          "sld": "anchorpoint",
+          "tld": "company",
+          "score": 0.8226853090965512,
+          "source": "llm"
+        },
+        {
+          "name": "slickdock.community",
+          "sld": "slickdock",
+          "tld": "community",
+          "score": 0.7165817789586,
+          "source": "llm"
+        },
+        {
+          "name": "bladerun.bar",
+          "sld": "bladerun",
+          "tld": "bar",
+          "score": 0.8724806506892588,
+          "source": "llm"
+        },
+        {
+          "name": "hewnstreet.shop",
+          "sld": "hewnstreet",
+          "tld": "shop",
+          "score": 0.8534307635617088,
+          "source": "llm"
+        },
+        {
+          "name": "barber.shop",
+          "sld": "barber",
+          "tld": "shop",
+          "score": 0.9232057637813116,
+          "source": "llm"
+        },
+        {
+          "name": "trim.me",
+          "sld": "trim",
+          "tld": "me",
+          "score": 0.7911876654682252,
+          "source": "llm"
+        },
+        {
+          "name": "shear.ly",
+          "sld": "shear",
+          "tld": "ly",
+          "score": 0.7506249722261006,
+          "source": "llm"
+        },
+        {
+          "name": "fade.bar",
+          "sld": "fade",
+          "tld": "bar",
+          "score": 0.8150783981856242,
+          "source": "llm"
+        },
+        {
+          "name": "groom.agency",
+          "sld": "groom",
+          "tld": "agency",
+          "score": 0.8110744566097163,
+          "source": "llm"
+        },
+        {
+          "name": "razor.works",
+          "sld": "razor",
+          "tld": "works",
+          "score": 0.7162372880939172,
+          "source": "llm"
+        },
+        {
+          "name": "bevel.studio",
+          "sld": "bevel",
+          "tld": "studio",
+          "score": 0.8300515739976264,
+          "source": "llm"
+        },
+        {
+          "name": "clipper.co",
+          "sld": "clipper",
+          "tld": "co",
+          "score": 0.7900202408743665,
+          "source": "llm"
+        },
+        {
+          "name": "fringe.city",
+          "sld": "fringe",
+          "tld": "city",
+          "score": 0.9326213798747344,
+          "source": "llm"
+        },
+        {
+          "name": "taper.zone",
+          "sld": "taper",
+          "tld": "zone",
+          "score": 0.8306154558057636,
+          "source": "llm"
+        },
+        {
+          "name": "snip.academy",
+          "sld": "snip",
+          "tld": "academy",
+          "score": 0.5406930191968872,
+          "source": "llm"
+        },
+        {
+          "name": "shave.events",
+          "sld": "shave",
+          "tld": "events",
+          "score": 0.8419350700851943,
+          "source": "llm"
+        },
+        {
+          "name": "grooming.center",
+          "sld": "grooming",
+          "tld": "center",
+          "score": 0.8161076765833845,
+          "source": "llm"
+        },
+        {
+          "name": "fades.gallery",
+          "sld": "fades",
+          "tld": "gallery",
+          "score": 0.7856134755812023,
+          "source": "llm"
+        },
+        {
+          "name": "blades.company",
+          "sld": "blades",
+          "tld": "company",
+          "score": 0.818855790630211,
+          "source": "llm"
+        },
+        {
+          "name": "gentle.care",
+          "sld": "gentle",
+          "tld": "care",
+          "score": 0.8261933441959702,
+          "source": "llm"
+        },
+        {
+          "name": "sharpen.house",
+          "sld": "sharpen",
+          "tld": "house",
+          "score": 0.7434290044504297,
+          "source": "llm"
+        },
+        {
+          "name": "fadefoundry.works",
+          "sld": "fadefoundry",
+          "tld": "works",
+          "score": 0.7772912131314007,
+          "source": "llm"
+        },
+        {
+          "name": "groomside.community",
+          "sld": "groomside",
+          "tld": "community",
+          "score": 0.8488569880147889,
+          "source": "llm"
+        },
+        {
+          "name": "razorverse.studio",
+          "sld": "razorverse",
+          "tld": "studio",
+          "score": 0.7703227911306991,
+          "source": "llm"
+        },
+        {
+          "name": "urbancut.city",
+          "sld": "urbancut",
+          "tld": "city",
+          "score": 0.8887206837947634,
+          "source": "llm"
+        },
+        {
+          "name": "brimstone.shop",
+          "sld": "brimstone",
+          "tld": "shop",
+          "score": 0.8854585883967483,
+          "source": "llm"
+        },
+        {
+          "name": "sharphaven.bar",
+          "sld": "sharphaven",
+          "tld": "bar",
+          "score": 0.8894652279515652,
+          "source": "llm"
+        },
+        {
+          "name": "edgecraft.salon",
+          "sld": "edgecraft",
+          "tld": "salon",
+          "score": 0.753316948225249,
+          "source": "llm"
+        },
+        {
+          "name": "follicle.academy",
+          "sld": "follicle",
+          "tld": "academy",
+          "score": 0.7272928748367719,
+          "source": "llm"
+        },
+        {
+          "name": "neatline.me",
+          "sld": "neatline",
+          "tld": "me",
+          "score": 0.9060417612877946,
+          "source": "llm"
+        },
+        {
+          "name": "bevelbound.studio",
+          "sld": "bevelbound",
+          "tld": "studio",
+          "score": 0.8048391399871786,
+          "source": "llm"
+        },
+        {
+          "name": "trimquest.city",
+          "sld": "trimquest",
+          "tld": "city",
+          "score": 0.6933304527234377,
+          "source": "llm"
+        },
+        {
+          "name": "shearlogic.works",
+          "sld": "shearlogic",
+          "tld": "works",
+          "score": 0.713137639966228,
+          "source": "llm"
+        },
+        {
+          "name": "groomguild.shop",
+          "sld": "groomguild",
+          "tld": "shop",
+          "score": 0.6846577581837319,
+          "source": "llm"
+        },
+        {
+          "name": "fadefable.academy",
+          "sld": "fadefable",
+          "tld": "academy",
+          "score": 0.7658326255408556,
+          "source": "llm"
+        },
+        {
+          "name": "briskblade.place",
+          "sld": "briskblade",
+          "tld": "place",
+          "score": 0.7329412846573681,
+          "source": "llm"
+        },
+        {
+          "name": "apexbarber.life",
+          "sld": "apexbarber",
+          "tld": "life",
+          "score": 0.7839793352272493,
+          "source": "llm"
+        }
+      ],
+      "dur_ms": 2894,
+      "tokens": 3929,
+      "est_cost_usd": 0.0005181
+    },
+    {
+      "query": "meditation and mindfulness app for anxiety",
+      "variant": "current",
+      "suggestions": [
+        {
+          "name": "stilled.app",
+          "sld": "stilled",
+          "tld": "app",
+          "score": 0.9782735644068039,
+          "source": "llm"
+        },
+        {
+          "name": "respite.ai",
+          "sld": "respite",
+          "tld": "ai",
+          "score": 0.9208660554430163,
+          "source": "llm"
+        },
+        {
+          "name": "halcyon.me",
+          "sld": "halcyon",
+          "tld": "me",
+          "score": 0.6783315215034962,
+          "source": "llm"
+        },
+        {
+          "name": "uncoil.io",
+          "sld": "uncoil",
+          "tld": "io",
+          "score": 0.7574660955379493,
+          "source": "llm"
+        },
+        {
+          "name": "anchored.care",
+          "sld": "anchored",
+          "tld": "care",
+          "score": 0.8078039396156536,
+          "source": "llm"
+        },
+        {
+          "name": "equinox.life",
+          "sld": "equinox",
+          "tld": "life",
+          "score": 0.6287607605160349,
+          "source": "llm"
+        },
+        {
+          "name": "quell.co",
+          "sld": "quell",
+          "tld": "co",
+          "score": 0.9173737565255355,
+          "source": "llm"
+        },
+        {
+          "name": "atonal.fm",
+          "sld": "atonal",
+          "tld": "fm",
+          "score": 0.768387958829403,
+          "source": "llm"
+        },
+        {
+          "name": "soothe.studio",
+          "sld": "soothe",
+          "tld": "studio",
+          "score": 0.7863520395555919,
+          "source": "llm"
+        },
+        {
+          "name": "cinder.net",
+          "sld": "cinder",
+          "tld": "net",
+          "score": 0.8299805253827574,
+          "source": "llm"
+        },
+        {
+          "name": "amity.community",
+          "sld": "amity",
+          "tld": "community",
+          "score": 0.7835956505130447,
+          "source": "llm"
+        },
+        {
+          "name": "verge.vision",
+          "sld": "verge",
+          "tld": "vision",
+          "score": 0.8798550951957704,
+          "source": "llm"
+        },
+        {
+          "name": "lull.live",
+          "sld": "lull",
+          "tld": "live",
+          "score": 0.8437110241197967,
+          "source": "llm"
+        },
+        {
+          "name": "mended.clinic",
+          "sld": "mended",
+          "tld": "clinic",
+          "score": 0.8394978401883444,
+          "source": "llm"
+        },
+        {
+          "name": "tranquil.org",
+          "sld": "tranquil",
+          "tld": "org",
+          "score": 0.7484167277440537,
+          "source": "llm"
+        },
+        {
+          "name": "hush.chat",
+          "sld": "hush",
+          "tld": "chat",
+          "score": 0.6557935565323437,
+          "source": "llm"
+        },
+        {
+          "name": "sedate.expert",
+          "sld": "sedate",
+          "tld": "expert",
+          "score": 0.862673253663381,
+          "source": "llm"
+        },
+        {
+          "name": "center.academy",
+          "sld": "center",
+          "tld": "academy",
+          "score": 0.8987596944046021,
+          "source": "llm"
+        },
+        {
+          "name": "unfurl.cloud",
+          "sld": "unfurl",
+          "tld": "cloud",
+          "score": 0.629534532930887,
+          "source": "llm"
+        },
+        {
+          "name": "pause.info",
+          "sld": "pause",
+          "tld": "info",
+          "score": 0.8678188185965882,
+          "source": "llm"
+        },
+        {
+          "name": "calm.am",
+          "sld": "calm",
+          "tld": "am",
+          "score": 0.8318075690512222,
+          "source": "llm"
+        },
+        {
+          "name": "mind.life",
+          "sld": "mind",
+          "tld": "life",
+          "score": 0.9954335001687442,
+          "source": "llm"
+        },
+        {
+          "name": "repose.ai",
+          "sld": "repose",
+          "tld": "ai",
+          "score": 0.8060069481429555,
+          "source": "llm"
+        },
+        {
+          "name": "breathe.fm",
+          "sld": "breathe",
+          "tld": "fm",
+          "score": 0.8918042132413797,
+          "source": "llm"
+        },
+        {
+          "name": "paus.ee",
+          "sld": "paus",
+          "tld": "ee",
+          "score": 0.7050254413782274,
+          "source": "llm"
+        },
+        {
+          "name": "inner.gg",
+          "sld": "inner",
+          "tld": "gg",
+          "score": 0.8740918504005499,
+          "source": "llm"
+        },
+        {
+          "name": "unwind.app",
+          "sld": "unwind",
+          "tld": "app",
+          "score": 0.8580440357745385,
+          "source": "llm"
+        },
+        {
+          "name": "zen.studio",
+          "sld": "zen",
+          "tld": "studio",
+          "score": 0.9320047557034212,
+          "source": "llm"
+        },
+        {
+          "name": "settle.care",
+          "sld": "settle",
+          "tld": "care",
+          "score": 0.7453277846928634,
+          "source": "llm"
+        },
+        {
+          "name": "align.center",
+          "sld": "align",
+          "tld": "center",
+          "score": 0.7365873423968661,
+          "source": "llm"
+        },
+        {
+          "name": "glow.life",
+          "sld": "glow",
+          "tld": "life",
+          "score": 0.7791599055353067,
+          "source": "llm"
+        },
+        {
+          "name": "steady.me",
+          "sld": "steady",
+          "tld": "me",
+          "score": 0.8316581076043011,
+          "source": "llm"
+        },
+        {
+          "name": "placid.co",
+          "sld": "placid",
+          "tld": "co",
+          "score": 0.7376040496313726,
+          "source": "llm"
+        },
+        {
+          "name": "flow.app",
+          "sld": "flow",
+          "tld": "app",
+          "score": 0.8500995045994214,
+          "source": "llm"
+        },
+        {
+          "name": "stillia.ai",
+          "sld": "stillia",
+          "tld": "ai",
+          "score": 0.9144966156267654,
+          "source": "llm"
+        },
+        {
+          "name": "mindrift.cloud",
+          "sld": "mindrift",
+          "tld": "cloud",
+          "score": 0.9002539799691035,
+          "source": "llm"
+        },
+        {
+          "name": "serenly.me",
+          "sld": "serenly",
+          "tld": "me",
+          "score": 0.7658624939241075,
+          "source": "llm"
+        },
+        {
+          "name": "pauza.studio",
+          "sld": "pauza",
+          "tld": "studio",
+          "score": 0.550423617658892,
+          "source": "llm"
+        },
+        {
+          "name": "unwindo.io",
+          "sld": "unwindo",
+          "tld": "io",
+          "score": 0.8179425078449133,
+          "source": "llm"
+        },
+        {
+          "name": "brethos.academy",
+          "sld": "brethos",
+          "tld": "academy",
+          "score": 0.7202828706666516,
+          "source": "llm"
+        },
+        {
+          "name": "zenify.software",
+          "sld": "zenify",
+          "tld": "software",
+          "score": 0.819227783947014,
+          "source": "llm"
+        },
+        {
+          "name": "levita.care",
+          "sld": "levita",
+          "tld": "care",
+          "score": 0.727604340782201,
+          "source": "llm"
+        },
+        {
+          "name": "quieto.build",
+          "sld": "quieto",
+          "tld": "build",
+          "score": 0.8876744559715615,
+          "source": "llm"
+        },
+        {
+          "name": "anchora.life",
+          "sld": "anchora",
+          "tld": "life",
+          "score": 0.8470756600268754,
+          "source": "llm"
+        },
+        {
+          "name": "fluxo.center",
+          "sld": "fluxo",
+          "tld": "center",
+          "score": 0.6773659088597057,
+          "source": "llm"
+        },
+        {
+          "name": "stasis.systems",
+          "sld": "stasis",
+          "tld": "systems",
+          "score": 0.7069498511567921,
+          "source": "llm"
+        },
+        {
+          "name": "clearic.vision",
+          "sld": "clearic",
+          "tld": "vision",
+          "score": 0.8361048024372045,
+          "source": "llm"
+        },
+        {
+          "name": "solace.works",
+          "sld": "solace",
+          "tld": "works",
+          "score": 0.7649201705975606,
+          "source": "llm"
+        },
+        {
+          "name": "balanc.guru",
+          "sld": "balanc",
+          "tld": "guru",
+          "score": 0.8205193786855639,
+          "source": "llm"
+        }
+      ],
+      "dur_ms": 1656,
+      "tokens": 3948,
+      "est_cost_usd": 0.0005237999999999999
+    },
+    {
+      "query": "team project management and async communication tool",
+      "variant": "current",
+      "suggestions": [
+        {
+          "name": "syncopate.app",
+          "sld": "syncopate",
+          "tld": "app",
+          "score": 0.8432288551841444,
+          "source": "llm"
+        },
+        {
+          "name": "fathom.ai",
+          "sld": "fathom",
+          "tld": "ai",
+          "score": 0.812853174408883,
+          "source": "llm"
+        },
+        {
+          "name": "tempo.works",
+          "sld": "tempo",
+          "tld": "works",
+          "score": 0.8493519503509419,
+          "source": "llm"
+        },
+        {
+          "name": "meridian.cloud",
+          "sld": "meridian",
+          "tld": "cloud",
+          "score": 0.8922541931408331,
+          "source": "llm"
+        },
+        {
+          "name": "convene.dev",
+          "sld": "convene",
+          "tld": "dev",
+          "score": 0.8986960369104351,
+          "source": "llm"
+        },
+        {
+          "name": "verge.io",
+          "sld": "verge",
+          "tld": "io",
+          "score": 0.9240943294474954,
+          "source": "llm"
+        },
+        {
+          "name": "staccato.systems",
+          "sld": "staccato",
+          "tld": "systems",
+          "score": 0.7964971974465309,
+          "source": "llm"
+        },
+        {
+          "name": "cadence.software",
+          "sld": "cadence",
+          "tld": "software",
+          "score": 0.774678785245053,
+          "source": "llm"
+        },
+        {
+          "name": "lattice.network",
+          "sld": "lattice",
+          "tld": "network",
+          "score": 0.8711132761163451,
+          "source": "llm"
+        },
+        {
+          "name": "nexus.agency",
+          "sld": "nexus",
+          "tld": "agency",
+          "score": 0.635517748310977,
+          "source": "llm"
+        },
+        {
+          "name": "pivot.solutions",
+          "sld": "pivot",
+          "tld": "solutions",
+          "score": 0.6348172557132185,
+          "source": "llm"
+        },
+        {
+          "name": "stasis.consulting",
+          "sld": "stasis",
+          "tld": "consulting",
+          "score": 0.71485695641995,
+          "source": "llm"
+        },
+        {
+          "name": "vector.technology",
+          "sld": "vector",
+          "tld": "technology",
+          "score": 0.8668347099075085,
+          "source": "llm"
+        },
+        {
+          "name": "parlance.chat",
+          "sld": "parlance",
+          "tld": "chat",
+          "score": 0.8318210532563106,
+          "source": "llm"
+        },
+        {
+          "name": "sequel.ventures",
+          "sld": "sequel",
+          "tld": "ventures",
+          "score": 0.7541793345204645,
+          "source": "llm"
+        },
+        {
+          "name": "stratum.academy",
+          "sld": "stratum",
+          "tld": "academy",
+          "score": 0.7519117556805439,
+          "source": "llm"
+        },
+        {
+          "name": "dovetail.design",
+          "sld": "dovetail",
+          "tld": "design",
+          "score": 0.7846974579728748,
+          "source": "llm"
+        },
+        {
+          "name": "ascent.digital",
+          "sld": "ascent",
+          "tld": "digital",
+          "score": 0.8244964374928341,
+          "source": "llm"
+        },
+        {
+          "name": "tether.community",
+          "sld": "tether",
+          "tld": "community",
+          "score": 0.9240352631578947,
+          "source": "llm"
+        },
+        {
+          "name": "flow.works",
+          "sld": "flow",
+          "tld": "works",
+          "score": 0.8479783165052263,
+          "source": "llm"
+        },
+        {
+          "name": "orbit.management",
+          "sld": "orbit",
+          "tld": "management",
+          "score": 0.8561567767750182,
+          "source": "llm"
+        },
+        {
+          "name": "vantage.academy",
+          "sld": "vantage",
+          "tld": "academy",
+          "score": 0.8790652817512885,
+          "source": "llm"
+        },
+        {
+          "name": "parallax.cloud",
+          "sld": "parallax",
+          "tld": "cloud",
+          "score": 0.8253285378132414,
+          "source": "llm"
+        },
+        {
+          "name": "summit.center",
+          "sld": "summit",
+          "tld": "center",
+          "score": 0.8510173175005346,
+          "source": "llm"
+        },
+        {
+          "name": "align.me",
+          "sld": "align",
+          "tld": "me",
+          "score": 0.7843872746058391,
+          "source": "llm"
+        },
+        {
+          "name": "pulse.agency",
+          "sld": "pulse",
+          "tld": "agency",
+          "score": 0.7665153875464276,
+          "source": "llm"
+        },
+        {
+          "name": "helix.vision",
+          "sld": "helix",
+          "tld": "vision",
+          "score": 0.6699155621013068,
+          "source": "llm"
+        },
+        {
+          "name": "strata.build",
+          "sld": "strata",
+          "tld": "build",
+          "score": 0.7884717067551613,
+          "source": "llm"
+        },
+        {
+          "name": "convey.info",
+          "sld": "convey",
+          "tld": "info",
+          "score": 0.8079181089350105,
+          "source": "llm"
+        },
+        {
+          "name": "flowsync.io",
+          "sld": "flowsync",
+          "tld": "io",
+          "score": 0.7609076477541311,
+          "source": "llm"
+        },
+        {
+          "name": "voucha.ai",
+          "sld": "voucha",
+          "tld": "ai",
+          "score": 0.7660872981645678,
+          "source": "llm"
+        },
+        {
+          "name": "kinetix.cloud",
+          "sld": "kinetix",
+          "tld": "cloud",
+          "score": 0.7468562241843083,
+          "source": "llm"
+        },
+        {
+          "name": "span.dev",
+          "sld": "span",
+          "tld": "dev",
+          "score": 0.8901414838022406,
+          "source": "llm"
+        },
+        {
+          "name": "stride.co",
+          "sld": "stride",
+          "tld": "co",
+          "score": 0.8951607792663575,
+          "source": "llm"
+        },
+        {
+          "name": "relay.community",
+          "sld": "relay",
+          "tld": "community",
+          "score": 0.8064215717018453,
+          "source": "llm"
+        },
+        {
+          "name": "anchor.management",
+          "sld": "anchor",
+          "tld": "management",
+          "score": 0.929196589050028,
+          "source": "llm"
+        },
+        {
+          "name": "converge.ventures",
+          "sld": "converge",
+          "tld": "ventures",
+          "score": 0.7978547173469125,
+          "source": "llm"
+        },
+        {
+          "name": "tide.digital",
+          "sld": "tide",
+          "tld": "digital",
+          "score": 0.8993258630053204,
+          "source": "llm"
+        },
+        {
+          "name": "merit.solutions",
+          "sld": "merit",
+          "tld": "solutions",
+          "score": 0.9259705426576403,
+          "source": "llm"
+        },
+        {
+          "name": "link.expert",
+          "sld": "link",
+          "tld": "expert",
+          "score": 0.8745287552239156,
+          "source": "llm"
+        }
+      ],
+      "dur_ms": 1744,
+      "tokens": 3939,
+      "est_cost_usd": 0.00051975
+    },
+    {
+      "query": "yoga studio",
+      "variant": "current",
+      "suggestions": [
+        {
+          "name": "asana.studio",
+          "sld": "asana",
+          "tld": "studio",
+          "score": 0.7752282245870581,
+          "source": "llm"
+        },
+        {
+          "name": "prana.cloud",
+          "sld": "prana",
+          "tld": "cloud",
+          "score": 0.8541650008015068,
+          "source": "llm"
+        },
+        {
+          "name": "vinyasa.academy",
+          "sld": "vinyasa",
+          "tld": "academy",
+          "score": 0.6764848415202526,
+          "source": "llm"
+        },
+        {
+          "name": "sadhana.live",
+          "sld": "sadhana",
+          "tld": "live",
+          "score": 0.7917455828161142,
+          "source": "llm"
+        },
+        {
+          "name": "drishti.vision",
+          "sld": "drishti",
+          "tld": "vision",
+          "score": 0.706293560217233,
+          "source": "llm"
+        },
+        {
+          "name": "tattva.co",
+          "sld": "tattva",
+          "tld": "co",
+          "score": 0.5971889856637339,
+          "source": "llm"
+        },
+        {
+          "name": "mudra.agency",
+          "sld": "mudra",
+          "tld": "agency",
+          "score": 0.7450096883172942,
+          "source": "llm"
+        },
+        {
+          "name": "nadi.center",
+          "sld": "nadi",
+          "tld": "center",
+          "score": 0.702671184554047,
+          "source": "llm"
+        },
+        {
+          "name": "bandha.works",
+          "sld": "bandha",
+          "tld": "works",
+          "score": 0.842182345660428,
+          "source": "llm"
+        },
+        {
+          "name": "krama.build",
+          "sld": "krama",
+          "tld": "build",
+          "score": 0.7703972440926197,
+          "source": "llm"
+        },
+        {
+          "name": "yamas.community",
+          "sld": "yamas",
+          "tld": "community",
+          "score": 0.7581507760612829,
+          "source": "llm"
+        },
+        {
+          "name": "dhyana.guru",
+          "sld": "dhyana",
+          "tld": "guru",
+          "score": 0.727732079986996,
+          "source": "llm"
+        },
+        {
+          "name": "tapas.fitness",
+          "sld": "tapas",
+          "tld": "fitness",
+          "score": 0.8059710265921064,
+          "source": "llm"
+        },
+        {
+          "name": "hatha.life",
+          "sld": "hatha",
+          "tld": "life",
+          "score": 0.866671047229767,
+          "source": "llm"
+        },
+        {
+          "name": "yama.institute",
+          "sld": "yama",
+          "tld": "institute",
+          "score": 0.6723393431559448,
+          "source": "llm"
+        },
+        {
+          "name": "muladhara.foundation",
+          "sld": "muladhara",
+          "tld": "foundation",
+          "score": 0.6304964543092524,
+          "source": "llm"
+        },
+        {
+          "name": "surya.energy",
+          "sld": "surya",
+          "tld": "energy",
+          "score": 0.6863439317252086,
+          "source": "llm"
+        },
+        {
+          "name": "kriya.training",
+          "sld": "kriya",
+          "tld": "training",
+          "score": 0.44630000000000003,
+          "source": "llm"
+        },
+        {
+          "name": "bija.design",
+          "sld": "bija",
+          "tld": "design",
+          "score": 0.49383985574410316,
+          "source": "llm"
+        },
+        {
+          "name": "kosha.management",
+          "sld": "kosha",
+          "tld": "management",
+          "score": 0.6372829391316446,
+          "source": "llm"
+        },
+        {
+          "name": "align.studio",
+          "sld": "align",
+          "tld": "studio",
+          "score": 0.8067198297210619,
+          "source": "llm"
+        },
+        {
+          "name": "posture.academy",
+          "sld": "posture",
+          "tld": "academy",
+          "score": 0.8560093705905856,
+          "source": "llm"
+        },
+        {
+          "name": "flow.zone",
+          "sld": "flow",
+          "tld": "zone",
+          "score": 0.8133376618459551,
+          "source": "llm"
+        },
+        {
+          "name": "zen.works",
+          "sld": "zen",
+          "tld": "works",
+          "score": 0.9405220491600037,
+          "source": "llm"
+        },
+        {
+          "name": "serene.center",
+          "sld": "serene",
+          "tld": "center",
+          "score": 0.7731400305779775,
+          "source": "llm"
+        },
+        {
+          "name": "spirit.guru",
+          "sld": "spirit",
+          "tld": "guru",
+          "score": 0.8531206901876525,
+          "source": "llm"
+        },
+        {
+          "name": "balance.studio",
+          "sld": "balance",
+          "tld": "studio",
+          "score": 0.9179319553224533,
+          "source": "llm"
+        },
+        {
+          "name": "unfold.me",
+          "sld": "unfold",
+          "tld": "me",
+          "score": 0.7511869659131069,
+          "source": "llm"
+        },
+        {
+          "name": "breathe.fm",
+          "sld": "breathe",
+          "tld": "fm",
+          "score": 0.8625812269639677,
+          "source": "llm"
+        },
+        {
+          "name": "evolve.ai",
+          "sld": "evolve",
+          "tld": "ai",
+          "score": 0.7653111671874975,
+          "source": "llm"
+        },
+        {
+          "name": "centered.solutions",
+          "sld": "centered",
+          "tld": "solutions",
+          "score": 0.893097050151825,
+          "source": "llm"
+        },
+        {
+          "name": "mindful.coach",
+          "sld": "mindful",
+          "tld": "coach",
+          "score": 0.698635769702534,
+          "source": "llm"
+        },
+        {
+          "name": "pulse.agency",
+          "sld": "pulse",
+          "tld": "agency",
+          "score": 0.7449469699972943,
+          "source": "llm"
+        },
+        {
+          "name": "asanamove.studio",
+          "sld": "asanamove",
+          "tld": "studio",
+          "score": 0.8260431538592907,
+          "source": "llm"
+        },
+        {
+          "name": "flowcraft.studio",
+          "sld": "flowcraft",
+          "tld": "studio",
+          "score": 0.779933979244786,
+          "source": "llm"
+        },
+        {
+          "name": "zenithia.me",
+          "sld": "zenithia",
+          "tld": "me",
+          "score": 0.9061635750697316,
+          "source": "llm"
+        },
+        {
+          "name": "kinevibe.guru",
+          "sld": "kinevibe",
+          "tld": "guru",
+          "score": 0.7739603284637819,
+          "source": "llm"
+        },
+        {
+          "name": "omspace.fitness",
+          "sld": "omspace",
+          "tld": "fitness",
+          "score": 0.8078881947382344,
+          "source": "llm"
+        },
+        {
+          "name": "breathly.app",
+          "sld": "breathly",
+          "tld": "app",
+          "score": 0.8450341857081906,
+          "source": "llm"
+        },
+        {
+          "name": "yogicomm.community",
+          "sld": "yogicomm",
+          "tld": "community",
+          "score": 0.7666635504829548,
+          "source": "llm"
+        },
+        {
+          "name": "soulalign.life",
+          "sld": "soulalign",
+          "tld": "life",
+          "score": 0.851431085766725,
+          "source": "llm"
+        },
+        {
+          "name": "vitaloom.cloud",
+          "sld": "vitaloom",
+          "tld": "cloud",
+          "score": 0.7957460805709211,
+          "source": "llm"
+        },
+        {
+          "name": "zenbound.gallery",
+          "sld": "zenbound",
+          "tld": "gallery",
+          "score": 0.8887315351737868,
+          "source": "llm"
+        },
+        {
+          "name": "pliable.agency",
+          "sld": "pliable",
+          "tld": "agency",
+          "score": 0.8019687759113208,
+          "source": "llm"
+        },
+        {
+          "name": "formpulse.care",
+          "sld": "formpulse",
+          "tld": "care",
+          "score": 0.8114337764983461,
+          "source": "llm"
+        },
+        {
+          "name": "stillness.zone",
+          "sld": "stillness",
+          "tld": "zone",
+          "score": 0.8176806747993013,
+          "source": "llm"
+        },
+        {
+          "name": "grounded.works",
+          "sld": "grounded",
+          "tld": "works",
+          "score": 0.8236310554909013,
+          "source": "llm"
+        },
+        {
+          "name": "vinyasart.design",
+          "sld": "vinyasart",
+          "tld": "design",
+          "score": 0.6340097475450203,
+          "source": "llm"
+        },
+        {
+          "name": "alignify.coach",
+          "sld": "alignify",
+          "tld": "coach",
+          "score": 0.6494860723849616,
+          "source": "llm"
+        },
+        {
+          "name": "serenis.academy",
+          "sld": "serenis",
+          "tld": "academy",
+          "score": 0.8085818867454673,
+          "source": "llm"
+        },
+        {
+          "name": "innerloop.center",
+          "sld": "innerloop",
+          "tld": "center",
+          "score": 0.8086149398492657,
+          "source": "llm"
+        },
+        {
+          "name": "mantramap.guide",
+          "sld": "mantramap",
+          "tld": "guide",
+          "score": 0.8704898988636696,
+          "source": "llm"
+        }
+      ],
+      "dur_ms": 1736,
+      "tokens": 3881,
+      "est_cost_usd": 0.0005064
+    },
+    {
+      "query": "AI-powered legal document review tool for small law firms",
+      "variant": "current",
+      "suggestions": [
+        {
+          "name": "juris.ai",
+          "sld": "juris",
+          "tld": "ai",
+          "score": 0.8139450000000001,
+          "source": "llm"
+        },
+        {
+          "name": "lexicon.ai",
+          "sld": "lexicon",
+          "tld": "ai",
+          "score": 0.909874299608327,
+          "source": "llm"
+        },
+        {
+          "name": "verdict.dev",
+          "sld": "verdict",
+          "tld": "dev",
+          "score": 0.9761504648989724,
+          "source": "llm"
+        },
+        {
+          "name": "counsel.cloud",
+          "sld": "counsel",
+          "tld": "cloud",
+          "score": 0.9737683036787479,
+          "source": "llm"
+        },
+        {
+          "name": "statute.solutions",
+          "sld": "statute",
+          "tld": "solutions",
+          "score": 0.967249671781644,
+          "source": "llm"
+        },
+        {
+          "name": "litigate.app",
+          "sld": "litigate",
+          "tld": "app",
+          "score": 0.8590569014539944,
+          "source": "llm"
+        },
+        {
+          "name": "brief.agency",
+          "sld": "brief",
+          "tld": "agency",
+          "score": 0.8216163862136701,
+          "source": "llm"
+        },
+        {
+          "name": "paragon.legal",
+          "sld": "paragon",
+          "tld": "legal",
+          "score": 0.8354872243691666,
+          "source": "llm"
+        },
+        {
+          "name": "solicitor.systems",
+          "sld": "solicitor",
+          "tld": "systems",
+          "score": 0.877485136924062,
+          "source": "llm"
+        },
+        {
+          "name": "docket.works",
+          "sld": "docket",
+          "tld": "works",
+          "score": 0.781402151592631,
+          "source": "llm"
+        },
+        {
+          "name": "testify.co",
+          "sld": "testify",
+          "tld": "co",
+          "score": 0.9154149400044647,
+          "source": "llm"
+        },
+        {
+          "name": "clause.expert",
+          "sld": "clause",
+          "tld": "expert",
+          "score": 0.8684310191074438,
+          "source": "llm"
+        },
+        {
+          "name": "arbitrate.io",
+          "sld": "arbitrate",
+          "tld": "io",
+          "score": 0.8401160265010701,
+          "source": "llm"
+        },
+        {
+          "name": "notary.software",
+          "sld": "notary",
+          "tld": "software",
+          "score": 0.8472103968838871,
+          "source": "llm"
+        },
+        {
+          "name": "codex.legal",
+          "sld": "codex",
+          "tld": "legal",
+          "score": 0.7654379807441336,
+          "source": "llm"
+        },
+        {
+          "name": "affidavit.expert",
+          "sld": "affidavit",
+          "tld": "expert",
+          "score": 0.7791582014940736,
+          "source": "llm"
+        },
+        {
+          "name": "probate.solutions",
+          "sld": "probate",
+          "tld": "solutions",
+          "score": 0.8750531018885714,
+          "source": "llm"
+        },
+        {
+          "name": "covenant.io",
+          "sld": "covenant",
+          "tld": "io",
+          "score": 0.9022965843672319,
+          "source": "llm"
+        },
+        {
+          "name": "judiciary.dev",
+          "sld": "judiciary",
+          "tld": "dev",
+          "score": 0.9127008809705548,
+          "source": "llm"
+        },
+        {
+          "name": "decree.works",
+          "sld": "decree",
+          "tld": "works",
+          "score": 0.8425010809552996,
+          "source": "llm"
+        },
+        {
+          "name": "summons.app",
+          "sld": "summons",
+          "tld": "app",
+          "score": 0.8173733789069921,
+          "source": "llm"
+        },
+        {
+          "name": "legali.ai",
+          "sld": "legali",
+          "tld": "ai",
+          "score": 0.9893974279535203,
+          "source": "llm"
+        },
+        {
+          "name": "stipulate.legal",
+          "sld": "stipulate",
+          "tld": "legal",
+          "score": 0.9447300300639946,
+          "source": "llm"
+        },
+        {
+          "name": "proof.legal",
+          "sld": "proof",
+          "tld": "legal",
+          "score": 0.8591100395130883,
+          "source": "llm"
+        },
+        {
+          "name": "equity.build",
+          "sld": "equity",
+          "tld": "build",
+          "score": 0.7964136840589923,
+          "source": "llm"
+        },
+        {
+          "name": "notarize.info",
+          "sld": "notarize",
+          "tld": "info",
+          "score": 0.9173243737058123,
+          "source": "llm"
+        },
+        {
+          "name": "advocacy.solutions",
+          "sld": "advocacy",
+          "tld": "solutions",
+          "score": 0.7848502016918689,
+          "source": "llm"
+        },
+        {
+          "name": "jurisly.ai",
+          "sld": "jurisly",
+          "tld": "ai",
+          "score": 0.7848788687703124,
+          "source": "llm"
+        },
+        {
+          "name": "legalsync.ai",
+          "sld": "legalsync",
+          "tld": "ai",
+          "score": 0.8925585478590666,
+          "source": "llm"
+        },
+        {
+          "name": "verdictly.io",
+          "sld": "verdictly",
+          "tld": "io",
+          "score": 0.8974329842435969,
+          "source": "llm"
+        },
+        {
+          "name": "notalith.legal",
+          "sld": "notalith",
+          "tld": "legal",
+          "score": 0.9585996245417466,
+          "source": "llm"
+        },
+        {
+          "name": "advoserve.legal",
+          "sld": "advoserve",
+          "tld": "legal",
+          "score": 0.847381651518025,
+          "source": "llm"
+        },
+        {
+          "name": "clarifirm.cloud",
+          "sld": "clarifirm",
+          "tld": "cloud",
+          "score": 0.8556084722967076,
+          "source": "llm"
+        },
+        {
+          "name": "testivest.cloud",
+          "sld": "testivest",
+          "tld": "cloud",
+          "score": 0.9035201936437215,
+          "source": "llm"
+        },
+        {
+          "name": "briefly.software",
+          "sld": "briefly",
+          "tld": "software",
+          "score": 0.8412148402141552,
+          "source": "llm"
+        },
+        {
+          "name": "counselly.software",
+          "sld": "counselly",
+          "tld": "software",
+          "score": 0.9248087736107613,
+          "source": "llm"
+        },
+        {
+          "name": "juristone.build",
+          "sld": "juristone",
+          "tld": "build",
+          "score": 0.852905331636762,
+          "source": "llm"
+        },
+        {
+          "name": "statumind.build",
+          "sld": "statumind",
+          "tld": "build",
+          "score": 0.878674624026761,
+          "source": "llm"
+        },
+        {
+          "name": "liticraft.expert",
+          "sld": "liticraft",
+          "tld": "expert",
+          "score": 0.7755822688725164,
+          "source": "llm"
+        },
+        {
+          "name": "codexflow.expert",
+          "sld": "codexflow",
+          "tld": "expert",
+          "score": 0.7297116104289644,
+          "source": "llm"
+        },
+        {
+          "name": "plaintive.company",
+          "sld": "plaintive",
+          "tld": "company",
+          "score": 0.81151897014337,
+          "source": "llm"
+        },
+        {
+          "name": "arguspace.company",
+          "sld": "arguspace",
+          "tld": "company",
+          "score": 0.7457151600941233,
+          "source": "llm"
+        },
+        {
+          "name": "scrivento.solutions",
+          "sld": "scrivento",
+          "tld": "solutions",
+          "score": 0.7389775096996098,
+          "source": "llm"
+        },
+        {
+          "name": "aequitas.solutions",
+          "sld": "aequitas",
+          "tld": "solutions",
+          "score": 0.7566229877679386,
+          "source": "llm"
+        },
+        {
+          "name": "lexicore.me",
+          "sld": "lexicore",
+          "tld": "me",
+          "score": 0.9005258775112109,
+          "source": "llm"
+        },
+        {
+          "name": "nomos.me",
+          "sld": "nomos",
+          "tld": "me",
+          "score": 0.6782804197577749,
+          "source": "llm"
+        },
+        {
+          "name": "prudence.works",
+          "sld": "prudence",
+          "tld": "works",
+          "score": 0.7184049171767385,
+          "source": "llm"
+        }
+      ],
+      "dur_ms": 1702,
+      "tokens": 3956,
+      "est_cost_usd": 0.000514725
+    },
+    {
+      "query": "craft beer subscription box monthly delivery",
+      "variant": "current",
+      "suggestions": [
+        {
+          "name": "cerve.beer",
+          "sld": "cerve",
+          "tld": "beer",
+          "score": 0.7775574143357236,
+          "source": "llm"
+        },
+        {
+          "name": "hopsage.beer",
+          "sld": "hopsage",
+          "tld": "beer",
+          "score": 0.8930852074657236,
+          "source": "llm"
+        },
+        {
+          "name": "brumal.delivery",
+          "sld": "brumal",
+          "tld": "delivery",
+          "score": 0.8557620371117851,
+          "source": "llm"
+        },
+        {
+          "name": "maltwise.pub",
+          "sld": "maltwise",
+          "tld": "pub",
+          "score": 0.7901429281614871,
+          "source": "llm"
+        },
+        {
+          "name": "yeastwood.co",
+          "sld": "yeastwood",
+          "tld": "co",
+          "score": 0.783703868135941,
+          "source": "llm"
+        },
+        {
+          "name": "frothly.delivery",
+          "sld": "frothly",
+          "tld": "delivery",
+          "score": 0.7901112505908378,
+          "source": "llm"
+        },
+        {
+          "name": "graincurator.agency",
+          "sld": "graincurator",
+          "tld": "agency",
+          "score": 0.860912250726447,
+          "source": "llm"
+        },
+        {
+          "name": "kegbound.run",
+          "sld": "kegbound",
+          "tld": "run",
+          "score": 0.8273537469500627,
+          "source": "llm"
+        },
+        {
+          "name": "fermentry.shop",
+          "sld": "fermentry",
+          "tld": "shop",
+          "score": 0.8975400851104104,
+          "source": "llm"
+        },
+        {
+          "name": "gyle.works",
+          "sld": "gyle",
+          "tld": "works",
+          "score": 0.6873255120907709,
+          "source": "llm"
+        },
+        {
+          "name": "wortsmith.studio",
+          "sld": "wortsmith",
+          "tld": "studio",
+          "score": 0.7990021464327218,
+          "source": "llm"
+        },
+        {
+          "name": "taphound.me",
+          "sld": "taphound",
+          "tld": "me",
+          "score": 0.8524233303977058,
+          "source": "llm"
+        },
+        {
+          "name": "barleybound.app",
+          "sld": "barleybound",
+          "tld": "app",
+          "score": 0.8166815695898073,
+          "source": "llm"
+        },
+        {
+          "name": "supsuds.cloud",
+          "sld": "supsuds",
+          "tld": "cloud",
+          "score": 0.7631196041788334,
+          "source": "llm"
+        },
+        {
+          "name": "brewworthy.company",
+          "sld": "brewworthy",
+          "tld": "company",
+          "score": 0.7791218210196617,
+          "source": "llm"
+        },
+        {
+          "name": "mashnote.ai",
+          "sld": "mashnote",
+          "tld": "ai",
+          "score": 0.8159341227284633,
+          "source": "llm"
+        },
+        {
+          "name": "hophaul.io",
+          "sld": "hophaul",
+          "tld": "io",
+          "score": 0.9174024448162096,
+          "source": "llm"
+        },
+        {
+          "name": "vessel.cafe",
+          "sld": "vessel",
+          "tld": "cafe",
+          "score": 0.9274161516018918,
+          "source": "llm"
+        },
+        {
+          "name": "drafted.network",
+          "sld": "drafted",
+          "tld": "network",
+          "score": 0.769589130764981,
+          "source": "llm"
+        },
+        {
+          "name": "hop.beer",
+          "sld": "hop",
+          "tld": "beer",
+          "score": 0.9553497626364303,
+          "source": "llm"
+        },
+        {
+          "name": "sups.beer",
+          "sld": "sups",
+          "tld": "beer",
+          "score": 0.8620963818191187,
+          "source": "llm"
+        },
+        {
+          "name": "ale.delivery",
+          "sld": "ale",
+          "tld": "delivery",
+          "score": 0.9618123032244515,
+          "source": "llm"
+        },
+        {
+          "name": "ferment.co",
+          "sld": "ferment",
+          "tld": "co",
+          "score": 0.8875856772923257,
+          "source": "llm"
+        },
+        {
+          "name": "brew.delivery",
+          "sld": "brew",
+          "tld": "delivery",
+          "score": 0.8328162239020891,
+          "source": "llm"
+        },
+        {
+          "name": "malt.pub",
+          "sld": "malt",
+          "tld": "pub",
+          "score": 0.6998414574710466,
+          "source": "llm"
+        },
+        {
+          "name": "keg.me",
+          "sld": "keg",
+          "tld": "me",
+          "score": 0.6629877442162609,
+          "source": "llm"
+        },
+        {
+          "name": "foam.am",
+          "sld": "foam",
+          "tld": "am",
+          "score": 0.7470602689632317,
+          "source": "llm"
+        },
+        {
+          "name": "lager.io",
+          "sld": "lager",
+          "tld": "io",
+          "score": 0.8422314351836111,
+          "source": "llm"
+        },
+        {
+          "name": "pint.fm",
+          "sld": "pint",
+          "tld": "fm",
+          "score": 0.8427558353485781,
+          "source": "llm"
+        },
+        {
+          "name": "sip.ai",
+          "sld": "sip",
+          "tld": "ai",
+          "score": 0.6003439020976221,
+          "source": "llm"
+        },
+        {
+          "name": "yeast.build",
+          "sld": "yeast",
+          "tld": "build",
+          "score": 0.8016390543475207,
+          "source": "llm"
+        },
+        {
+          "name": "tap.cloud",
+          "sld": "tap",
+          "tld": "cloud",
+          "score": 0.8647032041429288,
+          "source": "llm"
+        },
+        {
+          "name": "grain.cafe",
+          "sld": "grain",
+          "tld": "cafe",
+          "score": 0.9077643314154216,
+          "source": "llm"
+        },
+        {
+          "name": "steep.studio",
+          "sld": "steep",
+          "tld": "studio",
+          "score": 0.8199528729947466,
+          "source": "llm"
+        },
+        {
+          "name": "wort.agency",
+          "sld": "wort",
+          "tld": "agency",
+          "score": 0.6802655852098953,
+          "source": "llm"
+        },
+        {
+          "name": "hopflow.delivery",
+          "sld": "hopflow",
+          "tld": "delivery",
+          "score": 0.845292049959772,
+          "source": "llm"
+        },
+        {
+          "name": "brewerly.beer",
+          "sld": "brewerly",
+          "tld": "beer",
+          "score": 0.8544709273228973,
+          "source": "llm"
+        },
+        {
+          "name": "kegvoyage.me",
+          "sld": "kegvoyage",
+          "tld": "me",
+          "score": 0.6407701309985463,
+          "source": "llm"
+        },
+        {
+          "name": "draughtly.shop",
+          "sld": "draughtly",
+          "tld": "shop",
+          "score": 0.6057316438693,
+          "source": "llm"
+        },
+        {
+          "name": "brewbound.co",
+          "sld": "brewbound",
+          "tld": "co",
+          "score": 0.8731952362900645,
+          "source": "llm"
+        },
+        {
+          "name": "fermently.app",
+          "sld": "fermently",
+          "tld": "app",
+          "score": 0.8320372693372674,
+          "source": "llm"
+        },
+        {
+          "name": "pintpath.bar",
+          "sld": "pintpath",
+          "tld": "bar",
+          "score": 0.8185246703646167,
+          "source": "llm"
+        },
+        {
+          "name": "sudsjourn.pub",
+          "sld": "sudsjourn",
+          "tld": "pub",
+          "score": 0.6868294927882659,
+          "source": "llm"
+        },
+        {
+          "name": "yieldhopt.io",
+          "sld": "yieldhopt",
+          "tld": "io",
+          "score": 0.766093917993593,
+          "source": "llm"
+        },
+        {
+          "name": "alequest.agency",
+          "sld": "alequest",
+          "tld": "agency",
+          "score": 0.9013522325639515,
+          "source": "llm"
+        },
+        {
+          "name": "draftcrate.gifts",
+          "sld": "draftcrate",
+          "tld": "gifts",
+          "score": 0.81166119652474,
+          "source": "llm"
+        },
+        {
+          "name": "grainshift.community",
+          "sld": "grainshift",
+          "tld": "community",
+          "score": 0.7720071870193245,
+          "source": "llm"
+        },
+        {
+          "name": "caskroute.world",
+          "sld": "caskroute",
+          "tld": "world",
+          "score": 0.778831741963055,
+          "source": "llm"
+        },
+        {
+          "name": "bruevoke.digital",
+          "sld": "bruevoke",
+          "tld": "digital",
+          "score": 0.6086839351394152,
+          "source": "llm"
+        },
+        {
+          "name": "hoppulse.life",
+          "sld": "hoppulse",
+          "tld": "life",
+          "score": 0.831097773232233,
+          "source": "llm"
+        },
+        {
+          "name": "malthaven.center",
+          "sld": "malthaven",
+          "tld": "center",
+          "score": 0.7892469436606573,
+          "source": "llm"
+        },
+        {
+          "name": "zestbrew.boutique",
+          "sld": "zestbrew",
+          "tld": "boutique",
+          "score": 0.7804525544017343,
+          "source": "llm"
+        },
+        {
+          "name": "pourloom.studio",
+          "sld": "pourloom",
+          "tld": "studio",
+          "score": 0.7957823866652324,
+          "source": "llm"
+        },
+        {
+          "name": "frothfind.guide",
+          "sld": "frothfind",
+          "tld": "guide",
+          "score": 0.8086778992197966,
+          "source": "llm"
+        }
+      ],
+      "dur_ms": 1766,
+      "tokens": 3977,
+      "est_cost_usd": 0.0005298
+    },
+    {
+      "query": "podcast hosting and analytics platform",
+      "variant": "current",
+      "suggestions": [
+        {
+          "name": "reson.fm",
+          "sld": "reson",
+          "tld": "fm",
+          "score": 0.8519088143842249,
+          "source": "llm"
+        },
+        {
+          "name": "audiogram.ai",
+          "sld": "audiogram",
+          "tld": "ai",
+          "score": 0.7706042423311862,
+          "source": "llm"
+        },
+        {
+          "name": "decibel.io",
+          "sld": "decibel",
+          "tld": "io",
+          "score": 0.7821180979184774,
+          "source": "llm"
+        },
+        {
+          "name": "cadence.fm",
+          "sld": "cadence",
+          "tld": "fm",
+          "score": 0.7550262162397362,
+          "source": "llm"
+        },
+        {
+          "name": "sonance.cloud",
+          "sld": "sonance",
+          "tld": "cloud",
+          "score": 0.8606920113098311,
+          "source": "llm"
+        },
+        {
+          "name": "phonal.systems",
+          "sld": "phonal",
+          "tld": "systems",
+          "score": 0.7466150000000001,
+          "source": "llm"
+        },
+        {
+          "name": "tessera.media",
+          "sld": "tessera",
+          "tld": "media",
+          "score": 0.8548882774952481,
+          "source": "llm"
+        },
+        {
+          "name": "timbre.studio",
+          "sld": "timbre",
+          "tld": "studio",
+          "score": 0.8649761678204907,
+          "source": "llm"
+        },
+        {
+          "name": "modulate.dev",
+          "sld": "modulate",
+          "tld": "dev",
+          "score": 0.8852607463804616,
+          "source": "llm"
+        },
+        {
+          "name": "refrain.app",
+          "sld": "refrain",
+          "tld": "app",
+          "score": 0.8281875019125581,
+          "source": "llm"
+        },
+        {
+          "name": "vocalis.network",
+          "sld": "vocalis",
+          "tld": "network",
+          "score": 0.8737039482735881,
+          "source": "llm"
+        },
+        {
+          "name": "acoustix.agency",
+          "sld": "acoustix",
+          "tld": "agency",
+          "score": 0.7641009204862423,
+          "source": "llm"
+        },
+        {
+          "name": "overtone.am",
+          "sld": "overtone",
+          "tld": "am",
+          "score": 0.9245171904570488,
+          "source": "llm"
+        },
+        {
+          "name": "frequence.me",
+          "sld": "frequence",
+          "tld": "me",
+          "score": 0.6503038776713718,
+          "source": "llm"
+        },
+        {
+          "name": "clarion.community",
+          "sld": "clarion",
+          "tld": "community",
+          "score": 0.7802085517450833,
+          "source": "llm"
+        },
+        {
+          "name": "narrata.guide",
+          "sld": "narrata",
+          "tld": "guide",
+          "score": 0.7747067943652002,
+          "source": "llm"
+        },
+        {
+          "name": "prose.works",
+          "sld": "prose",
+          "tld": "works",
+          "score": 0.7876793587295483,
+          "source": "llm"
+        },
+        {
+          "name": "broadcast.ventures",
+          "sld": "broadcast",
+          "tld": "ventures",
+          "score": 0.8014640339385827,
+          "source": "llm"
+        },
+        {
+          "name": "amplitude.capital",
+          "sld": "amplitude",
+          "tld": "capital",
+          "score": 0.757455129423203,
+          "source": "llm"
+        },
+        {
+          "name": "resonance.direct",
+          "sld": "resonance",
+          "tld": "direct",
+          "score": 0.8070787194888515,
+          "source": "llm"
+        },
+        {
+          "name": "broad.fm",
+          "sld": "broad",
+          "tld": "fm",
+          "score": 0.7618045736353612,
+          "source": "llm"
+        },
+        {
+          "name": "audie.fm",
+          "sld": "audie",
+          "tld": "fm",
+          "score": 0.6787021730029066,
+          "source": "llm"
+        },
+        {
+          "name": "sonic.media",
+          "sld": "sonic",
+          "tld": "media",
+          "score": 0.868579243749565,
+          "source": "llm"
+        },
+        {
+          "name": "echo.cloud",
+          "sld": "echo",
+          "tld": "cloud",
+          "score": 0.86492973381418,
+          "source": "llm"
+        },
+        {
+          "name": "wave.fm",
+          "sld": "wave",
+          "tld": "fm",
+          "score": 0.8810663893357618,
+          "source": "llm"
+        },
+        {
+          "name": "pulse.ai",
+          "sld": "pulse",
+          "tld": "ai",
+          "score": 0.7612012489667785,
+          "source": "llm"
+        },
+        {
+          "name": "meter.fm",
+          "sld": "meter",
+          "tld": "fm",
+          "score": 0.8548845036007378,
+          "source": "llm"
+        },
+        {
+          "name": "vocal.ai",
+          "sld": "vocal",
+          "tld": "ai",
+          "score": 0.8678153226053333,
+          "source": "llm"
+        },
+        {
+          "name": "stream.fm",
+          "sld": "stream",
+          "tld": "fm",
+          "score": 0.8354265061821597,
+          "source": "llm"
+        },
+        {
+          "name": "listen.fm",
+          "sld": "listen",
+          "tld": "fm",
+          "score": 0.8992530003132541,
+          "source": "llm"
+        },
+        {
+          "name": "metric.media",
+          "sld": "metric",
+          "tld": "media",
+          "score": 0.8245790984698813,
+          "source": "llm"
+        },
+        {
+          "name": "resona.fm",
+          "sld": "resona",
+          "tld": "fm",
+          "score": 0.8053203840077314,
+          "source": "llm"
+        },
+        {
+          "name": "audio.fm",
+          "sld": "audio",
+          "tld": "fm",
+          "score": 0.7489427302002977,
+          "source": "llm"
+        },
+        {
+          "name": "vox.fm",
+          "sld": "vox",
+          "tld": "fm",
+          "score": 0.4711742054562461,
+          "source": "llm"
+        },
+        {
+          "name": "tempo.fm",
+          "sld": "tempo",
+          "tld": "fm",
+          "score": 0.7464614997596465,
+          "source": "llm"
+        },
+        {
+          "name": "ampli.fm",
+          "sld": "ampli",
+          "tld": "fm",
+          "score": 0.7303317426529266,
+          "source": "llm"
+        },
+        {
+          "name": "signal.fm",
+          "sld": "signal",
+          "tld": "fm",
+          "score": 0.7675913485747373,
+          "source": "llm"
+        },
+        {
+          "name": "audionaut.fm",
+          "sld": "audionaut",
+          "tld": "fm",
+          "score": 0.7430145485064023,
+          "source": "llm"
+        },
+        {
+          "name": "voxscale.ai",
+          "sld": "voxscale",
+          "tld": "ai",
+          "score": 0.7628624482606514,
+          "source": "llm"
+        },
+        {
+          "name": "echoist.studio",
+          "sld": "echoist",
+          "tld": "studio",
+          "score": 0.8146435705164444,
+          "source": "llm"
+        },
+        {
+          "name": "castmetric.io",
+          "sld": "castmetric",
+          "tld": "io",
+          "score": 0.8451272321091281,
+          "source": "llm"
+        },
+        {
+          "name": "sonoview.media",
+          "sld": "sonoview",
+          "tld": "media",
+          "score": 0.8130222201229399,
+          "source": "llm"
+        },
+        {
+          "name": "wavecraft.software",
+          "sld": "wavecraft",
+          "tld": "software",
+          "score": 0.7905096432675304,
+          "source": "llm"
+        },
+        {
+          "name": "podlytics.cloud",
+          "sld": "podlytics",
+          "tld": "cloud",
+          "score": 0.641429595921805,
+          "source": "llm"
+        },
+        {
+          "name": "aurasense.fm",
+          "sld": "aurasense",
+          "tld": "fm",
+          "score": 0.7857441405864831,
+          "source": "llm"
+        },
+        {
+          "name": "vocalize.app",
+          "sld": "vocalize",
+          "tld": "app",
+          "score": 0.8768184239637931,
+          "source": "llm"
+        },
+        {
+          "name": "fluxcast.network",
+          "sld": "fluxcast",
+          "tld": "network",
+          "score": 0.801353022526786,
+          "source": "llm"
+        },
+        {
+          "name": "notegraph.ai",
+          "sld": "notegraph",
+          "tld": "ai",
+          "score": 0.7734194079433944,
+          "source": "llm"
+        },
+        {
+          "name": "sonosync.io",
+          "sld": "sonosync",
+          "tld": "io",
+          "score": 0.770532552509319,
+          "source": "llm"
+        },
+        {
+          "name": "amplisage.media",
+          "sld": "amplisage",
+          "tld": "media",
+          "score": 0.8189578858941523,
+          "source": "llm"
+        },
+        {
+          "name": "dialectic.academy",
+          "sld": "dialectic",
+          "tld": "academy",
+          "score": 0.811380498373096,
+          "source": "llm"
+        },
+        {
+          "name": "pitchflow.tools",
+          "sld": "pitchflow",
+          "tld": "tools",
+          "score": 0.7181426253518596,
+          "source": "llm"
+        },
+        {
+          "name": "vectorvox.build",
+          "sld": "vectorvox",
+          "tld": "build",
+          "score": 0.6892998283008823,
+          "source": "llm"
+        },
+        {
+          "name": "soundtrack.systems",
+          "sld": "soundtrack",
+          "tld": "systems",
+          "score": 0.7322364074294245,
+          "source": "llm"
+        },
+        {
+          "name": "audigauge.digital",
+          "sld": "audigauge",
+          "tld": "digital",
+          "score": 0.6658118821623956,
+          "source": "llm"
+        }
+      ],
+      "dur_ms": 1609,
+      "tokens": 3889,
+      "est_cost_usd": 0.000500025
+    },
+    {
+      "query": "online learning platform for professional photography",
+      "variant": "current",
+      "suggestions": [
+        {
+          "name": "apercure.academy",
+          "sld": "apercure",
+          "tld": "academy",
+          "score": 0.8802430006214783,
+          "source": "llm"
+        },
+        {
+          "name": "shutter.school",
+          "sld": "shutter",
+          "tld": "school",
+          "score": 0.8179969448830976,
+          "source": "llm"
+        },
+        {
+          "name": "focal.guide",
+          "sld": "focal",
+          "tld": "guide",
+          "score": 0.8739739314086491,
+          "source": "llm"
+        },
+        {
+          "name": "exposur.io",
+          "sld": "exposur",
+          "tld": "io",
+          "score": 0.7453309011769508,
+          "source": "llm"
+        },
+        {
+          "name": "diaphragm.studio",
+          "sld": "diaphragm",
+          "tld": "studio",
+          "score": 0.6467594600944494,
+          "source": "llm"
+        },
+        {
+          "name": "iso.training",
+          "sld": "iso",
+          "tld": "training",
+          "score": 0.8127891588034866,
+          "source": "llm"
+        },
+        {
+          "name": "captura.vision",
+          "sld": "captura",
+          "tld": "vision",
+          "score": 0.6980769612769898,
+          "source": "llm"
+        },
+        {
+          "name": "bokeh.photography",
+          "sld": "bokeh",
+          "tld": "photography",
+          "score": 0.5910294842104868,
+          "source": "llm"
+        },
+        {
+          "name": "viewpoint.institute",
+          "sld": "viewpoint",
+          "tld": "institute",
+          "score": 0.7576533066044521,
+          "source": "llm"
+        },
+        {
+          "name": "primes.education",
+          "sld": "primes",
+          "tld": "education",
+          "score": 0.8412323089425081,
+          "source": "llm"
+        },
+        {
+          "name": "develop.camera",
+          "sld": "develop",
+          "tld": "camera",
+          "score": 0.9189066075312566,
+          "source": "llm"
+        },
+        {
+          "name": "lumens.guru",
+          "sld": "lumens",
+          "tld": "guru",
+          "score": 0.8626906531017148,
+          "source": "llm"
+        },
+        {
+          "name": "negative.works",
+          "sld": "negative",
+          "tld": "works",
+          "score": 0.8855498251506644,
+          "source": "llm"
+        },
+        {
+          "name": "reframe.design",
+          "sld": "reframe",
+          "tld": "design",
+          "score": 0.7999830546336071,
+          "source": "llm"
+        },
+        {
+          "name": "optic.expert",
+          "sld": "optic",
+          "tld": "expert",
+          "score": 0.8010410607123742,
+          "source": "llm"
+        },
+        {
+          "name": "vignette.gallery",
+          "sld": "vignette",
+          "tld": "gallery",
+          "score": 0.7647683017337887,
+          "source": "llm"
+        },
+        {
+          "name": "frame.university",
+          "sld": "frame",
+          "tld": "university",
+          "score": 0.846685509065755,
+          "source": "llm"
+        },
+        {
+          "name": "aether.graphics",
+          "sld": "aether",
+          "tld": "graphics",
+          "score": 0.8520667163485681,
+          "source": "llm"
+        },
+        {
+          "name": "parallax.agency",
+          "sld": "parallax",
+          "tld": "agency",
+          "score": 0.7897932822295285,
+          "source": "llm"
+        },
+        {
+          "name": "aper.camera",
+          "sld": "aper",
+          "tld": "camera",
+          "score": 0.8757749811715507,
+          "source": "llm"
+        },
+        {
+          "name": "lumina.school",
+          "sld": "lumina",
+          "tld": "school",
+          "score": 0.7850853751185984,
+          "source": "llm"
+        },
+        {
+          "name": "prime.vision",
+          "sld": "prime",
+          "tld": "vision",
+          "score": 0.8493266622843418,
+          "source": "llm"
+        },
+        {
+          "name": "optics.training",
+          "sld": "optics",
+          "tld": "training",
+          "score": 0.7266193176010756,
+          "source": "llm"
+        },
+        {
+          "name": "grain.media",
+          "sld": "grain",
+          "tld": "media",
+          "score": 0.8385361896228998,
+          "source": "llm"
+        },
+        {
+          "name": "reflex.institute",
+          "sld": "reflex",
+          "tld": "institute",
+          "score": 0.631766530870975,
+          "source": "llm"
+        },
+        {
+          "name": "vivid.gallery",
+          "sld": "vivid",
+          "tld": "gallery",
+          "score": 0.8446454331346425,
+          "source": "llm"
+        },
+        {
+          "name": "capture.live",
+          "sld": "capture",
+          "tld": "live",
+          "score": 0.8478837569824892,
+          "source": "llm"
+        },
+        {
+          "name": "lens.expert",
+          "sld": "lens",
+          "tld": "expert",
+          "score": 0.8462284374086,
+          "source": "llm"
+        },
+        {
+          "name": "candid.coach",
+          "sld": "candid",
+          "tld": "coach",
+          "score": 0.8767824958058422,
+          "source": "llm"
+        },
+        {
+          "name": "lumenta.academy",
+          "sld": "lumenta",
+          "tld": "academy",
+          "score": 0.8928694889016351,
+          "source": "llm"
+        },
+        {
+          "name": "focustream.studio",
+          "sld": "focustream",
+          "tld": "studio",
+          "score": 0.8931175522976453,
+          "source": "llm"
+        },
+        {
+          "name": "aperion.photography",
+          "sld": "aperion",
+          "tld": "photography",
+          "score": 0.9259164081704506,
+          "source": "llm"
+        },
+        {
+          "name": "glinted.education",
+          "sld": "glinted",
+          "tld": "education",
+          "score": 0.9008593954713005,
+          "source": "llm"
+        },
+        {
+          "name": "shutterwise.guide",
+          "sld": "shutterwise",
+          "tld": "guide",
+          "score": 0.8226727810999609,
+          "source": "llm"
+        },
+        {
+          "name": "vividly.training",
+          "sld": "vividly",
+          "tld": "training",
+          "score": 0.8249221123349463,
+          "source": "llm"
+        },
+        {
+          "name": "frameshift.camera",
+          "sld": "frameshift",
+          "tld": "camera",
+          "score": 0.7667708884008058,
+          "source": "llm"
+        },
+        {
+          "name": "optica.agency",
+          "sld": "optica",
+          "tld": "agency",
+          "score": 0.8205863276643328,
+          "source": "llm"
+        },
+        {
+          "name": "chromas.works",
+          "sld": "chromas",
+          "tld": "works",
+          "score": 0.7883526994403101,
+          "source": "llm"
+        },
+        {
+          "name": "refract.media",
+          "sld": "refract",
+          "tld": "media",
+          "score": 0.6848866732611558,
+          "source": "llm"
+        }
+      ],
+      "dur_ms": 1664,
+      "tokens": 3974,
+      "est_cost_usd": 0.0005235
+    },
+    {
+      "query": "vintage clothing resale marketplace",
+      "variant": "current",
+      "suggestions": [
+        {
+          "name": "vestige.market",
+          "sld": "vestige",
+          "tld": "market",
+          "score": 0.93652116122927,
+          "source": "llm"
+        },
+        {
+          "name": "reloom.clothing",
+          "sld": "reloom",
+          "tld": "clothing",
+          "score": 0.8482382778431243,
+          "source": "llm"
+        },
+        {
+          "name": "thrifta.boutique",
+          "sld": "thrifta",
+          "tld": "boutique",
+          "score": 0.7759154873014338,
+          "source": "llm"
+        },
+        {
+          "name": "retrace.exchange",
+          "sld": "retrace",
+          "tld": "exchange",
+          "score": 0.8757809642543365,
+          "source": "llm"
+        },
+        {
+          "name": "patina.shop",
+          "sld": "patina",
+          "tld": "shop",
+          "score": 0.8752770421278477,
+          "source": "llm"
+        },
+        {
+          "name": "reware.style",
+          "sld": "reware",
+          "tld": "style",
+          "score": 0.803976543667763,
+          "source": "llm"
+        },
+        {
+          "name": "curio.auction",
+          "sld": "curio",
+          "tld": "auction",
+          "score": 0.8289474845561715,
+          "source": "llm"
+        },
+        {
+          "name": "threadbare.app",
+          "sld": "threadbare",
+          "tld": "app",
+          "score": 0.8346548071851578,
+          "source": "llm"
+        },
+        {
+          "name": "epoch.gallery",
+          "sld": "epoch",
+          "tld": "gallery",
+          "score": 0.7328323751669333,
+          "source": "llm"
+        },
+        {
+          "name": "revive.world",
+          "sld": "revive",
+          "tld": "world",
+          "score": 0.8569149667396498,
+          "source": "llm"
+        },
+        {
+          "name": "provenance.agency",
+          "sld": "provenance",
+          "tld": "agency",
+          "score": 0.831438837213469,
+          "source": "llm"
+        },
+        {
+          "name": "relic.deals",
+          "sld": "relic",
+          "tld": "deals",
+          "score": 0.8813196312469005,
+          "source": "llm"
+        },
+        {
+          "name": "backstitch.works",
+          "sld": "backstitch",
+          "tld": "works",
+          "score": 0.777109213862482,
+          "source": "llm"
+        },
+        {
+          "name": "wardrobe.cloud",
+          "sld": "wardrobe",
+          "tld": "cloud",
+          "score": 0.873831867288626,
+          "source": "llm"
+        },
+        {
+          "name": "vintage.community",
+          "sld": "vintage",
+          "tld": "community",
+          "score": 0.9655975628217228,
+          "source": "llm"
+        },
+        {
+          "name": "reclaim.ventures",
+          "sld": "reclaim",
+          "tld": "ventures",
+          "score": 0.7512009745261564,
+          "source": "llm"
+        },
+        {
+          "name": "heirloom.sale",
+          "sld": "heirloom",
+          "tld": "sale",
+          "score": 0.7814975887618281,
+          "source": "llm"
+        },
+        {
+          "name": "vint.me",
+          "sld": "vint",
+          "tld": "me",
+          "score": 0.7939242332065107,
+          "source": "llm"
+        },
+        {
+          "name": "reloop.company",
+          "sld": "reloop",
+          "tld": "company",
+          "score": 0.7644550203299346,
+          "source": "llm"
+        },
+        {
+          "name": "swathe.center",
+          "sld": "swathe",
+          "tld": "center",
+          "score": 0.7951120031403427,
+          "source": "llm"
+        },
+        {
+          "name": "revest.me",
+          "sld": "revest",
+          "tld": "me",
+          "score": 0.9050772907257668,
+          "source": "llm"
+        },
+        {
+          "name": "found.clothing",
+          "sld": "found",
+          "tld": "clothing",
+          "score": 1,
+          "source": "llm"
+        },
+        {
+          "name": "rethread.shop",
+          "sld": "rethread",
+          "tld": "shop",
+          "score": 0.8557388199309932,
+          "source": "llm"
+        },
+        {
+          "name": "restyle.me",
+          "sld": "restyle",
+          "tld": "me",
+          "score": 0.9563086832569998,
+          "source": "llm"
+        },
+        {
+          "name": "rebound.market",
+          "sld": "rebound",
+          "tld": "market",
+          "score": 0.9123188798921241,
+          "source": "llm"
+        },
+        {
+          "name": "legacy.exchange",
+          "sld": "legacy",
+          "tld": "exchange",
+          "score": 0.8122288367830024,
+          "source": "llm"
+        },
+        {
+          "name": "reloved.boutique",
+          "sld": "reloved",
+          "tld": "boutique",
+          "score": 0.8736847103984234,
+          "source": "llm"
+        },
+        {
+          "name": "archival.style",
+          "sld": "archival",
+          "tld": "style",
+          "score": 0.7788686760907991,
+          "source": "llm"
+        },
+        {
+          "name": "recollect.boutique",
+          "sld": "recollect",
+          "tld": "boutique",
+          "score": 0.7803026291709168,
+          "source": "llm"
+        },
+        {
+          "name": "past.style",
+          "sld": "past",
+          "tld": "style",
+          "score": 0.9338171422002329,
+          "source": "llm"
+        },
+        {
+          "name": "worn.works",
+          "sld": "worn",
+          "tld": "works",
+          "score": 0.8494062428969869,
+          "source": "llm"
+        },
+        {
+          "name": "curate.works",
+          "sld": "curate",
+          "tld": "works",
+          "score": 0.8958840260854098,
+          "source": "llm"
+        },
+        {
+          "name": "reverie.auction",
+          "sld": "reverie",
+          "tld": "auction",
+          "score": 0.8964509585618788,
+          "source": "llm"
+        },
+        {
+          "name": "vestiary.market",
+          "sld": "vestiary",
+          "tld": "market",
+          "score": 0.9308068755149842,
+          "source": "llm"
+        },
+        {
+          "name": "relicth.clothing",
+          "sld": "relicth",
+          "tld": "clothing",
+          "score": 0.8923264887444594,
+          "source": "llm"
+        },
+        {
+          "name": "arcaneum.boutique",
+          "sld": "arcaneum",
+          "tld": "boutique",
+          "score": 0.7503595878796894,
+          "source": "llm"
+        },
+        {
+          "name": "thrifth.exchange",
+          "sld": "thrifth",
+          "tld": "exchange",
+          "score": 0.784952816671631,
+          "source": "llm"
+        },
+        {
+          "name": "loomify.shop",
+          "sld": "loomify",
+          "tld": "shop",
+          "score": 0.7727434839211863,
+          "source": "llm"
+        },
+        {
+          "name": "curavest.studio",
+          "sld": "curavest",
+          "tld": "studio",
+          "score": 0.8277173398348041,
+          "source": "llm"
+        },
+        {
+          "name": "patinart.gallery",
+          "sld": "patinart",
+          "tld": "gallery",
+          "score": 0.8064141746474258,
+          "source": "llm"
+        },
+        {
+          "name": "revintage.style",
+          "sld": "revintage",
+          "tld": "style",
+          "score": 0.8942238173155539,
+          "source": "llm"
+        },
+        {
+          "name": "fablead.sale",
+          "sld": "fablead",
+          "tld": "sale",
+          "score": 0.9103176402218665,
+          "source": "llm"
+        },
+        {
+          "name": "wornwise.community",
+          "sld": "wornwise",
+          "tld": "community",
+          "score": 0.8711892815054755,
+          "source": "llm"
+        },
+        {
+          "name": "epochal.clothing",
+          "sld": "epochal",
+          "tld": "clothing",
+          "score": 0.809119576186406,
+          "source": "llm"
+        },
+        {
+          "name": "threadlore.market",
+          "sld": "threadlore",
+          "tld": "market",
+          "score": 0.8803579446630421,
+          "source": "llm"
+        },
+        {
+          "name": "agedly.shop",
+          "sld": "agedly",
+          "tld": "shop",
+          "score": 0.8348217893176486,
+          "source": "llm"
+        },
+        {
+          "name": "vintique.boutique",
+          "sld": "vintique",
+          "tld": "boutique",
+          "score": 0.7369134243239254,
+          "source": "llm"
+        },
+        {
+          "name": "cravest.exchange",
+          "sld": "cravest",
+          "tld": "exchange",
+          "score": 0.814772207311287,
+          "source": "llm"
+        },
+        {
+          "name": "pastwear.community",
+          "sld": "pastwear",
+          "tld": "community",
+          "score": 0.8753142521295096,
+          "source": "llm"
+        },
+        {
+          "name": "timeworn.gallery",
+          "sld": "timeworn",
+          "tld": "gallery",
+          "score": 0.8527002082893538,
+          "source": "llm"
+        },
+        {
+          "name": "fabrique.sale",
+          "sld": "fabrique",
+          "tld": "sale",
+          "score": 0.7012717882110518,
+          "source": "llm"
+        },
+        {
+          "name": "archived.academy",
+          "sld": "archived",
+          "tld": "academy",
+          "score": 0.8260676474268168,
+          "source": "llm"
+        }
+      ],
+      "dur_ms": 1934,
+      "tokens": 3969,
+      "est_cost_usd": 0.00052875
+    },
+    {
+      "query": "patspizza.com",
+      "variant": "current",
+      "suggestions": [
+        {
+          "name": "doughcraft.pizza",
+          "sld": "doughcraft",
+          "tld": "pizza",
+          "score": 0.7773225126326199,
+          "source": "llm"
+        },
+        {
+          "name": "leaven.agency",
+          "sld": "leaven",
+          "tld": "agency",
+          "score": 0.8811565500284122,
+          "source": "llm"
+        },
+        {
+          "name": "neapolitan.kitchen",
+          "sld": "neapolitan",
+          "tld": "kitchen",
+          "score": 0.7603469707357396,
+          "source": "llm"
+        },
+        {
+          "name": "ember.bar",
+          "sld": "ember",
+          "tld": "bar",
+          "score": 0.7051973868619908,
+          "source": "llm"
+        },
+        {
+          "name": "ovenwise.com",
+          "sld": "ovenwise",
+          "tld": "com",
+          "score": 0.9247877908127238,
+          "source": "llm"
+        },
+        {
+          "name": "hearth.studio",
+          "sld": "hearth",
+          "tld": "studio",
+          "score": 0.8444302177450185,
+          "source": "llm"
+        },
+        {
+          "name": "pizzaiolo.academy",
+          "sld": "pizzaiolo",
+          "tld": "academy",
+          "score": 0.8293532048426632,
+          "source": "llm"
+        },
+        {
+          "name": "scorched.catering",
+          "sld": "scorched",
+          "tld": "catering",
+          "score": 0.7422861315745722,
+          "source": "llm"
+        },
+        {
+          "name": "flourish.restaurant",
+          "sld": "flourish",
+          "tld": "restaurant",
+          "score": 0.8019490040647105,
+          "source": "llm"
+        },
+        {
+          "name": "ferment.works",
+          "sld": "ferment",
+          "tld": "works",
+          "score": 0.8212377939545195,
+          "source": "llm"
+        },
+        {
+          "name": "woodfired.live",
+          "sld": "woodfired",
+          "tld": "live",
+          "score": 0.7917853934429384,
+          "source": "llm"
+        },
+        {
+          "name": "blistered.beer",
+          "sld": "blistered",
+          "tld": "beer",
+          "score": 0.9048755126105414,
+          "source": "llm"
+        },
+        {
+          "name": "char.delivery",
+          "sld": "char",
+          "tld": "delivery",
+          "score": 0.8205922902043661,
+          "source": "llm"
+        },
+        {
+          "name": "slice.community",
+          "sld": "slice",
+          "tld": "community",
+          "score": 0.8813124194088746,
+          "source": "llm"
+        },
+        {
+          "name": "pizzology.expert",
+          "sld": "pizzology",
+          "tld": "expert",
+          "score": 0.7145965207750637,
+          "source": "llm"
+        },
+        {
+          "name": "proof.solutions",
+          "sld": "proof",
+          "tld": "solutions",
+          "score": 0.6846618562499455,
+          "source": "llm"
+        },
+        {
+          "name": "topped.deals",
+          "sld": "topped",
+          "tld": "deals",
+          "score": 0.818906182302839,
+          "source": "llm"
+        },
+        {
+          "name": "margherita.co",
+          "sld": "margherita",
+          "tld": "co",
+          "score": 0.8246709707545383,
+          "source": "llm"
+        },
+        {
+          "name": "knead.pizza",
+          "sld": "knead",
+          "tld": "pizza",
+          "score": 0.6788102249098519,
+          "source": "llm"
+        },
+        {
+          "name": "dough.cafe",
+          "sld": "dough",
+          "tld": "cafe",
+          "score": 0.8285284534811777,
+          "source": "llm"
+        },
+        {
+          "name": "oven.works",
+          "sld": "oven",
+          "tld": "works",
+          "score": 0.9082719980192766,
+          "source": "llm"
+        },
+        {
+          "name": "top.pizza",
+          "sld": "top",
+          "tld": "pizza",
+          "score": 0.9108806189633324,
+          "source": "llm"
+        },
+        {
+          "name": "zest.kitchen",
+          "sld": "zest",
+          "tld": "kitchen",
+          "score": 0.8520453760382709,
+          "source": "llm"
+        },
+        {
+          "name": "embers.catering",
+          "sld": "embers",
+          "tld": "catering",
+          "score": 0.6647679738306504,
+          "source": "llm"
+        },
+        {
+          "name": "flour.delivery",
+          "sld": "flour",
+          "tld": "delivery",
+          "score": 0.8863608964441255,
+          "source": "llm"
+        },
+        {
+          "name": "pie.community",
+          "sld": "pie",
+          "tld": "community",
+          "score": 0.875675590893694,
+          "source": "llm"
+        },
+        {
+          "name": "sauce.expert",
+          "sld": "sauce",
+          "tld": "expert",
+          "score": 0.7868400226504456,
+          "source": "llm"
+        },
+        {
+          "name": "fold.pub",
+          "sld": "fold",
+          "tld": "pub",
+          "score": 0.7814970481647574,
+          "source": "llm"
+        },
+        {
+          "name": "round.studio",
+          "sld": "round",
+          "tld": "studio",
+          "score": 0.8798678842485503,
+          "source": "llm"
+        },
+        {
+          "name": "rise.media",
+          "sld": "rise",
+          "tld": "media",
+          "score": 0.8402882768022314,
+          "source": "llm"
+        },
+        {
+          "name": "base.agency",
+          "sld": "base",
+          "tld": "agency",
+          "score": 0.8484156822523296,
+          "source": "llm"
+        },
+        {
+          "name": "taste.center",
+          "sld": "taste",
+          "tld": "center",
+          "score": 0.926513337098565,
+          "source": "llm"
+        },
+        {
+          "name": "doughvine.pizza",
+          "sld": "doughvine",
+          "tld": "pizza",
+          "score": 0.8277284763588009,
+          "source": "llm"
+        },
+        {
+          "name": "crustify.app",
+          "sld": "crustify",
+          "tld": "app",
+          "score": 0.8201535529215295,
+          "source": "llm"
+        },
+        {
+          "name": "ovenly.cafe",
+          "sld": "ovenly",
+          "tld": "cafe",
+          "score": 0.8187059594938988,
+          "source": "llm"
+        },
+        {
+          "name": "pizzalo.co",
+          "sld": "pizzalo",
+          "tld": "co",
+          "score": 0.9094532488628859,
+          "source": "llm"
+        },
+        {
+          "name": "kneadflow.studio",
+          "sld": "kneadflow",
+          "tld": "studio",
+          "score": 0.626866844138955,
+          "source": "llm"
+        },
+        {
+          "name": "embersly.kitchen",
+          "sld": "embersly",
+          "tld": "kitchen",
+          "score": 0.6564224333322413,
+          "source": "llm"
+        },
+        {
+          "name": "saucecraft.agency",
+          "sld": "saucecraft",
+          "tld": "agency",
+          "score": 0.7811834411156073,
+          "source": "llm"
+        },
+        {
+          "name": "pieology.center",
+          "sld": "pieology",
+          "tld": "center",
+          "score": 0.8165092572233107,
+          "source": "llm"
+        },
+        {
+          "name": "bakerise.dev",
+          "sld": "bakerise",
+          "tld": "dev",
+          "score": 0.9261847411359253,
+          "source": "llm"
+        },
+        {
+          "name": "hearthside.community",
+          "sld": "hearthside",
+          "tld": "community",
+          "score": 0.8193335072434509,
+          "source": "llm"
+        },
+        {
+          "name": "crustiq.io",
+          "sld": "crustiq",
+          "tld": "io",
+          "score": 0.7552942135677531,
+          "source": "llm"
+        },
+        {
+          "name": "zaa.catering",
+          "sld": "zaa",
+          "tld": "catering",
+          "score": 0.44382,
+          "source": "llm"
+        },
+        {
+          "name": "yeastbound.works",
+          "sld": "yeastbound",
+          "tld": "works",
+          "score": 0.7644188258817205,
+          "source": "llm"
+        },
+        {
+          "name": "gastropie.restaurant",
+          "sld": "gastropie",
+          "tld": "restaurant",
+          "score": 0.8454130146378195,
+          "source": "llm"
+        },
+        {
+          "name": "oventide.life",
+          "sld": "oventide",
+          "tld": "life",
+          "score": 0.9167593746376038,
+          "source": "llm"
+        },
+        {
+          "name": "kneadly.me",
+          "sld": "kneadly",
+          "tld": "me",
+          "score": 0.6195635182734163,
+          "source": "llm"
+        },
+        {
+          "name": "pizzent.company",
+          "sld": "pizzent",
+          "tld": "company",
+          "score": 0.7256825970942357,
+          "source": "llm"
+        },
+        {
+          "name": "firebloom.pub",
+          "sld": "firebloom",
+          "tld": "pub",
+          "score": 0.7825972984809939,
+          "source": "llm"
+        },
+        {
+          "name": "crustwell.solutions",
+          "sld": "crustwell",
+          "tld": "solutions",
+          "score": 0.8108298648899854,
+          "source": "llm"
+        }
+      ],
+      "dur_ms": 1687,
+      "tokens": 3880,
+      "est_cost_usd": 0.0005061
+    },
+    {
+      "query": "developer tool for automating code reviews with AI",
+      "variant": "current",
+      "suggestions": [
+        {
+          "name": "lint.ai",
+          "sld": "lint",
+          "tld": "ai",
+          "score": 0.922464036769867,
+          "source": "llm"
+        },
+        {
+          "name": "prune.dev",
+          "sld": "prune",
+          "tld": "dev",
+          "score": 0.922239455710249,
+          "source": "llm"
+        },
+        {
+          "name": "refactor.systems",
+          "sld": "refactor",
+          "tld": "systems",
+          "score": 0.8083158257101922,
+          "source": "llm"
+        },
+        {
+          "name": "scrutinize.io",
+          "sld": "scrutinize",
+          "tld": "io",
+          "score": 0.7655935484892828,
+          "source": "llm"
+        },
+        {
+          "name": "curate.dev",
+          "sld": "curate",
+          "tld": "dev",
+          "score": 0.913792282541472,
+          "source": "llm"
+        },
+        {
+          "name": "lexicon.tools",
+          "sld": "lexicon",
+          "tld": "tools",
+          "score": 0.9081847556494576,
+          "source": "llm"
+        },
+        {
+          "name": "verify.software",
+          "sld": "verify",
+          "tld": "software",
+          "score": 0.8613942721479595,
+          "source": "llm"
+        },
+        {
+          "name": "reconcile.io",
+          "sld": "reconcile",
+          "tld": "io",
+          "score": 0.8139100442255661,
+          "source": "llm"
+        },
+        {
+          "name": "parse.cloud",
+          "sld": "parse",
+          "tld": "cloud",
+          "score": 0.7883292265799713,
+          "source": "llm"
+        },
+        {
+          "name": "codex.academy",
+          "sld": "codex",
+          "tld": "academy",
+          "score": 0.7705595659174478,
+          "source": "llm"
+        },
+        {
+          "name": "audit.works",
+          "sld": "audit",
+          "tld": "works",
+          "score": 0.7868334435351828,
+          "source": "llm"
+        },
+        {
+          "name": "triage.cloud",
+          "sld": "triage",
+          "tld": "cloud",
+          "score": 0.8526735542044128,
+          "source": "llm"
+        },
+        {
+          "name": "vetted.co",
+          "sld": "vetted",
+          "tld": "co",
+          "score": 0.8362266666212822,
+          "source": "llm"
+        },
+        {
+          "name": "remedy.builders",
+          "sld": "remedy",
+          "tld": "builders",
+          "score": 0.8310613911622075,
+          "source": "llm"
+        },
+        {
+          "name": "logic.ventures",
+          "sld": "logic",
+          "tld": "ventures",
+          "score": 0.897708271811963,
+          "source": "llm"
+        },
+        {
+          "name": "sift.app",
+          "sld": "sift",
+          "tld": "app",
+          "score": 0.5833129577005578,
+          "source": "llm"
+        },
+        {
+          "name": "proof.digital",
+          "sld": "proof",
+          "tld": "digital",
+          "score": 0.7874374067074146,
+          "source": "llm"
+        },
+        {
+          "name": "heirloom.software",
+          "sld": "heirloom",
+          "tld": "software",
+          "score": 0.6965580435234335,
+          "source": "llm"
+        },
+        {
+          "name": "tome.app",
+          "sld": "tome",
+          "tld": "app",
+          "score": 0.8376053532570289,
+          "source": "llm"
+        },
+        {
+          "name": "codify.software",
+          "sld": "codify",
+          "tld": "software",
+          "score": 0.7036526241891543,
+          "source": "llm"
+        },
+        {
+          "name": "commit.cloud",
+          "sld": "commit",
+          "tld": "cloud",
+          "score": 0.870529064500968,
+          "source": "llm"
+        },
+        {
+          "name": "deep.dev",
+          "sld": "deep",
+          "tld": "dev",
+          "score": 0.7723437201003657,
+          "source": "llm"
+        },
+        {
+          "name": "query.systems",
+          "sld": "query",
+          "tld": "systems",
+          "score": 0.8340544982573513,
+          "source": "llm"
+        },
+        {
+          "name": "diff.agency",
+          "sld": "diff",
+          "tld": "agency",
+          "score": 0.6745051892767214,
+          "source": "llm"
+        },
+        {
+          "name": "flow.dev",
+          "sld": "flow",
+          "tld": "dev",
+          "score": 0.7961742511823504,
+          "source": "llm"
+        },
+        {
+          "name": "solid.codes",
+          "sld": "solid",
+          "tld": "codes",
+          "score": 0.8784859496168379,
+          "source": "llm"
+        },
+        {
+          "name": "refine.app",
+          "sld": "refine",
+          "tld": "app",
+          "score": 0.8773316375541373,
+          "source": "llm"
+        },
+        {
+          "name": "debug.solutions",
+          "sld": "debug",
+          "tld": "solutions",
+          "score": 0.7048531066740311,
+          "source": "llm"
+        },
+        {
+          "name": "clean.build",
+          "sld": "clean",
+          "tld": "build",
+          "score": 0.8355090183021182,
+          "source": "llm"
+        },
+        {
+          "name": "prime.codes",
+          "sld": "prime",
+          "tld": "codes",
+          "score": 0.8950225795791621,
+          "source": "llm"
+        },
+        {
+          "name": "codexify.ai",
+          "sld": "codexify",
+          "tld": "ai",
+          "score": 0.7783590028854992,
+          "source": "llm"
+        },
+        {
+          "name": "logicflow.dev",
+          "sld": "logicflow",
+          "tld": "dev",
+          "score": 0.7803229642259987,
+          "source": "llm"
+        },
+        {
+          "name": "syntaxia.io",
+          "sld": "syntaxia",
+          "tld": "io",
+          "score": 0.7350393417500876,
+          "source": "llm"
+        },
+        {
+          "name": "prismic.build",
+          "sld": "prismic",
+          "tld": "build",
+          "score": 0.8326304556154532,
+          "source": "llm"
+        },
+        {
+          "name": "graphel.run",
+          "sld": "graphel",
+          "tld": "run",
+          "score": 0.8741559933644587,
+          "source": "llm"
+        },
+        {
+          "name": "fluxion.ai",
+          "sld": "fluxion",
+          "tld": "ai",
+          "score": 0.7887858208498635,
+          "source": "llm"
+        },
+        {
+          "name": "quellon.io",
+          "sld": "quellon",
+          "tld": "io",
+          "score": 0.8087586311191106,
+          "source": "llm"
+        },
+        {
+          "name": "refactora.dev",
+          "sld": "refactora",
+          "tld": "dev",
+          "score": 0.8156526616755754,
+          "source": "llm"
+        },
+        {
+          "name": "veriflow.cloud",
+          "sld": "veriflow",
+          "tld": "cloud",
+          "score": 0.8280706404151683,
+          "source": "llm"
+        },
+        {
+          "name": "clearsig.build",
+          "sld": "clearsig",
+          "tld": "build",
+          "score": 0.7431834796741944,
+          "source": "llm"
+        },
+        {
+          "name": "codemend.software",
+          "sld": "codemend",
+          "tld": "software",
+          "score": 0.9388518936922333,
+          "source": "llm"
+        },
+        {
+          "name": "audity.run",
+          "sld": "audity",
+          "tld": "run",
+          "score": 0.7710239340743649,
+          "source": "llm"
+        },
+        {
+          "name": "axiomize.cloud",
+          "sld": "axiomize",
+          "tld": "cloud",
+          "score": 0.6684424335891807,
+          "source": "llm"
+        },
+        {
+          "name": "devpulse.am",
+          "sld": "devpulse",
+          "tld": "am",
+          "score": 0.5553734411343954,
+          "source": "llm"
+        },
+        {
+          "name": "tessell.codes",
+          "sld": "tessell",
+          "tld": "codes",
+          "score": 0.9502182974810269,
+          "source": "llm"
+        },
+        {
+          "name": "kernal.net",
+          "sld": "kernal",
+          "tld": "net",
+          "score": 0.8399606900239557,
+          "source": "llm"
+        },
+        {
+          "name": "valide.com",
+          "sld": "valide",
+          "tld": "com",
+          "score": 0.9608061710775467,
+          "source": "llm"
+        },
+        {
+          "name": "scrutiny.info",
+          "sld": "scrutiny",
+          "tld": "info",
+          "score": 0.7895870674934846,
+          "source": "llm"
+        },
+        {
+          "name": "flowstate.codes",
+          "sld": "flowstate",
+          "tld": "codes",
+          "score": 0.839913051791106,
+          "source": "llm"
+        }
+      ],
+      "dur_ms": 1777,
+      "tokens": 3985,
+      "est_cost_usd": 0.00052545
+    }
+  ]
+}

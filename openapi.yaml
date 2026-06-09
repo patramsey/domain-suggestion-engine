@@ -1,0 +1,367 @@
+openapi: "3.1.0"
+info:
+  title: Domain Suggestion Engine
+  version: "1.0.0"
+  description: >
+    Generates ranked domain name suggestions from flexible input (keywords,
+    descriptions, or existing domain strings). Does not check availability.
+
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /suggest:
+    post:
+      summary: Generate domain name suggestions
+      parameters:
+        - in: query
+          name: debug
+          schema:
+            type: boolean
+          description: Include tlds_used and active_generators in response
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SuggestRequest"
+            examples:
+              keywords:
+                summary: Keyword input
+                value: { "input": "coffee shop brooklyn" }
+              domain:
+                summary: Existing domain input
+                value: { "input": "patspizza.com", "count": 30 }
+              filtered:
+                summary: With TLD category filter
+                value: { "input": "coffee", "tld_filter": { "category": "identity_digital" } }
+              explicit_tlds:
+                summary: With explicit TLD list
+                value: { "input": "coffee", "tld_filter": { "list": ["coffee", "cafe", "com"] } }
+              follow_up:
+                summary: Follow-up call with unavailable + inspire_from
+                value:
+                  input: "denver coffee shop"
+                  unavailable_domains: ["ember.coffee", "vesper.bar"]
+                  inspire_from: ["ember.coffee", "vesper.bar"]
+      responses:
+        "200":
+          description: Suggestions generated successfully
+          headers:
+            X-Generation-Source:
+              schema:
+                type: string
+                enum: [algorithmic, llm, both]
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuggestResponse"
+        "400":
+          $ref: "#/components/responses/Error"
+        "422":
+          $ref: "#/components/responses/Error"
+        "500":
+          $ref: "#/components/responses/Error"
+
+  /tlds/categories:
+    get:
+      summary: List all TLD categories with their contents
+      responses:
+        "200":
+          description: All available TLD categories
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+              example: "public, max-age=86400"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CategoriesResponse"
+
+  /health:
+    get:
+      summary: Readiness check
+      description: >
+        Returns 200 when all components are configured correctly.
+        Returns 503 when any check fails (misconfigured, not unhealthy).
+      responses:
+        "200":
+          description: All checks passed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+        "503":
+          description: One or more checks failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+
+  /config:
+    get:
+      summary: Current runtime configuration snapshot
+      responses:
+        "200":
+          description: Configuration snapshot
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConfigResponse"
+
+components:
+  schemas:
+    TLDFilter:
+      type: object
+      description: Exactly one field must be set.
+      properties:
+        category:
+          type: string
+          description: Named preset — see GET /tlds/categories for valid values
+          example: identity_digital
+        list:
+          type: array
+          items:
+            type: string
+          description: Explicit TLD list without leading dots
+          example: ["com", "io", "pizza"]
+
+    SuggestRequest:
+      type: object
+      required: [input]
+      properties:
+        input:
+          type: string
+          maxLength: 500
+          description: Keywords, business description, or existing domain (e.g. "patspizza.com")
+          example: "denver coffee shop that serves beer"
+        count:
+          type: integer
+          default: 20
+          maximum: 100
+          description: Number of suggestions to return
+        tld_filter:
+          $ref: "#/components/schemas/TLDFilter"
+        unavailable_domains:
+          type: array
+          items:
+            type: string
+          maxItems: 40
+          description: >
+            Domains confirmed taken. Excluded from results and passed to the LLM
+            so it doesn't waste output budget regenerating them.
+          example: ["ember.coffee", "vesper.bar"]
+        inspire_from:
+          type: array
+          items:
+            type: string
+          maxItems: 5
+          description: >
+            Domains the user liked. The LLM generates suggestions in a similar
+            creative direction (same vibe and tone, different names).
+            Typically combined with unavailable_domains on a follow-up call.
+          example: ["ember.coffee", "vesper.bar"]
+
+    Suggestion:
+      type: object
+      required: [name, sld, tld, score, source]
+      properties:
+        name:
+          type: string
+          description: Full domain string including TLD
+          example: "pats.pizza"
+        sld:
+          type: string
+          description: Second-level domain only
+          example: "pats"
+        tld:
+          type: string
+          description: TLD without leading dot
+          example: "pizza"
+        score:
+          type: number
+          format: float
+          minimum: 0.0
+          maximum: 1.0
+        source:
+          type: string
+          enum: [algorithmic, llm]
+
+    SuggestResponse:
+      type: object
+      required: [suggestions, partial]
+      properties:
+        suggestions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Suggestion"
+        partial:
+          type: boolean
+          description: True when only one tier contributed (LLM failure or all-stopword input)
+        tlds_used:
+          type: array
+          items:
+            type: string
+          description: Only present when ?debug=true
+        active_generators:
+          type: array
+          items:
+            type: string
+          description: Only present when ?debug=true
+
+    Category:
+      type: object
+      required: [name, count, tlds]
+      properties:
+        name:
+          type: string
+          example: identity_digital
+        count:
+          type: integer
+        tlds:
+          type: array
+          items:
+            type: string
+
+    CategoriesResponse:
+      type: object
+      required: [categories]
+      properties:
+        categories:
+          type: array
+          items:
+            $ref: "#/components/schemas/Category"
+
+    CheckResult:
+      type: object
+      required: [ok]
+      properties:
+        ok:
+          type: boolean
+        message:
+          type: string
+
+    HealthResponse:
+      type: object
+      required: [status, checks]
+      properties:
+        status:
+          type: string
+          enum: [ok, degraded]
+        checks:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/CheckResult"
+          example:
+            tld_registry: { ok: true }
+            llm_key: { ok: false, message: "GEMINI_API_KEY not set" }
+            cache: { ok: true }
+            generators: { ok: true }
+
+    LLMConfig:
+      type: object
+      properties:
+        model:
+          type: string
+          example: gemini-3.1-flash-lite
+        timeout_ms:
+          type: integer
+          example: 8000
+        llm_share:
+          type: number
+          example: 0.60
+        api_key_set:
+          type: boolean
+
+    AlgoConfig:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        active_generators:
+          type: array
+          items:
+            type: string
+        all_generators:
+          type: array
+          items:
+            type: string
+
+    CacheConfig:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        max_size:
+          type: integer
+        ttl_seconds:
+          type: integer
+
+    TLDRegistryConfig:
+      type: object
+      properties:
+        psl_date:
+          type: string
+          example: "2026-05-28"
+        icann_tld_count:
+          type: integer
+        categories:
+          type: array
+          items:
+            type: string
+        default_category:
+          type: string
+          example: default
+
+    BuildInfo:
+      type: object
+      properties:
+        version:
+          type: string
+        built_at:
+          type: string
+
+    ConfigResponse:
+      type: object
+      properties:
+        llm:
+          $ref: "#/components/schemas/LLMConfig"
+        algo:
+          $ref: "#/components/schemas/AlgoConfig"
+        cache:
+          $ref: "#/components/schemas/CacheConfig"
+        tld_registry:
+          $ref: "#/components/schemas/TLDRegistryConfig"
+        build:
+          $ref: "#/components/schemas/BuildInfo"
+
+    ErrorResponse:
+      type: object
+      required: [error, code]
+      properties:
+        error:
+          type: string
+        code:
+          type: string
+          enum:
+            - missing_input
+            - input_too_long
+            - ambiguous_tld_filter
+            - unknown_tld
+            - unknown_category
+            - too_many_unavailable_domains
+            - too_many_inspire_from
+            - both_tiers_failed
+        details:
+          type: array
+          items:
+            type: string
+
+  responses:
+    Error:
+      description: Error response
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
