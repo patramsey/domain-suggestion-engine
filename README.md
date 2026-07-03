@@ -136,6 +136,31 @@ The LLM receives both lists: `inspire_from` tells it the creative direction to p
 
 ---
 
+### Scoring competitor domains with `bin/score`
+
+`bin/score` runs the same scoring algorithm against any list of domain names — no API key or server required. Useful for benchmarking competitor suggestions or evaluating a hand-crafted shortlist.
+
+```bash
+# Score a comma-separated list
+./bin/score --query "coffee shop denver" --domains "duskbrew.cafe,perkbrew.pub,roast.coffee"
+
+# Score from a CSV file (first column used)
+./bin/score --query "coffee shop denver" --file competitors.csv
+
+# JSON output
+./bin/score --query "coffee shop denver" --domains "duskbrew.cafe,roast.coffee" --json
+```
+
+```
+domain                          score
+----------------------------------------
+roast.coffee                    0.804
+perkbrew.pub                    0.760
+duskbrew.cafe                   0.716
+```
+
+---
+
 ## Configuration
 
 All configuration is via environment variables.
@@ -265,7 +290,7 @@ Current runtime configuration snapshot. Never exposes the API key value.
 
 ```bash
 make test           # run all tests
-make build          # build binary to bin/server
+make build          # build bin/server and bin/score
 make eval           # run prompt evaluation harness (requires GEMINI_API_KEY)
 make update-psl     # refresh the vendored Public Suffix List
 make gen-tld-scores # regenerate TLD scores from IANA + Majestic Million

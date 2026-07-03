@@ -6,6 +6,7 @@ LDFLAGS := -X main.version=$(VERSION) -X main.builtAt=$(BUILT_AT)
 
 build:
 	go build -ldflags "$(LDFLAGS)" -o bin/server ./cmd/server
+	go build -o bin/score ./cmd/score
 
 test:
 	go test ./...
