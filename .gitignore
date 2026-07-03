@@ -1,5 +1,6 @@
 bin/
 *.test
+CLAUDE.md
 
 # Compiled binaries from old root-level locations (moved to cmd/gen/)
 build-glove
@@ -9,6 +10,5 @@ eval
 
 # Secrets
 .env
-*.
 
 RESEARCH.md

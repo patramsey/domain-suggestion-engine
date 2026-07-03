@@ -5,10 +5,10 @@ BUILT_AT := $(shell date -u +%Y-%m-%dT%H:%M:%SZ)
 LDFLAGS := -X main.version=$(VERSION) -X main.builtAt=$(BUILT_AT)
 
 build:
-	GOWORK=off go build -ldflags "$(LDFLAGS)" -o bin/server ./cmd/server
+	go build -ldflags "$(LDFLAGS)" -o bin/server ./cmd/server
 
 test:
-	GOWORK=off go test ./...
+	go test ./...
 
 eval:
 	GEMINI_API_KEY=$$(cat ~/.gemini-api-key) go run ./cmd/eval
