@@ -207,8 +207,10 @@ type genConfig struct {
 	ResponseMIMEType string       `json:"responseMimeType,omitempty"`
 }
 
+// thinkingCfg uses thinkingLevel rather than the legacy thinkingBudget:
+// gemini-3.5+ rejects thinkingBudget with a 400, and 3.1 accepts both.
 type thinkingCfg struct {
-	ThinkingBudget int `json:"thinkingBudget"`
+	ThinkingLevel string `json:"thinkingLevel"`
 }
 
 type geminiUsage struct {
@@ -271,7 +273,7 @@ func (c *Client) call(ctx context.Context, system, user string) ([]rawPair, Toke
 		},
 		GenerationConfig: &genConfig{
 			Temperature:      c.temperature(),
-			ThinkingConfig:   &thinkingCfg{ThinkingBudget: 0},
+			ThinkingConfig:   &thinkingCfg{ThinkingLevel: "minimal"},
 			ResponseMIMEType: "application/json",
 		},
 	}
