@@ -221,29 +221,16 @@ func TestR3BriefsReplacesOnlyCraftedBrief(t *testing.T) {
 	}
 }
 
-func TestCompoundVariants(t *testing.T) {
-	got := map[string]promptVariant{}
+func TestConcreteVariantReplacesOnlyCraftedBrief(t *testing.T) {
+	var c3 promptVariant
 	for _, v := range allVariants {
-		got[v.name] = v
+		if v.name == "c3-concrete" {
+			c3 = v
+		}
 	}
 	prod := llm.VariantInstructions()
-	c1 := got["c1-grounded"]
-	if c1.system != llm.SystemPrompt || len(c1.variantOverrides) != 3 {
-		t.Fatalf("c1-grounded: want production system prompt and 3 briefs, got %d briefs", len(c1.variantOverrides))
-	}
-	if c1.variantOverrides[0] != prod[0] || c1.variantOverrides[1] != prod[1] {
-		t.Error("c1-grounded must keep the production evocative and wordplay briefs")
-	}
-	if c1.variantOverrides[2] != compoundCraftedBrief {
-		t.Error("c1-grounded must replace the crafted brief")
-	}
-	c3 := got["c3-concrete"]
 	if c3.system != llm.SystemPrompt || len(c3.variantOverrides) != 3 ||
 		c3.variantOverrides[0] != prod[0] || c3.variantOverrides[1] != prod[1] || c3.variantOverrides[2] != concreteCraftedBrief {
 		t.Error("c3-concrete must keep production briefs 1–2 and replace the crafted brief")
-	}
-	c2 := got["c2-mix"]
-	if c2.system != llm.SystemPrompt+compoundMix || c2.variantOverrides != nil {
-		t.Error("c2-mix: want production briefs and system prompt + compoundMix")
 	}
 }

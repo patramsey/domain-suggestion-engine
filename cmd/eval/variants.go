@@ -53,27 +53,15 @@ var r3Briefs = []string{separatedBriefs[0], separatedBriefs[1], craftedBriefR3}
 // for 3.1), and compounds are the most registrable kind of name. r3 made a
 // whole batch of them and lost rated quality with generic pairs, so these
 // variants keep the current prompt and ask for compounds grounded in the
-// concept: one word for what it makes or does, one for the feeling it evokes.
-
-// compoundCraftedBrief replaces the current crafted brief in c1-grounded.
-const compoundCraftedBrief = "\n\nCreative focus for this batch: compound names — two short, ordinary English words joined into one name. One word names something THIS concept makes, does or works with; the other names the feeling, image or quality it should evoke. Both words must be instantly recognisable, and the joined name must read naturally aloud as one word. No invented prefixes or suffixes, and no words so general they could attach to any business."
+// concept. The winner, c1-grounded (one word for what the concept makes or
+// does, one for the feeling it evokes), is now the production crafted brief;
+// c2-mix (a one-line "one in five" request) had no effect and was removed.
 
 // concreteCraftedBrief replaces the crafted brief in c3-concrete. In round 5,
-// c1's "okay" compounds paired a concept word with an abstract quality word
-// (a generic virtue or feeling); its "good" ones paired two concrete words.
+// c1-grounded's "okay" compounds paired a concept word with an abstract
+// quality word (a generic virtue or feeling); its "good" ones paired two
+// concrete words. Round 6: more registrable, rated 78% good vs c1's 82%.
 const concreteCraftedBrief = "\n\nCreative focus for this batch: compound names — two short, ordinary English words joined into one name. One word names something THIS concept makes, does or works with; the other is a concrete, sensory word — an object, material, place, season, time of day or natural element — that brings the right picture to mind. Avoid abstract words for generic qualities, virtues or feelings that could suit any brand. Both words must be instantly recognisable, and the joined name must read naturally aloud as one word. No invented prefixes or suffixes."
-
-// compoundMix is appended to the system prompt in c2-mix.
-const compoundMix = `
-
-Compounds: across your suggestions, make roughly one name in five a compound — two short, ordinary English words joined into one name, one naming something this concept makes, does or works with and the other the feeling or image it should evoke. The joined name must read naturally aloud. No invented prefixes or suffixes, and no words so general they could attach to any business.`
-
-// c1Briefs is the production briefs with the crafted brief replaced.
-func c1Briefs() []string {
-	b := llm.VariantInstructions()
-	b[2] = compoundCraftedBrief
-	return b
-}
 
 // c3Briefs is the production briefs with the concrete crafted brief.
 func c3Briefs() []string {
@@ -93,11 +81,7 @@ var allVariants = []promptVariant{
 	{name: "r2-uncommon", system: llm.SystemPrompt + tldAdherence + commonWordGuidance, temperature: 1.0, variantOverrides: separatedBriefs},
 	// Round 3: r1 with the crafted brief rewritten after the blind-rating failure.
 	{name: "r3-briefs", system: llm.SystemPrompt + tldAdherence, temperature: 1.0, variantOverrides: r3Briefs},
-	// Issue #4: current prompt, crafted brief asks for grounded compounds.
-	{name: "c1-grounded", system: llm.SystemPrompt, temperature: 1.0, variantOverrides: c1Briefs()},
-	// Issue #4: current prompt and briefs, about one name in five a grounded compound.
-	{name: "c2-mix", system: llm.SystemPrompt + compoundMix, temperature: 1.0},
-	// Issue #4: c1 with the second word concrete and sensory, not an abstract quality.
+	// Issue #4: production crafted brief with the second word concrete and sensory, not an abstract quality.
 	{name: "c3-concrete", system: llm.SystemPrompt, temperature: 1.0, variantOverrides: c3Briefs()},
 }
 

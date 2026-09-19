@@ -96,10 +96,10 @@ Parser — tokenises, strips stopwords, extracts the SLD from existing domains
   │    creative brief to maximise variety:
   │
   │    ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
-  │    │  Evocative   │  │  Wordplay    │  │  Crafted     │
-  │    │  metaphors,  │  │  domain      │  │  portmanteaus│
-  │    │  classical   │  │  hacks, TLD  │  │  coined      │
-  │    │  words       │  │  cleverness  │  │  words       │
+  │    │  Evocative   │  │  Wordplay    │  │  Compounds   │
+  │    │  metaphors,  │  │  domain      │  │  two real    │
+  │    │  classical   │  │  hacks, TLD  │  │  words that  │
+  │    │  words       │  │  cleverness  │  │  fit concept │
   │    └──────┬───────┘  └──────┬───────┘  └──────┬───────┘
   │           └─────────────────┴─────────────────┘
   │                      merge + SLD dedup
@@ -120,7 +120,7 @@ Remove unavailable_domains, return the top N
 
 **Why two tiers?** The LLM is good at creative, concept-specific names but can't reliably find domain hacks, because it doesn't know which suffixes are real TLDs. The algorithmic tier finds them instantly and deterministically. Each covers the other's blind spot.
 
-**Why three LLM calls?** A single call converges on one creative direction. Three parallel calls with different briefs give breadth without adding latency.
+**Why three LLM calls?** A single call converges on one creative direction. Three parallel calls with different briefs give breadth without adding latency. The third brief asks for compounds of two ordinary words — one for what the business makes or does, one for the feeling it should evoke (`darkroast`, `lenscraft`) — because such names are rarely registered yet read like real brands.
 
 **What if a tier fails?** The response still returns whatever the other tier produced, with `"partial": true`. Only when both fail does the request return an error.
 
@@ -170,7 +170,7 @@ The engine never checks whether a domain is registered, but some names are almos
 
 Word commonness comes from [SCOWL](http://wordlist.aspell.net/) frequency levels (very common: level ≤ 20; moderately common: level 35). TLD crowding comes from a table generated offline by checking which of a fixed set of probe words have DNS delegations on each TLD (`make gen-tld-crowding`). Both are embedded, so ranking makes no network calls.
 
-In evaluation, this raised the share of registrable names from about 21% to 31% in the top 10 and from about 24% to 28% in the top 20, without lowering blind human ratings. The experiment history is in [`eval-results/README.md`](./eval-results/README.md).
+Together with the compound brief, this makes about half of the top 20 registrable at standard price (51% in evaluation, against 26% before the compound brief and 44% for the previous model), with 82% of top-10 names rated good in blind review. The experiment history is in [`eval-results/README.md`](./eval-results/README.md).
 
 ### How the signals work
 
