@@ -6,10 +6,11 @@ import (
 	"strings"
 
 	"github.com/patlivet/domain-suggestion-engine/internal/algorithmic"
+	"github.com/patlivet/domain-suggestion-engine/internal/wordlist"
 )
 
-// Score computes a composite quality score [0.0, 1.0] for a candidate.
-// Weights (sum = 1.0):
+// baseScore computes a composite quality score [0.0, 1.0] for a candidate,
+// before the availability penalty is applied. Weights (sum = 1.0):
 //   brandability     0.40 — n-gram phonotactics (70%) + sub-word memorability (30%)
 //   conceptRelevance 0.30 — GloVe semantic similarity to query
 //   tldPremium       0.15 — IANA adoption + word-likeness + semantic match
@@ -17,7 +18,7 @@ import (
 // LLM-sourced candidates receive a position-scaled bonus: +0.03 base for all
 // LLM suggestions, plus up to +0.04 for the LLM's top-ranked picks (LLMRank=1.0).
 // The LLM sorts its output best-first, so position is a free quality signal.
-func Score(c algorithmic.Candidate, tokens []string) float64 {
+func baseScore(c algorithmic.Candidate, tokens []string) float64 {
 	base := clamp(
 		brandability(c.SLD)*0.40 +
 			conceptRelevance(c.SLD, tokens)*0.30 +
@@ -28,6 +29,40 @@ func Score(c algorithmic.Candidate, tokens []string) float64 {
 		return clamp(base + 0.03 + c.LLMRank*0.04)
 	}
 	return base
+}
+
+// Availability penalties (spec Part 2): likely-taken names are demoted so
+// more of the top results are registrable. Values from the offline sweep.
+const (
+	commonWordPenalty = 0.20 // SCOWL ≤ wordlist.CommonMaxLevel
+	level35Penalty    = 0.05 // SCOWL level 35
+	crowdingWeight    = 0.15
+	neutralFreeRate   = 0.5 // TLDs missing from tldFreeRate
+)
+
+// Score is the composite quality score minus the availability penalty,
+// clamped to [0, 1].
+func Score(c algorithmic.Candidate, tokens []string) float64 {
+	return clamp(baseScore(c, tokens) - availabilityPenalty(c))
+}
+
+// availabilityPenalty is larger for names that are likely registered: very
+// common or common words, and TLDs where most probe labels are taken.
+func availabilityPenalty(c algorithmic.Candidate) float64 {
+	p := 0.0
+	if l, ok := wordlist.Level(c.SLD); ok {
+		switch {
+		case l <= wordlist.CommonMaxLevel:
+			p += commonWordPenalty
+		case l == 35:
+			p += level35Penalty
+		}
+	}
+	fr, ok := tldFreeRate[c.TLD]
+	if !ok {
+		fr = neutralFreeRate
+	}
+	return p + crowdingWeight*(1-fr)
 }
 
 // --- Length ---

@@ -171,26 +171,34 @@ func memorability(sld string) float64 {
 	return float64(matched) / float64(n)
 }
 
-// conceptRelevance scores how semantically related the SLD is to the query tokens.
-// Returns [0, 1]: 0 = no recognised sub-words or no relation; 1 = very close match.
-// Returns 0.5 if the SLD has no recognisable sub-words (neutral, not penalising).
-func conceptRelevance(sld string, tokens []string) float64 {
+// ConceptRelevance returns the GloVe relevance of sld to the query tokens,
+// in [0.1, 1.0]. ok is false when it cannot be computed: no tokens, or no
+// recognisable English sub-words in sld or in the tokens.
+func ConceptRelevance(sld string, tokens []string) (float64, bool) {
 	if len(tokens) == 0 {
-		return 0.5
+		return 0, false
 	}
 	sldVec, ok := avgVec(subWords(sld))
 	if !ok {
-		// SLD contains no recognisable English sub-words — score neutral
-		return 0.5
+		return 0, false
 	}
 	qVec, ok := avgVec(tokens)
 	if !ok {
-		return 0.5
+		return 0, false
 	}
 	cos := float64(cosine(sldVec, qVec))
 	// Typical cosine similarities for related words: 0.3–0.7.
 	// Scale so that cos=0.5 → score≈0.75, cos=0 → 0.5, cos<0 → below 0.5.
 	// Mapping: score = clamp(0.5 + cos*0.5, 0.1, 1.0)
-	return math.Max(0.1, math.Min(1.0, 0.5+cos*0.8))
+	return math.Max(0.1, math.Min(1.0, 0.5+cos*0.8)), true
+}
+
+// conceptRelevance is ConceptRelevance with a neutral 0.5 when relevance
+// cannot be computed, which is what scoring uses.
+func conceptRelevance(sld string, tokens []string) float64 {
+	if r, ok := ConceptRelevance(sld, tokens); ok {
+		return r
+	}
+	return 0.5
 }
 

@@ -59,9 +59,15 @@ func NewHandler(cfg Config) (*Handler, error) {
 
 	llmClient := llm.NewClient(cfg.GeminiAPIKey, cfg.GeminiModel)
 
-	c, err := cache.New(cfg.CacheSize, cache.DefaultTTL)
-	if err != nil {
-		return nil, err
+	// CacheSize 0 disables the response cache (used by pipeline checks that
+	// need every request to reach the model).
+	var c *cache.Cache
+	if cfg.CacheSize > 0 {
+		var err error
+		c, err = cache.New(cfg.CacheSize, cache.DefaultTTL)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return &Handler{
@@ -71,6 +77,20 @@ func NewHandler(cfg Config) (*Handler, error) {
 		cache:    c,
 		icannSet: tlds.DefaultRegistry.ICANNSet(),
 	}, nil
+}
+
+// cacheGet and cacheSet are no-ops when the cache is disabled (CacheSize 0).
+func (h *Handler) cacheGet(key string) ([]byte, bool) {
+	if h.cache == nil {
+		return nil, false
+	}
+	return h.cache.Get(key)
+}
+
+func (h *Handler) cacheSet(key string, value []byte) {
+	if h.cache != nil {
+		h.cache.Set(key, value)
+	}
 }
 
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -149,7 +169,7 @@ func (h *Handler) handleSuggest(w http.ResponseWriter, r *http.Request) {
 	unavailable := normalizeUnavailable(req.UnavailableDomains)
 	inspireFrom := normalizeUnavailable(req.InspireFrom) // same normalization: lowercase + dedupe
 	cacheKey := cache.Key(req.Input, resolvedTLDs, unavailable, inspireFrom)
-	if cached, ok := h.cache.Get(cacheKey); ok {
+	if cached, ok := h.cacheGet(cacheKey); ok {
 		w.Header().Set("Content-Type", "application/json")
 		w.Header().Set("Age", "1")
 		w.Write(cached)
@@ -305,7 +325,7 @@ func (h *Handler) handleSuggest(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	encoded, _ := json.Marshal(resp)
-	h.cache.Set(cacheKey, encoded)
+	h.cacheSet(cacheKey, encoded)
 	w.Write(encoded)
 }
 
@@ -393,7 +413,7 @@ func (h *Handler) handleConfig(w http.ResponseWriter, _ *http.Request) {
 			AllGenerators:    h.cfg.AllGenerators,
 		},
 		Cache: CacheConfig{
-			Enabled:    true,
+			Enabled:    h.cache != nil,
 			MaxSize:    h.cfg.CacheSize,
 			TTLSeconds: int(cache.DefaultTTL.Seconds()),
 		},

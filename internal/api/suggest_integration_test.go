@@ -31,7 +31,7 @@ func integrationSuggest(t *testing.T, input string, count int) []Suggestion {
 
 	allGen := algorithmic.DefaultGenerators(nil, nil)
 	engine := algorithmic.NewEngine(allGen, []string{"hacks"})
-	llmClient := llm.NewClient(key, "gemini-2.5-flash-lite")
+	llmClient := llm.NewClient(key, "gemini-3.5-flash-lite")
 	c, _ := cache.New(10, cache.DefaultTTL)
 	icannSet := tlds.DefaultRegistry.ICANNSet()
 
@@ -301,5 +301,53 @@ func TestIntegrationSuggestionQuality(t *testing.T) {
 			suggestions := integrationSuggest(t, tc.input, 8)
 			assertSuggestionQuality(t, tc.label, suggestions, tc.minCount)
 		})
+	}
+}
+
+// TestIntegrationUnavailableDomains verifies that confirmed-taken domains are
+// excluded from results and used as quality calibration for new suggestions.
+//
+// Unavailability verified with a registrar availability check on 2026-07-03.
+func TestIntegrationUnavailableDomains(t *testing.T) {
+	key := os.Getenv("GEMINI_API_KEY")
+	if key == "" {
+		t.Skip("GEMINI_API_KEY not set")
+	}
+
+	const input = "craft beer subscription box monthly delivery"
+
+	// Confirmed taken via a registrar availability check on 2026-07-03.
+	unavailable := []string{"vessel.beer", "hopology.beer", "craft.beer", "brew.beer"}
+
+	llmClient := llm.NewClient(key, "gemini-3.5-flash-lite")
+	icannSet := tlds.DefaultRegistry.ICANNSet()
+	resolvedTLDs, _ := tlds.Resolve(tlds.Filter{})
+	tldSet := make(map[string]struct{}, len(resolvedTLDs))
+	for _, tld := range resolvedTLDs {
+		tldSet[tld] = struct{}{}
+	}
+	tokens := parser.Parse(input, icannSet)
+
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
+	defer cancel()
+
+	cands, _, err := llmClient.Generate(ctx, input, tokens, resolvedTLDs, tldSet, 10, unavailable, nil)
+	if err != nil {
+		t.Fatalf("Generate failed: %v", err)
+	}
+	if len(cands) < 3 {
+		t.Fatalf("too few candidates returned: %d", len(cands))
+	}
+
+	unavailableSet := make(map[string]struct{}, len(unavailable))
+	for _, d := range unavailable {
+		unavailableSet[d] = struct{}{}
+	}
+
+	for _, c := range cands {
+		name := c.SLD + "." + c.TLD
+		if _, taken := unavailableSet[name]; taken {
+			t.Errorf("unavailable domain %q appeared in suggestions", name)
+		}
 	}
 }

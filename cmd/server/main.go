@@ -26,8 +26,8 @@ func main() {
 
 	cfg := api.Config{
 		GeminiAPIKey:     os.Getenv("GEMINI_API_KEY"),
-		GeminiModel:      envString("GEMINI_MODEL", "gemini-3.1-flash-lite"),
-		CacheSize:        envInt("CACHE_SIZE", 500),
+		GeminiModel:      envString("GEMINI_MODEL", "gemini-3.5-flash-lite"),
+		CacheSize:        envInt("CACHE_SIZE", 500), // 0 disables the response cache
 		LLMShare:         envFloat("LLM_SHARE", 0.60),
 		AlgoEnabled:      envBool("ALGO_ENABLED", true),
 		ActiveGenerators: envStrings("GENERATORS", "hacks"),

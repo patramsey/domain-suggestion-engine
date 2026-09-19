@@ -168,7 +168,7 @@ All configuration is via environment variables.
 | Variable | Default | Description |
 |---|---|---|
 | `GEMINI_API_KEY` | — | **Required.** Gemini API key |
-| `GEMINI_MODEL` | `gemini-3.1-flash-lite` | Model ID. Override to pin a specific version. |
+| `GEMINI_MODEL` | `gemini-3.5-flash-lite` | Model ID. Override to pin a specific version. |
 | `PORT` | `8080` | HTTP listen port |
 | `CACHE_SIZE` | `500` | LRU cache entry count |
 | `LLM_SHARE` | `0.60` | Fraction of result slots reserved for LLM suggestions |
@@ -322,9 +322,57 @@ The engine deduplicates candidates across all active generators, so generators c
 
 ### Prompt evaluation
 
-`make eval` runs 16 fixed queries across the current prompt and scorer, saving a timestamped JSON snapshot to `eval-results/`. Commit the snapshot to track quality over time — `git diff eval-results/` between two snapshots shows exactly which suggestions changed.
+`make eval` runs the 16-query `core` set against the current prompt and scorer, saving a timestamped JSON snapshot to `eval-results/`. Commit the snapshot to track quality over time — `git diff eval-results/` between two snapshots shows exactly which suggestions changed.
+
+Pass flags through `ARGS` to compare configurations:
+
+```bash
+make eval ARGS="-model gemini-3.5-flash-lite -runs 3 -label m35"
+make eval ARGS="-thinking low -temperature 0.7 -queries all"
+```
+
+| Flag | Default | Purpose |
+|---|---|---|
+| `-model` | `$GEMINI_MODEL`, else `gemini-3.5-flash-lite` | Model under test |
+| `-thinking` | `minimal` | Gemini `thinkingLevel` (`minimal`, `low`, `medium`, `high`) |
+| `-temperature` | each variant's own | Override generation temperature (0–2) |
+| `-runs` | `1` | Repeat each query to measure run-to-run noise |
+| `-queries` | `core` | `core` (historical 16), `hard` (short, vague, non-English, long, niche inputs) or `all` |
+| `-variant` | `current` | Prompt variant(s) to run: comma-separated names, or `all` |
+| `-label` | none | Added to the snapshot filename |
+| `-rescore` | none | Re-annotate an existing snapshot with quality metrics; no API calls |
+
+With -runs 2 or more, the report adds per-run top-10 metrics and each metric's noise band (max − min across runs).
+
+Each snapshot records its full configuration (model, thinking level, temperatures, prompt fingerprint, git commit and whether code was uncommitted), per-call token usage including thinking tokens, cost at the model's real price (see `cmd/eval/pricing.go`), and a yield funnel showing where returned names were dropped.
+
+Every saved suggestion is also annotated with deterministic quality flags, and the report prints them per config for all kept names and for each query's top 10:
+
+- **Typo** — not a word, 5+ letters, and one edit from a common word (`pizzaria`, `balanc`).
+- **Common word** — a very common English word (SCOWL level ≤ 20: `late`, `mint`), almost certainly registered.
+- **Specificity** — GloVe relevance to its own query minus mean relevance to the other queries; near zero means the name would fit any business. Specificity is relative to the snapshot's own query set, so only compare specificity between snapshots run on the same `-queries` set.
+
+Word data is classic SCOWL 2020.12.07, embedded via `make gen-wordlist` (see `internal/wordlist/data/NOTICE`). These metrics are eval-only; production ranking does not use them.
 
 Run it after any change to `internal/llm/prompt.go`, `internal/scorer/`, or the Gemini model version. See `eval-results/README.md` for the full experiment history and methodology.
+
+To check the metrics against human judgement, `cmd/ratings` builds a blind sample and analyses ratings:
+
+```bash
+go run ./cmd/ratings sample -n 150 -seed 1 -out ratings/ eval-results/run-A.json eval-results/run-B.json
+# rate ratings/items.json (good / okay / bad), save as ratings/ratings.json
+go run ./cmd/ratings analyze -dir ratings/
+```
+
+`ratings.json` is a flat array of `{"id": "r001", "rating": "good"}` objects, one per rated item in `items.json`, where `rating` is one of `good`, `okay` or `bad`.
+
+`cmd/suggestcheck` checks a running server end to end (both tiers, tier balance, TLD diversity cap, retry, unavailable-domains and TLD-filter paths). Start the server with `CACHE_SIZE=0` so every request reaches the model:
+
+```bash
+CACHE_SIZE=0 GEMINI_API_KEY=... ./bin/server &
+go run ./cmd/suggestcheck quality -url http://localhost:8080 -out quality.json
+go run ./cmd/suggestcheck load -url http://localhost:8080 -n 200 -c 5 -out load.json
+```
 
 **Disabling the algorithmic tier (LLM only):**
 
