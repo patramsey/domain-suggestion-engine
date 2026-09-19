@@ -55,6 +55,12 @@
   },
   {
     "query": "AI-powered legal document review tool for small law firms",
+    "domain": "injunction.digital",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "AI-powered legal document review tool for small law firms",
     "domain": "legisync.dev",
     "rating": "okay",
     "round": 1
@@ -151,9 +157,21 @@
   },
   {
     "query": "AI-powered legal document review tool for small law firms",
+    "domain": "testimony.io",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "AI-powered legal document review tool for small law firms",
     "domain": "trial.net",
     "rating": "okay",
     "round": 3
+  },
+  {
+    "query": "AI-powered legal document review tool for small law firms",
+    "domain": "tribunal.info",
+    "rating": "good",
+    "round": 5
   },
   {
     "query": "AI-powered legal document review tool for small law firms",
@@ -187,9 +205,27 @@
   },
   {
     "query": "SOC 2 compliance automation for mid-market fintech companies",
+    "domain": "anchor.finance",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "SOC 2 compliance automation for mid-market fintech companies",
+    "domain": "audit.ly",
+    "rating": "okay",
+    "round": 5
+  },
+  {
+    "query": "SOC 2 compliance automation for mid-market fintech companies",
     "domain": "basis.network",
     "rating": "good",
     "round": 2
+  },
+  {
+    "query": "SOC 2 compliance automation for mid-market fintech companies",
+    "domain": "beacon.fund",
+    "rating": "good",
+    "round": 5
   },
   {
     "query": "SOC 2 compliance automation for mid-market fintech companies",
@@ -208,6 +244,12 @@
     "domain": "catalyst.solutions",
     "rating": "good",
     "round": 4
+  },
+  {
+    "query": "SOC 2 compliance automation for mid-market fintech companies",
+    "domain": "citadel.finance",
+    "rating": "good",
+    "round": 5
   },
   {
     "query": "SOC 2 compliance automation for mid-market fintech companies",
@@ -238,6 +280,12 @@
     "domain": "valid.run",
     "rating": "good",
     "round": 2
+  },
+  {
+    "query": "SOC 2 compliance automation for mid-market fintech companies",
+    "domain": "valida.ai",
+    "rating": "good",
+    "round": 5
   },
   {
     "query": "SOC 2 compliance automation for mid-market fintech companies",
@@ -343,6 +391,12 @@
   },
   {
     "query": "a denver based coffee shop that serves beer at night",
+    "domain": "hop.coffee",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "a denver based coffee shop that serves beer at night",
     "domain": "java.pub",
     "rating": "good",
     "round": 1
@@ -433,6 +487,12 @@
   },
   {
     "query": "a denver based coffee shop that serves beer at night",
+    "domain": "umbra.coffee",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "a denver based coffee shop that serves beer at night",
     "domain": "velvet.bar",
     "rating": "good",
     "round": 1
@@ -463,6 +523,12 @@
   },
   {
     "query": "craft beer subscription box monthly delivery",
+    "domain": "beerparcel.express",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "craft beer subscription box monthly delivery",
     "domain": "crate.pub",
     "rating": "good",
     "round": 2
@@ -472,6 +538,12 @@
     "domain": "draftquest.info",
     "rating": "okay",
     "round": 1
+  },
+  {
+    "query": "craft beer subscription box monthly delivery",
+    "domain": "ferment.co",
+    "rating": "good",
+    "round": 5
   },
   {
     "query": "craft beer subscription box monthly delivery",
@@ -496,6 +568,12 @@
     "domain": "hop.bar",
     "rating": "good",
     "round": 4
+  },
+  {
+    "query": "craft beer subscription box monthly delivery",
+    "domain": "hopchest.pub",
+    "rating": "good",
+    "round": 5
   },
   {
     "query": "craft beer subscription box monthly delivery",
@@ -553,9 +631,21 @@
   },
   {
     "query": "developer tool for automating code reviews with AI",
+    "domain": "binary.codes",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "developer tool for automating code reviews with AI",
     "domain": "clean.software",
     "rating": "good",
     "round": 1
+  },
+  {
+    "query": "developer tool for automating code reviews with AI",
+    "domain": "cleancode.software",
+    "rating": "good",
+    "round": 5
   },
   {
     "query": "developer tool for automating code reviews with AI",
@@ -613,9 +703,21 @@
   },
   {
     "query": "developer tool for automating code reviews with AI",
+    "domain": "merge.run",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "developer tool for automating code reviews with AI",
     "domain": "merge.software",
     "rating": "good",
     "round": 3
+  },
+  {
+    "query": "developer tool for automating code reviews with AI",
+    "domain": "quicklint.engineering",
+    "rating": "good",
+    "round": 5
   },
   {
     "query": "developer tool for automating code reviews with AI",
@@ -685,6 +787,12 @@
   },
   {
     "query": "freelance marketplace for creative professionals",
+    "domain": "catalyst.systems",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "freelance marketplace for creative professionals",
     "domain": "collab.market",
     "rating": "good",
     "round": 1
@@ -730,6 +838,12 @@
     "domain": "evokera.expert",
     "rating": "okay",
     "round": 1
+  },
+  {
+    "query": "freelance marketplace for creative professionals",
+    "domain": "foundry.agency",
+    "rating": "good",
+    "round": 5
   },
   {
     "query": "freelance marketplace for creative professionals",
@@ -841,9 +955,33 @@
   },
   {
     "query": "getfitnow.net",
+    "domain": "cardio.systems",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "getfitnow.net",
+    "domain": "coreleap.com",
+    "rating": "okay",
+    "round": 5
+  },
+  {
+    "query": "getfitnow.net",
     "domain": "drive.solutions",
     "rating": "good",
     "round": 3
+  },
+  {
+    "query": "getfitnow.net",
+    "domain": "elemental.life",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "getfitnow.net",
+    "domain": "enduro.academy",
+    "rating": "good",
+    "round": 5
   },
   {
     "query": "getfitnow.net",
@@ -886,6 +1024,12 @@
     "domain": "hearten.community",
     "rating": "good",
     "round": 2
+  },
+  {
+    "query": "getfitnow.net",
+    "domain": "meridian.solutions",
+    "rating": "good",
+    "round": 5
   },
   {
     "query": "getfitnow.net",
@@ -934,6 +1078,12 @@
     "domain": "artisan.build",
     "rating": "good",
     "round": 2
+  },
+  {
+    "query": "indie game developer community and showcase",
+    "domain": "avatar.gallery",
+    "rating": "good",
+    "round": 5
   },
   {
     "query": "indie game developer community and showcase",
@@ -1027,9 +1177,21 @@
   },
   {
     "query": "indie game developer community and showcase",
+    "domain": "tapestry.community",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "indie game developer community and showcase",
     "domain": "vector.zone",
     "rating": "good",
     "round": 1
+  },
+  {
+    "query": "indie game developer community and showcase",
+    "domain": "waypoint.live",
+    "rating": "good",
+    "round": 5
   },
   {
     "query": "law firm",
@@ -1048,6 +1210,12 @@
     "domain": "briefing.guide",
     "rating": "good",
     "round": 4
+  },
+  {
+    "query": "law firm",
+    "domain": "citation.media",
+    "rating": "good",
+    "round": 5
   },
   {
     "query": "law firm",
@@ -1102,6 +1270,12 @@
     "domain": "meritgrid.net",
     "rating": "okay",
     "round": 3
+  },
+  {
+    "query": "law firm",
+    "domain": "plaintiff.solutions",
+    "rating": "good",
+    "round": 5
   },
   {
     "query": "law firm",
@@ -1189,6 +1363,12 @@
   },
   {
     "query": "meditation and mindfulness app for anxiety",
+    "domain": "mindanchor.ai",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "meditation and mindfulness app for anxiety",
     "domain": "mindward.me",
     "rating": "okay",
     "round": 1
@@ -1219,6 +1399,12 @@
   },
   {
     "query": "meditation and mindfulness app for anxiety",
+    "domain": "plunge.me",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "meditation and mindfulness app for anxiety",
     "domain": "quietis.academy",
     "rating": "okay",
     "round": 1
@@ -1237,9 +1423,27 @@
   },
   {
     "query": "meditation and mindfulness app for anxiety",
+    "domain": "sedate.io",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "meditation and mindfulness app for anxiety",
     "domain": "seren.am",
     "rating": "okay",
     "round": 4
+  },
+  {
+    "query": "meditation and mindfulness app for anxiety",
+    "domain": "shanti.app",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "meditation and mindfulness app for anxiety",
+    "domain": "stillcrest.ly",
+    "rating": "okay",
+    "round": 5
   },
   {
     "query": "meditation and mindfulness app for anxiety",
@@ -1321,6 +1525,12 @@
   },
   {
     "query": "neighborhood barbershop in brooklyn",
+    "domain": "clippers.studio",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "neighborhood barbershop in brooklyn",
     "domain": "cobble.shop",
     "rating": "good",
     "round": 1
@@ -1363,6 +1573,12 @@
   },
   {
     "query": "neighborhood barbershop in brooklyn",
+    "domain": "neckline.shop",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "neighborhood barbershop in brooklyn",
     "domain": "part.bar",
     "rating": "good",
     "round": 2
@@ -1390,6 +1606,12 @@
     "domain": "razorly.bar",
     "rating": "good",
     "round": 1
+  },
+  {
+    "query": "neighborhood barbershop in brooklyn",
+    "domain": "sideburn.shop",
+    "rating": "good",
+    "round": 5
   },
   {
     "query": "neighborhood barbershop in brooklyn",
@@ -1459,6 +1681,12 @@
   },
   {
     "query": "nonprofit that plants trees in cities",
+    "domain": "floraheart.community",
+    "rating": "okay",
+    "round": 5
+  },
+  {
+    "query": "nonprofit that plants trees in cities",
     "domain": "fund.io",
     "rating": "good",
     "round": 3
@@ -1483,6 +1711,18 @@
   },
   {
     "query": "nonprofit that plants trees in cities",
+    "domain": "petal.institute",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "nonprofit that plants trees in cities",
+    "domain": "reforest.build",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "nonprofit that plants trees in cities",
     "domain": "root.org",
     "rating": "good",
     "round": 3
@@ -1495,6 +1735,12 @@
   },
   {
     "query": "nonprofit that plants trees in cities",
+    "domain": "timbertrust.fund",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "nonprofit that plants trees in cities",
     "domain": "verdict.org",
     "rating": "good",
     "round": 3
@@ -1504,6 +1750,12 @@
     "domain": "apertext.education",
     "rating": "okay",
     "round": 2
+  },
+  {
+    "query": "online learning platform for professional photography",
+    "domain": "candid.training",
+    "rating": "good",
+    "round": 5
   },
   {
     "query": "online learning platform for professional photography",
@@ -1528,6 +1780,12 @@
     "domain": "exposures.guru",
     "rating": "good",
     "round": 3
+  },
+  {
+    "query": "online learning platform for professional photography",
+    "domain": "focal.camera",
+    "rating": "good",
+    "round": 5
   },
   {
     "query": "online learning platform for professional photography",
@@ -1573,6 +1831,12 @@
   },
   {
     "query": "online learning platform for professional photography",
+    "domain": "lenscraft.studio",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "online learning platform for professional photography",
     "domain": "lumen.academy",
     "rating": "good",
     "round": 4
@@ -1588,6 +1852,12 @@
     "domain": "plate.works",
     "rating": "good",
     "round": 3
+  },
+  {
+    "query": "online learning platform for professional photography",
+    "domain": "primer.camera",
+    "rating": "good",
+    "round": 5
   },
   {
     "query": "online learning platform for professional photography",
@@ -1612,6 +1882,12 @@
     "domain": "revelation.photography",
     "rating": "okay",
     "round": 3
+  },
+  {
+    "query": "online learning platform for professional photography",
+    "domain": "shotcraft.coach",
+    "rating": "good",
+    "round": 5
   },
   {
     "query": "online learning platform for professional photography",
@@ -1675,6 +1951,12 @@
   },
   {
     "query": "panadería artesanal en madrid",
+    "domain": "candeal.co",
+    "rating": "okay",
+    "round": 5
+  },
+  {
+    "query": "panadería artesanal en madrid",
     "domain": "candeal.shop",
     "rating": "okay",
     "round": 4
@@ -1714,6 +1996,12 @@
     "domain": "harinart.me",
     "rating": "okay",
     "round": 2
+  },
+  {
+    "query": "panadería artesanal en madrid",
+    "domain": "mas.am",
+    "rating": "okay",
+    "round": 5
   },
   {
     "query": "panadería artesanal en madrid",
@@ -1861,6 +2149,12 @@
   },
   {
     "query": "patspizza.com",
+    "domain": "pan.guide",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "patspizza.com",
     "domain": "patina.studio",
     "rating": "okay",
     "round": 3
@@ -1876,6 +2170,12 @@
     "domain": "pizzala.co",
     "rating": "okay",
     "round": 2
+  },
+  {
+    "query": "patspizza.com",
+    "domain": "rustica.restaurant",
+    "rating": "good",
+    "round": 5
   },
   {
     "query": "patspizza.com",
@@ -1918,6 +2218,12 @@
     "domain": "budgetry.app",
     "rating": "okay",
     "round": 2
+  },
+  {
+    "query": "personal finance and budgeting app for millennials",
+    "domain": "cashhaven.ee",
+    "rating": "okay",
+    "round": 5
   },
   {
     "query": "personal finance and budgeting app for millennials",
@@ -1972,6 +2278,12 @@
     "domain": "interest.life",
     "rating": "good",
     "round": 4
+  },
+  {
+    "query": "personal finance and budgeting app for millennials",
+    "domain": "ledger.me",
+    "rating": "good",
+    "round": 5
   },
   {
     "query": "personal finance and budgeting app for millennials",
@@ -2113,6 +2425,12 @@
   },
   {
     "query": "podcast hosting and analytics platform",
+    "domain": "micstream.productions",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "podcast hosting and analytics platform",
     "domain": "phonetic.digital",
     "rating": "good",
     "round": 3
@@ -2149,6 +2467,12 @@
   },
   {
     "query": "podcast hosting and analytics platform",
+    "domain": "timbre.co",
+    "rating": "okay",
+    "round": 5
+  },
+  {
+    "query": "podcast hosting and analytics platform",
     "domain": "tone.studio",
     "rating": "good",
     "round": 1
@@ -2179,6 +2503,18 @@
   },
   {
     "query": "something for my side hustle",
+    "domain": "afterhours.biz",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "something for my side hustle",
+    "domain": "bootstrap.academy",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "something for my side hustle",
     "domain": "bootstrap.guide",
     "rating": "good",
     "round": 4
@@ -2197,15 +2533,33 @@
   },
   {
     "query": "something for my side hustle",
+    "domain": "freelance.agency",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "something for my side hustle",
     "domain": "fringe.build",
     "rating": "good",
     "round": 3
   },
   {
     "query": "something for my side hustle",
+    "domain": "goldmine.fund",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "something for my side hustle",
     "domain": "hatchery.zone",
     "rating": "good",
     "round": 4
+  },
+  {
+    "query": "something for my side hustle",
+    "domain": "honeypot.cash",
+    "rating": "good",
+    "round": 5
   },
   {
     "query": "something for my side hustle",
@@ -2242,6 +2596,12 @@
     "domain": "sidecar.studio",
     "rating": "good",
     "round": 3
+  },
+  {
+    "query": "something for my side hustle",
+    "domain": "sidekick.network",
+    "rating": "good",
+    "round": 5
   },
   {
     "query": "something for my side hustle",
@@ -2353,6 +2713,18 @@
   },
   {
     "query": "sustainable outdoor gear and apparel brand",
+    "domain": "rover.ly",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "sustainable outdoor gear and apparel brand",
+    "domain": "solaris.app",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "sustainable outdoor gear and apparel brand",
     "domain": "terraflow.camp",
     "rating": "good",
     "round": 1
@@ -2401,9 +2773,33 @@
   },
   {
     "query": "tea",
+    "domain": "brewery.place",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "tea",
+    "domain": "ceramic.gallery",
+    "rating": "okay",
+    "round": 5
+  },
+  {
+    "query": "tea",
+    "domain": "chillbrew.zone",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "tea",
     "domain": "decant.bar",
     "rating": "good",
     "round": 3
+  },
+  {
+    "query": "tea",
+    "domain": "decant.kitchen",
+    "rating": "good",
+    "round": 5
   },
   {
     "query": "tea",
@@ -2425,15 +2821,45 @@
   },
   {
     "query": "tea",
+    "domain": "herbalist.shop",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "tea",
     "domain": "infusion.com",
     "rating": "good",
     "round": 3
   },
   {
     "query": "tea",
+    "domain": "matcha.fm",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "tea",
+    "domain": "mistypot.info",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "tea",
     "domain": "oolong.world",
     "rating": "okay",
     "round": 4
+  },
+  {
+    "query": "tea",
+    "domain": "purepour.net",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "tea",
+    "domain": "rootblend.shop",
+    "rating": "good",
+    "round": 5
   },
   {
     "query": "tea",
@@ -2461,6 +2887,18 @@
   },
   {
     "query": "team project management and async communication tool",
+    "domain": "halotrack.dev",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "team project management and async communication tool",
+    "domain": "haven.place",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "team project management and async communication tool",
     "domain": "interleave.solutions",
     "rating": "good",
     "round": 2
@@ -2470,6 +2908,18 @@
     "domain": "kindle.academy",
     "rating": "good",
     "round": 2
+  },
+  {
+    "query": "team project management and async communication tool",
+    "domain": "kinetic.live",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "team project management and async communication tool",
+    "domain": "mesh.cloud",
+    "rating": "good",
+    "round": 5
   },
   {
     "query": "team project management and async communication tool",
@@ -2533,6 +2983,12 @@
   },
   {
     "query": "team project management and async communication tool",
+    "domain": "tide.ai",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "team project management and async communication tool",
     "domain": "vecto.cloud",
     "rating": "good",
     "round": 1
@@ -2545,6 +3001,12 @@
   },
   {
     "query": "vintage clothing resale marketplace",
+    "domain": "cache.sale",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "vintage clothing resale marketplace",
     "domain": "chic.ly",
     "rating": "okay",
     "round": 2
@@ -2554,6 +3016,12 @@
     "domain": "curated.clothing",
     "rating": "good",
     "round": 4
+  },
+  {
+    "query": "vintage clothing resale marketplace",
+    "domain": "curator.boutique",
+    "rating": "good",
+    "round": 5
   },
   {
     "query": "vintage clothing resale marketplace",
@@ -2593,6 +3061,12 @@
   },
   {
     "query": "vintage clothing resale marketplace",
+    "domain": "linen.fund",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "vintage clothing resale marketplace",
     "domain": "memory.place",
     "rating": "good",
     "round": 3
@@ -2614,6 +3088,12 @@
     "domain": "pastchic.boutique",
     "rating": "good",
     "round": 3
+  },
+  {
+    "query": "vintage clothing resale marketplace",
+    "domain": "patina.market",
+    "rating": "good",
+    "round": 5
   },
   {
     "query": "vintage clothing resale marketplace",
@@ -2653,6 +3133,12 @@
   },
   {
     "query": "vintage clothing resale marketplace",
+    "domain": "tapestry.world",
+    "rating": "okay",
+    "round": 5
+  },
+  {
+    "query": "vintage clothing resale marketplace",
     "domain": "threaden.app",
     "rating": "okay",
     "round": 1
@@ -2662,6 +3148,12 @@
     "domain": "timeless.design",
     "rating": "good",
     "round": 1
+  },
+  {
+    "query": "vintage clothing resale marketplace",
+    "domain": "vestige.sale",
+    "rating": "good",
+    "round": 5
   },
   {
     "query": "vintage clothing resale marketplace",
@@ -2689,6 +3181,12 @@
   },
   {
     "query": "we're a small family-run business in vermont that makes maple syrup and maple candy, we sell at farmers markets and online and want to start doing corporate holiday gift boxes",
+    "domain": "forage.direct",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "we're a small family-run business in vermont that makes maple syrup and maple candy, we sell at farmers markets and online and want to start doing corporate holiday gift boxes",
     "domain": "forest.holiday",
     "rating": "good",
     "round": 3
@@ -2701,6 +3199,12 @@
   },
   {
     "query": "we're a small family-run business in vermont that makes maple syrup and maple candy, we sell at farmers markets and online and want to start doing corporate holiday gift boxes",
+    "domain": "goldengrove.works",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "we're a small family-run business in vermont that makes maple syrup and maple candy, we sell at farmers markets and online and want to start doing corporate holiday gift boxes",
     "domain": "grove.company",
     "rating": "good",
     "round": 3
@@ -2710,6 +3214,12 @@
     "domain": "grove.delivery",
     "rating": "okay",
     "round": 4
+  },
+  {
+    "query": "we're a small family-run business in vermont that makes maple syrup and maple candy, we sell at farmers markets and online and want to start doing corporate holiday gift boxes",
+    "domain": "grove.gifts",
+    "rating": "good",
+    "round": 5
   },
   {
     "query": "we're a small family-run business in vermont that makes maple syrup and maple candy, we sell at farmers markets and online and want to start doing corporate holiday gift boxes",
@@ -2755,6 +3265,12 @@
   },
   {
     "query": "we're a small family-run business in vermont that makes maple syrup and maple candy, we sell at farmers markets and online and want to start doing corporate holiday gift boxes",
+    "domain": "pinedrop.studio",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "we're a small family-run business in vermont that makes maple syrup and maple candy, we sell at farmers markets and online and want to start doing corporate holiday gift boxes",
     "domain": "sapharvest.shop",
     "rating": "good",
     "round": 4
@@ -2767,6 +3283,30 @@
   },
   {
     "query": "we're a small family-run business in vermont that makes maple syrup and maple candy, we sell at farmers markets and online and want to start doing corporate holiday gift boxes",
+    "domain": "sugaring.house",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "we're a small family-run business in vermont that makes maple syrup and maple candy, we sell at farmers markets and online and want to start doing corporate holiday gift boxes",
+    "domain": "sweetgrove.farm",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "we're a small family-run business in vermont that makes maple syrup and maple candy, we sell at farmers markets and online and want to start doing corporate holiday gift boxes",
+    "domain": "tapped.farm",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "we're a small family-run business in vermont that makes maple syrup and maple candy, we sell at farmers markets and online and want to start doing corporate holiday gift boxes",
+    "domain": "thicket.shop",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "we're a small family-run business in vermont that makes maple syrup and maple candy, we sell at farmers markets and online and want to start doing corporate holiday gift boxes",
     "domain": "timber.express",
     "rating": "good",
     "round": 4
@@ -2776,6 +3316,18 @@
     "domain": "vermont.company",
     "rating": "good",
     "round": 2
+  },
+  {
+    "query": "we're a small family-run business in vermont that makes maple syrup and maple candy, we sell at farmers markets and online and want to start doing corporate holiday gift boxes",
+    "domain": "wintertap.company",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "we're a small family-run business in vermont that makes maple syrup and maple candy, we sell at farmers markets and online and want to start doing corporate holiday gift boxes",
+    "domain": "woodline.ventures",
+    "rating": "good",
+    "round": 5
   },
   {
     "query": "we're a small family-run business in vermont that makes maple syrup and maple candy, we sell at farmers markets and online and want to start doing corporate holiday gift boxes",
@@ -2845,6 +3397,12 @@
   },
   {
     "query": "yoga studio",
+    "domain": "kinetic.guide",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "yoga studio",
     "domain": "kinetics.center",
     "rating": "good",
     "round": 1
@@ -2887,6 +3445,12 @@
   },
   {
     "query": "yoga studio",
+    "domain": "posture.guide",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "yoga studio",
     "domain": "pranaspire.academy",
     "rating": "bad",
     "round": 1
@@ -2899,9 +3463,27 @@
   },
   {
     "query": "yoga studio",
+    "domain": "shala.live",
+    "rating": "okay",
+    "round": 5
+  },
+  {
+    "query": "yoga studio",
+    "domain": "shanti.place",
+    "rating": "good",
+    "round": 5
+  },
+  {
+    "query": "yoga studio",
     "domain": "sol.agency",
     "rating": "good",
     "round": 4
+  },
+  {
+    "query": "yoga studio",
+    "domain": "somatic.academy",
+    "rating": "good",
+    "round": 5
   },
   {
     "query": "yoga studio",
@@ -2944,6 +3526,12 @@
     "domain": "zen.codes",
     "rating": "good",
     "round": 1
+  },
+  {
+    "query": "yoga studio",
+    "domain": "zenith.io",
+    "rating": "good",
+    "round": 5
   },
   {
     "query": "yoga studio",

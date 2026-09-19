@@ -390,3 +390,27 @@ Per name, DNS agreed with the registrar on 91.6% (3.1), 86.1% and 87.5% (3.5) of
 Blind ratings of compounds across all rounds: **57% good (21/37), 2 bad** — most of the rest "okay" (`pinecrest`, `meritgrid`, `mossline`). 3.1's compounds rated better (13/20: `corebound`, `wavecast`, `moontide`) than r3's (7/15). Other non-common names rated 69–82% good; very common words ~95%. Compounds are the most registrable kind of name (81–86% DNS-free for 3.1 and r3).
 
 So compounds buy availability but, as r3 produced them, cost rated quality. Next: add a minority of compounds grounded in the concept to the current prompt, rather than a whole batch of them.
+
+### Issue #4, round 1: `c1-grounded` vs current — 2026-09-19
+
+Snapshot `run-2026-09-19T200530.335-issue4-r1.json` (`-variant current,c1-grounded,c2-mix -runs 3 -queries all -avail`). `c1-grounded` keeps the production prompt and replaces only the crafted brief with a request for compounds of two ordinary words, one for what the concept makes or does and one for the feeling it evokes. `c2-mix` (a one-line "about one in five" request) had no measurable effect and was dropped.
+
+| | Current 3.5 | `c1-grounded` | 3.1 (earlier baseline) |
+|---|---|---|---|
+| Registrar standard-price available, top 10 | 28.6% (2.8 / query) | **52.1% (5.2 / query)** | 38.6% (3.9 / query) |
+| Registrar standard-price available, top 20 | 26.4% (5.3 / query) | **51.1% (10.2 / query)** | 44.4% (8.9 / query) |
+| Per run, top 10 | 25.0 / 34.5 / 26.2% | 48.5 / 57.3 / 50.4% | 37.9 / 36.8 / 41.0% |
+| DNS free, top 10 / top 20 | 41.6% / 38.7% | 62.4% / 59.0% | 47.2% / 52.8% |
+| Compound, top 10 | 4.9% | 47.1% | 13.2% |
+| Typo, top 10 | 8.3% | 4.6% | 8.8% |
+| Names kept / requested | 57% | 71% | — |
+| Cost / query, median latency | $0.0039, 1648 ms | $0.0038, 1621 ms | — |
+
+**Blind rating round 5** (seed 5, 50 top-10 names per arm, 2 prefilled from history):
+
+| | Good | Okay | Bad | Good **and** registrable |
+|---|---|---|---|---|
+| Current 3.5 | 48 (96%) | 2 | 0 | 16 / 50 (32%) |
+| `c1-grounded` | 41 (82%) | 9 | 0 | 22 / 50 (44%) |
+
+The good-rate gap is 14 points (Fisher p = 0.051); every lost "good" became "okay", none "bad". `c1-grounded`'s compounds rated 83% good (20/24) — far better than r3's — and its other names 81% (21/26). Round 5 rated current 3.5 higher than earlier rounds did (84–88%), so part of the gap is round-to-round variation. `c1-grounded` meets every completion criterion in #4 (≥ 80% good; registrar top 10 and top 20 above 3.1; typos below 3.1; cost unchanged).
