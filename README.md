@@ -10,8 +10,8 @@ Input (keywords, description, or existing domain like "patspizza.com")
   ▼
 Parser — tokenises, strips stopwords, extracts SLD from existing domains
   │
-  ├─── LLM tier ─────────────────────────────────────────── ~1.9s, $0.0005/query
-  │    Three parallel Gemini 3.1 Flash-Lite calls, each with a different
+  ├─── LLM tier ─────────────────────────────────────────── ~1.6s, ~$0.004/query
+  │    Three parallel Gemini 3.5 Flash-Lite calls, each with a different
   │    creative brief to maximise variety:
   │
   │    ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
@@ -28,7 +28,7 @@ Parser — tokenises, strips stopwords, extracts SLD from existing domains
   │    e.g. "coffee" → coff.ee,  "studio" → stud.io
   │
   ▼
-Score + rank (4 signals, see below)
+Score + rank (4 signals minus an availability penalty, see below)
   │
   ▼
 Apply tier balance (default 60% LLM / 40% algo) + 25% per-TLD diversity cap
@@ -47,7 +47,7 @@ Each candidate is scored on four data-driven signals before ranking:
 
 | Signal | Weight | How it works |
 |--------|--------|--------------|
-| Brandability | 40% | Phonotactic quality (70%) + sub-word recognizability (30%) |
+| Brandability | 40% | Phonotactic quality (80%) + sub-word recognizability (20%) |
 | Concept relevance | 30% | Semantic similarity between the domain name and the query |
 | TLD quality | 15% | Per-TLD score based on real-world adoption data, word-likeness, and semantic match |
 | Length | 15% | SLD length curve peaking at 3–8 chars — short names are desirable, not penalised |
@@ -55,6 +55,16 @@ Each candidate is scored on four data-driven signals before ranking:
 **Why these signals?** Brandability catches what sounds like a real word vs. a random consonant cluster — `forge` scores high, `xkqvz` scores near zero. Concept relevance catches whether the name actually relates to the query — `dental.clinic` beats `random.clinic` for a dentistry query. TLD quality reflects real-world recognition and meaning rather than treating all TLDs equally. Length reflects empirical domain popularity distributions.
 
 LLM candidates also receive a position bonus: the LLM sorts its output best-first, so earlier suggestions get a small boost (~0.03–0.07) over later ones.
+
+**Availability penalty.** The service never checks availability, but it demotes names that are probably taken so the top results are more likely to be registrable:
+
+| Penalty | Amount | Why |
+|---------|--------|-----|
+| Very common word as the SLD (SCOWL level ≤ 20: `mint`, `late`) | −0.20 | Common dictionary words are almost always registered on popular TLDs |
+| Common-ish word (SCOWL level 35) | −0.05 | Registered less often, but still frequently |
+| TLD crowding | −0.15 × taken share | Share of ordinary probe words already registered on that TLD (`.com` ≈ 94%, `.io` ≈ 55%) |
+
+The crowding table (`internal/scorer/tld_crowding_gen.go`) is generated offline from public DNS delegation (`make gen-tld-crowding`) and embedded; no network calls happen at request time. In evaluation this raised the share of registrable names in the top 10 from about 21% to about 31% with no drop in human-rated quality. See `eval-results/README.md`.
 
 **How the signals work under the hood:**
 
@@ -70,9 +80,9 @@ LLM candidates also receive a position bonus: the LLM sorts its output best-firs
 
 | Metric | Value |
 |--------|-------|
-| Latency (p50) | ~1.9s |
-| Cost per query | ~$0.0005 |
-| LLM model | Gemini 3.1 Flash-Lite |
+| Latency (p50) | ~1.6s |
+| Cost per query | ~$0.004 (paid-tier estimate) |
+| LLM model | Gemini 3.5 Flash-Lite |
 | Throughput | Limited by Gemini rate limits |
 
 Repeated identical queries are served from an in-memory LRU cache (default 500 entries, 5-minute TTL).
@@ -296,6 +306,8 @@ make update-psl     # refresh the vendored Public Suffix List
 make gen-tld-scores # regenerate TLD scores from IANA + Majestic Million
 make gen-ngrams     # regenerate character n-gram tables from English word corpus
 make gen-glove      # regenerate GloVe word embeddings (~860 MB download)
+make gen-wordlist   # regenerate the embedded SCOWL word list
+make gen-tld-crowding # regenerate the TLD crowding table from DNS (network)
 ```
 
 The three `gen-*` targets fetch external datasets and write generated Go/binary files that are committed to the repo. Re-run them when you want to refresh the underlying data (e.g. after a significant Majestic Million update, or to pick up new TLDs from a PSL refresh).
@@ -352,7 +364,7 @@ Every saved suggestion is also annotated with deterministic quality flags, and t
 - **Common word** — a very common English word (SCOWL level ≤ 20: `late`, `mint`), almost certainly registered.
 - **Specificity** — GloVe relevance to its own query minus mean relevance to the other queries; near zero means the name would fit any business. Specificity is relative to the snapshot's own query set, so only compare specificity between snapshots run on the same `-queries` set.
 
-Word data is classic SCOWL 2020.12.07, embedded via `make gen-wordlist` (see `internal/wordlist/data/NOTICE`). These metrics are eval-only; production ranking does not use them.
+Word data is classic SCOWL 2020.12.07, embedded via `make gen-wordlist` (see `internal/wordlist/data/NOTICE`). The typo and specificity metrics are eval-only. Production ranking uses the same SCOWL levels for the common-word availability penalty (see Scoring).
 
 Run it after any change to `internal/llm/prompt.go`, `internal/scorer/`, or the Gemini model version. See `eval-results/README.md` for the full experiment history and methodology.
 
@@ -388,17 +400,24 @@ GEMINI_API_KEY=your-key ALGO_ENABLED=false ./bin/server
 cmd/
   server/            HTTP server entrypoint
   eval/              Prompt evaluation harness (make eval)
+  ratings/           Blind human-rating samples and analysis
+  suggestcheck/      End-to-end quality and load checks against a running server
   gen/
     tld-scores/      Generates internal/scorer/tld_scores_gen.go
     ngrams/          Generates internal/scorer/ngrams_gen.go
     glove/           Generates internal/scorer/data/glove.bin
+    wordlist/        Generates internal/wordlist/data/words.txt.gz
+    tld-crowding/    Generates internal/scorer/tld_crowding_gen.go
 internal/
   api/               Request handling, types, errors
   tlds/              Public Suffix List parser, TLD category registry
   parser/            Input tokenizer (SLD stripping, camelCase split, stopwords)
   algorithmic/       Generator interface + domain hacks generator
   llm/               Gemini REST client, multi-variant prompt builder, response validation
-  scorer/            Domain quality scorer + embedded data (n-gram tables, GloVe vectors, TLD scores)
+  scorer/            Domain quality scorer + availability penalty + embedded data (n-gram tables, GloVe vectors, TLD scores, TLD crowding)
+  quality/           Eval-only name quality metrics (typo, common word, specificity)
+  wordlist/          Embedded SCOWL word levels
+  evalset/           Eval query sets
   cache/             In-process LRU cache with TTL
 data/
   tlds/              Vendored PSL + hand-maintained category files
