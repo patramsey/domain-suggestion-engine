@@ -61,6 +61,16 @@ func variantInstruction(v Variant) string {
 	return ""
 }
 
+// VariantInstructions returns the production focus instruction for each
+// parallel batch, in batch order. For prompt experiments in cmd/eval.
+func VariantInstructions() []string {
+	out := make([]string, len(llmVariants))
+	for i, v := range llmVariants {
+		out[i] = variantInstruction(v)
+	}
+	return out
+}
+
 // BuildRequest constructs the user message for a suggestion request.
 // rawInput is the original user input (for fallback path).
 // tokens is the parsed token list (empty on fallback path).

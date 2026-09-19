@@ -220,3 +220,25 @@ func TestR3BriefsReplacesOnlyCraftedBrief(t *testing.T) {
 		t.Error("the new crafted brief must start with a blank line like the others")
 	}
 }
+
+func TestCompoundVariants(t *testing.T) {
+	got := map[string]promptVariant{}
+	for _, v := range allVariants {
+		got[v.name] = v
+	}
+	prod := llm.VariantInstructions()
+	c1 := got["c1-grounded"]
+	if c1.system != llm.SystemPrompt || len(c1.variantOverrides) != 3 {
+		t.Fatalf("c1-grounded: want production system prompt and 3 briefs, got %d briefs", len(c1.variantOverrides))
+	}
+	if c1.variantOverrides[0] != prod[0] || c1.variantOverrides[1] != prod[1] {
+		t.Error("c1-grounded must keep the production evocative and wordplay briefs")
+	}
+	if c1.variantOverrides[2] != compoundCraftedBrief {
+		t.Error("c1-grounded must replace the crafted brief")
+	}
+	c2 := got["c2-mix"]
+	if c2.system != llm.SystemPrompt+compoundMix || c2.variantOverrides != nil {
+		t.Error("c2-mix: want production briefs and system prompt + compoundMix")
+	}
+}
