@@ -15,6 +15,7 @@ func newTestHandler(t *testing.T) *Handler {
 		GeminiModel:      "gemini-2.5-flash-lite",
 		CacheSize:        10,
 		LLMShare:         0.60,
+		CommonWordSlots:  2,
 		AlgoEnabled:      true,
 		ActiveGenerators: []string{"hacks"},
 		AllGenerators:    []string{"hacks"},
@@ -205,6 +206,9 @@ func TestConfigEndpoint(t *testing.T) {
 	}
 	if resp.LLM.LLMShare != 0.60 {
 		t.Errorf("unexpected llm_share: %f", resp.LLM.LLMShare)
+	}
+	if resp.Ranking.CommonWordSlots != 2 {
+		t.Errorf("unexpected common_word_slots: %d", resp.Ranking.CommonWordSlots)
 	}
 	if !resp.Algo.Enabled {
 		t.Error("algo should be enabled")
@@ -435,5 +439,13 @@ func TestConfigReportsCacheEnabledByDefault(t *testing.T) {
 	}
 	if !resp.Cache.Enabled {
 		t.Error("/config should report the cache as enabled when CacheSize > 0")
+	}
+}
+
+func TestNewHandlerRejectsBadCommonWordSlots(t *testing.T) {
+	for _, n := range []int{-1, 11} {
+		if _, err := NewHandler(Config{GeminiAPIKey: "k", GeminiModel: "m", CommonWordSlots: n}); err == nil {
+			t.Errorf("CommonWordSlots %d: want error", n)
+		}
 	}
 }

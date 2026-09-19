@@ -36,6 +36,7 @@ type Config struct {
 	GeminiModel      string
 	CacheSize        int
 	LLMShare         float64
+	CommonWordSlots  int // results per 10 reserved for very common single words; 0 disables
 	AlgoEnabled      bool
 	ActiveGenerators []string
 	AllGenerators    []string
@@ -58,6 +59,10 @@ func NewHandler(cfg Config) (*Handler, error) {
 	engine := algorithmic.NewEngine(allGen, cfg.ActiveGenerators)
 
 	llmClient := llm.NewClient(cfg.GeminiAPIKey, cfg.GeminiModel)
+
+	if cfg.CommonWordSlots < 0 || cfg.CommonWordSlots > 10 {
+		return nil, fmt.Errorf("CommonWordSlots %d: want 0–10", cfg.CommonWordSlots)
+	}
 
 	// CacheSize 0 disables the response cache (used by pipeline checks that
 	// need every request to reach the model).
@@ -271,7 +276,19 @@ func (h *Handler) handleSuggest(w http.ResponseWriter, r *http.Request) {
 		final = filterUnavailable(final, unavailable)
 	}
 
-	// 14. Log pipeline metrics
+	// 14. Reserve slots for very common single words: great names that are
+	//     usually taken, ranked by quality instead of being demoted out.
+	if h.cfg.CommonWordSlots > 0 {
+		pool := scored
+		if len(unavailable) > 0 {
+			pool = filterUnavailable(scored, unavailable)
+		}
+		final = reserveCommonWords(final, pool, req.Count, h.cfg.CommonWordSlots, func(c algorithmic.Candidate) float64 {
+			return scorer.ScoreWithoutCommonWordPenalty(c, tokens)
+		})
+	}
+
+	// 15. Log pipeline metrics
 	algoUnique := countSource("algorithmic", merged)
 	estimatedCostUSD := float64(llmResult.usage.PromptTokens)*llmInputPricePerToken +
 		float64(llmResult.usage.CandidateTokens)*llmOutputPricePerToken
@@ -412,6 +429,7 @@ func (h *Handler) handleConfig(w http.ResponseWriter, _ *http.Request) {
 			ActiveGenerators: h.engine.Active(),
 			AllGenerators:    h.cfg.AllGenerators,
 		},
+		Ranking: RankingConfig{CommonWordSlots: h.cfg.CommonWordSlots},
 		Cache: CacheConfig{
 			Enabled:    h.cache != nil,
 			MaxSize:    h.cfg.CacheSize,

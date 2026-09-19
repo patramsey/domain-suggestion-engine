@@ -66,6 +66,9 @@ func integrationSuggest(t *testing.T, input string, count int) []Suggestion {
 	final := tierBalance(scored, count, 0.60)
 	final = sldDedup(final)
 	sort.Slice(final, func(i, j int) bool { return final[i].Score > final[j].Score })
+	final = reserveCommonWords(final, scored, count, 2, func(c algorithmic.Candidate) float64 {
+		return scorer.ScoreWithoutCommonWordPenalty(c, tokens)
+	})
 
 	_ = c
 	suggestions := make([]Suggestion, len(final))
@@ -105,7 +108,11 @@ func assertSuggestionQuality(t *testing.T, label string, suggestions []Suggestio
 		if s.Score < 0 || s.Score > 1 {
 			t.Errorf("[%s] suggestion %d %q score %.3f out of [0,1]", label, i, s.Name, s.Score)
 		}
-		// sorted descending
+		// sorted descending within each block of 10 (common-word slots are
+		// capped per block, so a new block may start higher)
+		if i%resultBlock == 0 {
+			prevScore = 2.0
+		}
 		if s.Score > prevScore+0.001 {
 			t.Errorf("[%s] suggestions not sorted: [%d]=%.3f > [%d]=%.3f", label, i, s.Score, i-1, prevScore)
 		}

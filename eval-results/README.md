@@ -434,3 +434,18 @@ The rating difference is noise (Fisher p = 0.80), but `c3-concrete` falls just u
 **Decision:** ship `c1-grounded` as the production crafted brief (closes #4). Keep `c3-concrete` as an eval variant: more registrable, same cost, slightly lower rating — worth revisiting with a way to keep the pairing meaningful.
 
 **Pipeline and load with the new brief** (`cmd/suggestcheck`, `CACHE_SIZE=0`): 32/32 requests, 0 errors, 0 LLM failures; load n=200 c=5 with 0% failures, p50 / p95 / p99 = 1639 / 1847 / 2135 ms (previous prompt: 1617 / 1789 / 1939 ms).
+
+### Common-word slots — 2026-09-19
+
+Very common single words (SCOWL ≤ 20) are strong names the user wants to see even though most are taken; the refinement loop (`unavailable_domains`) handles the ones that are. With the full −0.20 penalty they had disappeared from results (0% of any top 10; 17 of 480 names, all at positions 12–20). `COMMON_WORD_SLOTS=2` keeps 2 of every 10 results for the best of them, scored without the common-word penalty, at most 2 per block of 10.
+
+`cmd/suggestcheck quality` against a local server, 24 plain requests of 20 results, registrar standard-price availability (one run each; ±5 pts noise):
+
+| | Slots off | Slots, uncapped | **Slots, capped 2 per 10 (shipped)** |
+|---|---|---|---|
+| Very common words in results 1–10 / 11–20 | 0 / ~0.7 | ~4 / ~0 (18 of 24 at #1) | **2 / 2** |
+| Registrable, top 10 | 56.7% (5.7 / query) | 40.8% (4.1 / query) | 41.7% (4.2 / query) |
+| Registrable, top 20 | 54.3% (10.8 / query) | 46.0% (9.2 / query) | 41.8% (8.3 / query) |
+| Common words registrable | 1 / 17 | 12 / 101 | — |
+
+Cost: about 2 registrable names per 20 results, as expected from swapping in words that are ~12% registrable. The full response stays near 3.1's level (44% top 20) while every page of 10 shows 2 strong common words.
