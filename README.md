@@ -8,7 +8,7 @@ curl -s -X POST localhost:8080/suggest -d '{"input": "denver coffee shop that se
 ```
 
 - **Two generators, one ranking.** Gemini proposes creative, concept-specific names; a deterministic generator finds domain hacks (`coff.ee`, `stud.io`). Both are scored by the same data-driven ranker.
-- **Leans toward registrable names.** The engine does not check availability — that belongs to a separate service — but it demotes names that are almost certainly taken (common dictionary words, crowded TLDs).
+- **Leans toward registrable names, without hiding great ones.** The engine does not check availability — that belongs to a separate service. It demotes names that are almost certainly taken (common dictionary words, crowded TLDs), but keeps 2 of every 10 results for the best very common single words (`mint.cafe`): strong names worth checking, even though most are taken.
 - **Iterative.** Pass back names the user liked (`inspire_from`) and names that turned out to be taken (`unavailable_domains`) to steer the next batch.
 - **One self-contained binary.** Word embeddings, n-gram tables, TLD data and word lists are embedded; the only runtime dependency is the Gemini API.
 
@@ -115,7 +115,10 @@ Score + rank (four quality signals, minus an availability penalty)
 Tier balance (default 60% LLM / 40% algorithmic) + 25% per-TLD diversity cap
   │
   ▼
-Remove unavailable_domains, return the top N
+Remove unavailable_domains
+  │
+  ▼
+Reserve 2 of every 10 results for very common single words, return the top N
 ```
 
 **Why two tiers?** The LLM is good at creative, concept-specific names but can't reliably find domain hacks, because it doesn't know which suffixes are real TLDs. The algorithmic tier finds them instantly and deterministically. Each covers the other's blind spot.
@@ -168,9 +171,13 @@ The engine never checks whether a domain is registered, but some names are almos
 | The name is a moderately common word | −0.05 | Registered often, but less reliably |
 | TLD crowding | −0.15 × share of ordinary words already registered on that TLD | `.com` is about 94% taken for ordinary words; `.io` about 55% |
 
+### Common-word slots
+
+Very common single words (`mint`, `forge`, `case`) are some of the best names there are, but about 7 in 8 are already registered. Demoting them all would hide them completely, so **2 of every 10 results** (`COMMON_WORD_SLOTS`) are kept for the best of them, scored without the common-word penalty (the TLD crowding penalty still applies). Each block of 10 results holds at most 2 such words and is sorted by score, so every page of 10 shows 2 alongside 8 names that are mostly registrable. When one turns out to be taken, pass it back in `unavailable_domains` on the next request.
+
 Word commonness comes from [SCOWL](http://wordlist.aspell.net/) frequency levels (very common: level ≤ 20; moderately common: level 35). TLD crowding comes from a table generated offline by checking which of a fixed set of probe words have DNS delegations on each TLD (`make gen-tld-crowding`). Both are embedded, so ranking makes no network calls.
 
-Together with the compound brief, this makes about half of the top 20 registrable at standard price (51% in evaluation, against 26% before the compound brief and 44% for the previous model), with 82% of top-10 names rated good in blind review. The experiment history is in [`eval-results/README.md`](./eval-results/README.md).
+Together with the compound brief, this makes about half of the LLM's top 20 registrable at standard price (51% in evaluation, against 26% before the compound brief and 44% for the previous model), with 82% of top-10 names rated good in blind review. The common-word slots then trade about 2 of those registrable names per 20 results for strong common words, bringing a full response to roughly 42–46%. The experiment history is in [`eval-results/README.md`](./eval-results/README.md).
 
 ### How the signals work
 
@@ -222,7 +229,7 @@ Add `?debug=true` to include `tlds_used` and `active_generators` in the response
 }
 ```
 
-`source` is `llm` or `algorithmic`. `partial: true` means only one tier contributed (for example, the LLM call failed, or the input was all stopwords).
+`source` is `llm` or `algorithmic`. Results come in blocks of 10, each sorted by score; each block holds at most 2 very common single words (see [Common-word slots](#common-word-slots)). `partial: true` means only one tier contributed (for example, the LLM call failed, or the input was all stopwords).
 
 **Errors** are returned as `{"error": "...", "code": "..."}`:
 
@@ -272,7 +279,7 @@ Returns `200` when the server is fully configured and `503` otherwise.
 
 ### `GET /config`
 
-A snapshot of the running configuration: model, LLM timeout and share, generators, cache settings, TLD registry date and build version. The API key is reported only as `api_key_set: true/false`.
+A snapshot of the running configuration: model, LLM timeout and share, generators, common-word slots, cache settings, TLD registry date and build version. The API key is reported only as `api_key_set: true/false`.
 
 ---
 
@@ -288,6 +295,7 @@ All configuration is through environment variables.
 | `CACHE_SIZE` | `500` | Response cache entries. `0` disables the cache. |
 | `LLM_SHARE` | `0.60` | Share of result slots reserved for LLM suggestions. |
 | `ALGO_ENABLED` | `true` | `false` turns off the algorithmic tier (LLM-only results). |
+| `COMMON_WORD_SLOTS` | `2` | Results per 10 kept for very common single words, ranked by quality (0–10). `0` ranks them with the full availability penalty, which pushes nearly all of them out. |
 | `GENERATORS` | `hacks` | Comma-separated algorithmic generators. Only `hacks` exists today. |
 
 ---

@@ -29,6 +29,7 @@ func main() {
 		GeminiModel:      envString("GEMINI_MODEL", "gemini-3.5-flash-lite"),
 		CacheSize:        envInt("CACHE_SIZE", 500), // 0 disables the response cache
 		LLMShare:         envFloat("LLM_SHARE", 0.60),
+		CommonWordSlots:  envInt("COMMON_WORD_SLOTS", 2),
 		AlgoEnabled:      envBool("ALGO_ENABLED", true),
 		ActiveGenerators: envStrings("GENERATORS", "hacks"),
 		AllGenerators:    []string{"hacks"},

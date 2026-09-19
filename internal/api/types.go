@@ -66,6 +66,10 @@ type AlgoConfig struct {
 	AllGenerators    []string `json:"all_generators"`
 }
 
+type RankingConfig struct {
+	CommonWordSlots int `json:"common_word_slots"`
+}
+
 type CacheConfig struct {
 	Enabled    bool `json:"enabled"`
 	MaxSize    int  `json:"max_size"`
@@ -87,6 +91,7 @@ type BuildInfo struct {
 type ConfigResponse struct {
 	LLM         LLMConfig         `json:"llm"`
 	Algo        AlgoConfig        `json:"algo"`
+	Ranking     RankingConfig     `json:"ranking"`
 	Cache       CacheConfig       `json:"cache"`
 	TLDRegistry TLDRegistryConfig `json:"tld_registry"`
 	Build       BuildInfo         `json:"build"`

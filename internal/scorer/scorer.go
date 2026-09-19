@@ -11,7 +11,7 @@ import (
 
 // baseScore computes a composite quality score [0.0, 1.0] for a candidate,
 // before the availability penalty is applied. Weights (sum = 1.0):
-//   brandability     0.40 — n-gram phonotactics (70%) + sub-word memorability (30%)
+//   brandability     0.40 — n-gram phonotactics (80%) + sub-word memorability (20%)
 //   conceptRelevance 0.30 — GloVe semantic similarity to query
 //   tldPremium       0.15 — IANA adoption + word-likeness + semantic match
 //   length           0.15 — SLD length curve
@@ -44,6 +44,19 @@ const (
 // clamped to [0, 1].
 func Score(c algorithmic.Candidate, tokens []string) float64 {
 	return clamp(baseScore(c, tokens) - availabilityPenalty(c))
+}
+
+// ScoreWithoutCommonWordPenalty is Score without the very-common-word part
+// of the availability penalty (the TLD crowding and SCOWL-35 parts still
+// apply). Used for the results reserved for very common single words, which
+// are great names but usually taken: they rank by quality, and the caller
+// learns availability from a registrar and refines with unavailable_domains.
+func ScoreWithoutCommonWordPenalty(c algorithmic.Candidate, tokens []string) float64 {
+	p := availabilityPenalty(c)
+	if wordlist.IsCommon(c.SLD) {
+		p -= commonWordPenalty
+	}
+	return clamp(baseScore(c, tokens) - p)
 }
 
 // availabilityPenalty is larger for names that are likely registered: very

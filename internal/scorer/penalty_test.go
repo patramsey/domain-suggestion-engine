@@ -47,3 +47,20 @@ func TestScoreSubtractsPenalty(t *testing.T) {
 		t.Errorf("Score = %v, want base − penalty = %v", got, want)
 	}
 }
+
+func TestScoreWithoutCommonWordPenalty(t *testing.T) {
+	tokens := []string{"coffee", "shop"}
+	common := algorithmic.Candidate{SLD: "mint", TLD: "cafe", Source: "llm", LLMRank: 0.5} // SCOWL ≤ 20
+	got, full := ScoreWithoutCommonWordPenalty(common, tokens), Score(common, tokens)
+	if math.Abs(got-full-commonWordPenalty) > 1e-9 {
+		t.Errorf("common word: got %v, want Score %v + %v", got, full, commonWordPenalty)
+	}
+	// every other penalty still applies
+	if want := clamp(baseScore(common, tokens) - crowdingWeight*(1-tldFreeRate["cafe"])); math.Abs(got-want) > 1e-9 {
+		t.Errorf("common word: got %v, want base minus crowding %v", got, want)
+	}
+	other := algorithmic.Candidate{SLD: "tether", TLD: "cafe"} // SCOWL 35: not affected
+	if a, b := ScoreWithoutCommonWordPenalty(other, tokens), Score(other, tokens); a != b {
+		t.Errorf("non-common word changed: %v vs %v", a, b)
+	}
+}

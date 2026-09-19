@@ -288,6 +288,14 @@ components:
           items:
             type: string
 
+    RankingConfig:
+      type: object
+      properties:
+        common_word_slots:
+          type: integer
+          description: Results per 10 reserved for very common single words (e.g. mint, forge), ranked by quality without the common-word availability penalty. 0 disables.
+          example: 2
+
     CacheConfig:
       type: object
       properties:
@@ -329,6 +337,8 @@ components:
           $ref: "#/components/schemas/LLMConfig"
         algo:
           $ref: "#/components/schemas/AlgoConfig"
+        ranking:
+          $ref: "#/components/schemas/RankingConfig"
         cache:
           $ref: "#/components/schemas/CacheConfig"
         tld_registry:
