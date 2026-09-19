@@ -361,7 +361,7 @@ The gap is wider in the top 20 (−16 pts, ≈3.2 fewer registrable names per qu
 
 \*20% of 3.5's top-10 SLDs were outside the cached level lookup; the share is between 10% and 30%.
 
-The penalty removed very common words as designed, but 3.5 fills those slots with SCOWL-35 words, which are also mostly taken. 3.1 coins more names, and coined names are usually free. Across all rating rounds, names made of two real words (`duskbrew`, `nightcap`) were rated good 93% of the time (14/15), dictionary words 88% (278/315), and other coinages 38% (23/61) — which is why both earlier "coin new words" prompts lowered ratings. Follow-up: steer 3.5 toward two-word compounds without suffix coinages (tracked in issue #4).
+The penalty removed very common words as designed, but 3.5 fills those slots with SCOWL-35 words, which are also mostly taken. 3.1 coins more names, and coined names are usually free. Follow-up tracked in issue #4. (An earlier version of this paragraph said two-word compounds rated 93% good; that used an incomplete word list and is corrected below.)
 
 ### DNS availability metric (`make eval -avail`) — calibration, 2026-09-19
 
@@ -376,3 +376,17 @@ Issue #4, step 1. `-avail` checks each query's top 20 names for an NS delegation
 Per name, DNS agreed with the registrar on 91.6% (3.1), 86.1% and 87.5% (3.5) of names. Every disagreement was DNS saying "free" for a name that is premium-priced or registered without nameservers; DNS never called an available name taken. 3.5's names are premium more often (7.3% vs 3.2%, mostly dictionary words on newer TLDs), so DNS flatters 3.5 by about 4 points relative to 3.1.
 
 **Use:** screen prompt variants with `-avail`, and treat a 3.5 variant as a candidate only if it clears 3.1's DNS figures by that margin — about **≥ 51% top 10 and ≥ 57% top 20** (3.1's registrar numbers plus 3.5's offset). Confirm candidates with a registrar check; if a variant produces fewer dictionary words, its offset should shrink toward 3.1's, which the registrar check will show.
+
+### Two-word compounds — ratings and availability, 2026-09-19
+
+`quality.IsCompound` flags an SLD that is not itself a word but splits into two common SCOWL words (≤ level 50, 3+ letters each): `corebound`, `hopcrate`. Suffix coinages (`blendora`) don't count. Share of compounds in each snapshot (all kept names / each query's top 10):
+
+| Snapshot | Compound, all | Compound, top 10 | DNS free, top 10 / top 20 |
+|---|---|---|---|
+| 3.1 baseline | 18.4% | 13.2% | 47.2% / 52.8% |
+| 3.5 current prompt | 2.4% | 2.2% | 33.4% / 36.2% |
+| 3.5 `r3-briefs` | 27.8% | 19.9% | 41.2% / 46.4% |
+
+Blind ratings of compounds across all rounds: **57% good (21/37), 2 bad** — most of the rest "okay" (`pinecrest`, `meritgrid`, `mossline`). 3.1's compounds rated better (13/20: `corebound`, `wavecast`, `moontide`) than r3's (7/15). Other non-common names rated 69–82% good; very common words ~95%. Compounds are the most registrable kind of name (81–86% DNS-free for 3.1 and r3).
+
+So compounds buy availability but, as r3 produced them, cost rated quality. Next: add a minority of compounds grounded in the concept to the current prompt, rather than a whole batch of them.
