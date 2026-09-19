@@ -414,3 +414,21 @@ Snapshot `run-2026-09-19T200530.335-issue4-r1.json` (`-variant current,c1-ground
 | `c1-grounded` | 41 (82%) | 9 | 0 | 22 / 50 (44%) |
 
 The good-rate gap is 14 points (Fisher p = 0.051); every lost "good" became "okay", none "bad". `c1-grounded`'s compounds rated 83% good (20/24) — far better than r3's — and its other names 81% (21/26). Round 5 rated current 3.5 higher than earlier rounds did (84–88%), so part of the gap is round-to-round variation. `c1-grounded` meets every completion criterion in #4 (≥ 80% good; registrar top 10 and top 20 above 3.1; typos below 3.1; cost unchanged).
+
+### Issue #4, round 2: `c3-concrete` vs `c1-grounded` — 2026-09-19
+
+Round 5's "okay" compounds from `c1-grounded` paired a concept word with an abstract quality word (`cashhaven`, `coreleap`, `stillcrest`); the "good" ones paired two concrete words. `c3-concrete` asks for the second word to be concrete and sensory (an object, material, place, season, time of day or natural element). Snapshot `run-2026-09-19T202316.878-issue4-r2.json` (3 runs, all queries).
+
+| | `c1-grounded` | `c3-concrete` |
+|---|---|---|
+| Registrar standard-price available, top 10 | 49.4% (4.9 / query) | 61.4% (6.1 / query) |
+| Registrar standard-price available, top 20 | 49.4% (9.9 / query) | 58.0% (11.6 / query) |
+| Compound, top 10 | 43.5% | 50.4% |
+| Typo, top 10 | 4.4% | 5.3% |
+| Cost / query | $0.0037 | $0.0038 |
+| **Blind rating round 6** (50 each): good / okay / bad | **41 (82%)** / 7 / 2 | 39 (78%) / 11 / 0 |
+| Good **and** registrable | 22 / 50 | 25 / 50 |
+
+The rating difference is noise (Fisher p = 0.80), but `c3-concrete` falls just under the ≥ 80% criterion while `c1-grounded` rated 82% in both rounds 5 and 6. `c3`'s "okay" names paired concrete words arbitrarily (`candypine`, `levelmoss`, `rootfrost`).
+
+**Decision:** ship `c1-grounded` as the production crafted brief (closes #4). Keep `c3-concrete` as an eval variant: more registrable, same cost, slightly lower rating — worth revisiting with a way to keep the pairing meaningful.
