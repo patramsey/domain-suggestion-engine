@@ -432,3 +432,5 @@ Round 5's "okay" compounds from `c1-grounded` paired a concept word with an abst
 The rating difference is noise (Fisher p = 0.80), but `c3-concrete` falls just under the ≥ 80% criterion while `c1-grounded` rated 82% in both rounds 5 and 6. `c3`'s "okay" names paired concrete words arbitrarily (`candypine`, `levelmoss`, `rootfrost`).
 
 **Decision:** ship `c1-grounded` as the production crafted brief (closes #4). Keep `c3-concrete` as an eval variant: more registrable, same cost, slightly lower rating — worth revisiting with a way to keep the pairing meaningful.
+
+**Pipeline and load with the new brief** (`cmd/suggestcheck`, `CACHE_SIZE=0`): 32/32 requests, 0 errors, 0 LLM failures; load n=200 c=5 with 0% failures, p50 / p95 / p99 = 1639 / 1847 / 2135 ms (previous prompt: 1617 / 1789 / 1939 ms).
