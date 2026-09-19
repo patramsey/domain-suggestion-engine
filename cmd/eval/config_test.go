@@ -237,6 +237,11 @@ func TestCompoundVariants(t *testing.T) {
 	if c1.variantOverrides[2] != compoundCraftedBrief {
 		t.Error("c1-grounded must replace the crafted brief")
 	}
+	c3 := got["c3-concrete"]
+	if c3.system != llm.SystemPrompt || len(c3.variantOverrides) != 3 ||
+		c3.variantOverrides[0] != prod[0] || c3.variantOverrides[1] != prod[1] || c3.variantOverrides[2] != concreteCraftedBrief {
+		t.Error("c3-concrete must keep production briefs 1–2 and replace the crafted brief")
+	}
 	c2 := got["c2-mix"]
 	if c2.system != llm.SystemPrompt+compoundMix || c2.variantOverrides != nil {
 		t.Error("c2-mix: want production briefs and system prompt + compoundMix")

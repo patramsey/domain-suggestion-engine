@@ -58,6 +58,11 @@ var r3Briefs = []string{separatedBriefs[0], separatedBriefs[1], craftedBriefR3}
 // compoundCraftedBrief replaces the current crafted brief in c1-grounded.
 const compoundCraftedBrief = "\n\nCreative focus for this batch: compound names — two short, ordinary English words joined into one name. One word names something THIS concept makes, does or works with; the other names the feeling, image or quality it should evoke. Both words must be instantly recognisable, and the joined name must read naturally aloud as one word. No invented prefixes or suffixes, and no words so general they could attach to any business."
 
+// concreteCraftedBrief replaces the crafted brief in c3-concrete. In round 5,
+// c1's "okay" compounds paired a concept word with an abstract quality word
+// (a generic virtue or feeling); its "good" ones paired two concrete words.
+const concreteCraftedBrief = "\n\nCreative focus for this batch: compound names — two short, ordinary English words joined into one name. One word names something THIS concept makes, does or works with; the other is a concrete, sensory word — an object, material, place, season, time of day or natural element — that brings the right picture to mind. Avoid abstract words for generic qualities, virtues or feelings that could suit any brand. Both words must be instantly recognisable, and the joined name must read naturally aloud as one word. No invented prefixes or suffixes."
+
 // compoundMix is appended to the system prompt in c2-mix.
 const compoundMix = `
 
@@ -67,6 +72,13 @@ Compounds: across your suggestions, make roughly one name in five a compound —
 func c1Briefs() []string {
 	b := llm.VariantInstructions()
 	b[2] = compoundCraftedBrief
+	return b
+}
+
+// c3Briefs is the production briefs with the concrete crafted brief.
+func c3Briefs() []string {
+	b := llm.VariantInstructions()
+	b[2] = concreteCraftedBrief
 	return b
 }
 
@@ -85,6 +97,8 @@ var allVariants = []promptVariant{
 	{name: "c1-grounded", system: llm.SystemPrompt, temperature: 1.0, variantOverrides: c1Briefs()},
 	// Issue #4: current prompt and briefs, about one name in five a grounded compound.
 	{name: "c2-mix", system: llm.SystemPrompt + compoundMix, temperature: 1.0},
+	// Issue #4: c1 with the second word concrete and sensory, not an abstract quality.
+	{name: "c3-concrete", system: llm.SystemPrompt, temperature: 1.0, variantOverrides: c3Briefs()},
 }
 
 // variants is the selected subset for this invocation (set in main).
