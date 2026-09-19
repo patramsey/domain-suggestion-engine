@@ -133,10 +133,10 @@ func printQuality(run savedRun) {
 	fmt.Println("  Typo/Common: lower is better. Mean spec: higher = more specific to the query.")
 }
 
-// rescoreFile annotates an existing snapshot with the quality metrics and
-// writes it back in place. Snapshots saved before the queries list existed
+// rescoreFile annotates an existing snapshot with the quality metrics, runs
+// any extra annotation hooks, and writes it back in place. Snapshots saved before the queries list existed
 // fall back to the queries found in their results.
-func rescoreFile(path string, icannSet map[string]struct{}) (savedRun, error) {
+func rescoreFile(path string, icannSet map[string]struct{}, hooks ...func(*savedRun)) (savedRun, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
 		return savedRun{}, err
@@ -155,6 +155,9 @@ func rescoreFile(path string, icannSet map[string]struct{}) (savedRun, error) {
 		}
 	}
 	annotateRun(&run, icannSet)
+	for _, hook := range hooks {
+		hook(&run)
+	}
 	out, err := json.MarshalIndent(run, "", "  ")
 	if err != nil {
 		return savedRun{}, err

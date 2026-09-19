@@ -362,3 +362,17 @@ The gap is wider in the top 20 (−16 pts, ≈3.2 fewer registrable names per qu
 \*20% of 3.5's top-10 SLDs were outside the cached level lookup; the share is between 10% and 30%.
 
 The penalty removed very common words as designed, but 3.5 fills those slots with SCOWL-35 words, which are also mostly taken. 3.1 coins more names, and coined names are usually free. Across all rating rounds, names made of two real words (`duskbrew`, `nightcap`) were rated good 93% of the time (14/15), dictionary words 88% (278/315), and other coinages 38% (23/61) — which is why both earlier "coin new words" prompts lowered ratings. Follow-up: steer 3.5 toward two-word compounds without suffix coinages (tracked in issue #4).
+
+### DNS availability metric (`make eval -avail`) — calibration, 2026-09-19
+
+Issue #4, step 1. `-avail` checks each query's top 20 names for an NS delegation (`internal/dnscheck`, resolver 1.1.1.1) and reports the share with none. Calibrated with `-rescore -avail` on three snapshots that already have registrar results:
+
+| Snapshot | DNS free, top 10 / top 20 | Registrar standard-price available, top 10 / top 20 | Offset |
+|---|---|---|---|
+| 3.1 baseline (3 runs) | 47.2% / 52.8% | 38.6% / 44.4% | +8.6 / +8.4 |
+| 3.5 untuned (3 runs) | 33.4% / 36.2% | 20.7% / 24.2% | +12.7 / +12.0 |
+| 3.5 final build (1 run) | 40.8% / 38.8% | 28.7% / 26.2% | +12.1 / +12.6 |
+
+Per name, DNS agreed with the registrar on 91.6% (3.1), 86.1% and 87.5% (3.5) of names. Every disagreement was DNS saying "free" for a name that is premium-priced or registered without nameservers; DNS never called an available name taken. 3.5's names are premium more often (7.3% vs 3.2%, mostly dictionary words on newer TLDs), so DNS flatters 3.5 by about 4 points relative to 3.1.
+
+**Use:** screen prompt variants with `-avail`, and treat a 3.5 variant as a candidate only if it clears 3.1's DNS figures by that margin — about **≥ 51% top 10 and ≥ 57% top 20** (3.1's registrar numbers plus 3.5's offset). Confirm candidates with a registrar check; if a variant produces fewer dictionary words, its offset should shrink toward 3.1's, which the registrar check will show.

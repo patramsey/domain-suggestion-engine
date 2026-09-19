@@ -5,40 +5,29 @@
 // makes network calls at request time.
 //
 // Validated 2026-09-19 against registrar availability checks on 1,957 names: 94.2%
-// per-name agreement; per-TLD rank correlation 0.96.
+// per-name agreement; per-TLD rank correlation 0.96. Lookups use internal/dnscheck.
 //
 // Usage: go run ./cmd/gen/tld-crowding [-resolver 1.1.1.1:53] [-concurrency 8] [-labels 60]
 package main
 
 import (
 	"context"
-	"errors"
 	"flag"
 	"fmt"
 	"go/format"
 	"math"
-	"net"
 	"os"
 	"sort"
 	"strings"
 	"sync"
 	"time"
 
+	"github.com/patlivet/domain-suggestion-engine/internal/dnscheck"
 	"github.com/patlivet/domain-suggestion-engine/internal/tlds"
 	"github.com/patlivet/domain-suggestion-engine/internal/wordlist"
 )
 
 const outPath = "internal/scorer/tld_crowding_gen.go"
-
-type outcome int
-
-const (
-	unknown outcome = iota
-	free
-	delegated
-)
-
-type lookupFunc func(ctx context.Context, name string) outcome
 
 func main() {
 	resolver := flag.String("resolver", "1.1.1.1:53", "DNS resolver host:port (public resolvers tolerate bursts better than home routers)")
@@ -52,7 +41,7 @@ func main() {
 	}
 	labels := probeLabels(*nLabels)
 	fmt.Printf("Probing %d TLDs × %d labels via %s ...\n", len(all), len(labels), *resolver)
-	counts := measure(context.Background(), all, labels, dnsLookup(*resolver), *conc)
+	counts := measure(context.Background(), all, labels, dnscheck.Resolver(*resolver), *conc)
 	minKnown := len(labels) / 2
 	rates := freeRates(counts, minKnown)
 	if len(rates) < len(all)*9/10 {
@@ -96,7 +85,7 @@ func probeLabels(n int) []string {
 }
 
 // measure returns, per TLD, [free count, known count] over the labels.
-func measure(ctx context.Context, tldList, labels []string, look lookupFunc, conc int) map[string][2]int {
+func measure(ctx context.Context, tldList, labels []string, look dnscheck.Lookup, conc int) map[string][2]int {
 	type job struct{ tld, name string }
 	out := make(map[string][2]int, len(tldList))
 	var mu sync.Mutex
@@ -108,12 +97,12 @@ func measure(ctx context.Context, tldList, labels []string, look lookupFunc, con
 			defer wg.Done()
 			for j := range jobs {
 				o := look(ctx, j.name)
-				if o == unknown {
+				if o == dnscheck.Unknown {
 					continue
 				}
 				mu.Lock()
 				c := out[j.tld]
-				if o == free {
+				if o == dnscheck.Free {
 					c[0]++
 				}
 				c[1]++
@@ -159,29 +148,4 @@ func render(rates map[string]float64, header string) ([]byte, error) {
 	}
 	b.WriteString("}\n")
 	return format.Source([]byte(b.String()))
-}
-
-// dnsLookup resolves NS records through the given resolver: NXDOMAIN → free,
-// any NS → delegated, anything else (after one retry) → unknown.
-func dnsLookup(resolver string) lookupFunc {
-	r := &net.Resolver{PreferGo: true, Dial: func(ctx context.Context, _, _ string) (net.Conn, error) {
-		d := net.Dialer{Timeout: 3 * time.Second}
-		return d.DialContext(ctx, "udp", resolver)
-	}}
-	return func(ctx context.Context, name string) outcome {
-		for try := 0; try < 2; try++ {
-			c, cancel := context.WithTimeout(ctx, 5*time.Second)
-			_, err := r.LookupNS(c, name)
-			cancel()
-			if err == nil {
-				return delegated
-			}
-			var de *net.DNSError
-			if errors.As(err, &de) && de.IsNotFound {
-				return free
-			}
-			time.Sleep(200 * time.Millisecond)
-		}
-		return unknown
-	}
 }

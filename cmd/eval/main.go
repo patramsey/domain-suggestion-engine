@@ -11,6 +11,8 @@
 //	-variant      prompt variant(s): comma-separated names, or all (default current)
 //	-label        short label added to the snapshot filename
 //	-rescore      re-annotate an existing snapshot with quality metrics (no API calls)
+//	-avail        DNS-check each query's top 20 names for likely availability (works with -rescore)
+//	-resolver     DNS resolver for -avail (default 1.1.1.1:53)
 //
 // Results are saved to eval-results/ — see eval-results/README.md for history.
 package main
@@ -70,13 +72,14 @@ func main() {
 		os.Exit(2)
 	}
 	if cfg.Rescore != "" {
-		run, err := rescoreFile(cfg.Rescore, tlds.DefaultRegistry.ICANNSet())
+		run, err := rescoreFile(cfg.Rescore, tlds.DefaultRegistry.ICANNSet(), cfg.availHook()...)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "eval: rescore: %v\n", err)
 			os.Exit(1)
 		}
 		printQuality(run)
 		printQualityByRun(run)
+		printAvailability(run)
 		fmt.Printf("\nUpdated: %s\n", cfg.Rescore)
 		return
 	}
@@ -180,8 +183,12 @@ func main() {
 	printReport(queries, results)
 	run := buildSnapshot(cfg, queries, results)
 	annotateRun(&run, icannSet)
+	for _, hook := range cfg.availHook() {
+		hook(&run)
+	}
 	printQuality(run)
 	printQualityByRun(run)
+	printAvailability(run)
 	if err := writeSnapshot(run, cfg.Label); err != nil {
 		fmt.Fprintf(os.Stderr, "warning: could not save results: %v\n", err)
 	}
@@ -413,7 +420,8 @@ type savedSuggestion struct {
 	Source      string   `json:"source"`
 	Typo        bool     `json:"typo"`
 	CommonWord  bool     `json:"common_word"`
-	Specificity *float64 `json:"specificity"` // null when not computable
+	Specificity *float64 `json:"specificity"`   // null when not computable
+	DNS         string   `json:"dns,omitempty"` // -avail: "free" or "delegated"; empty when unchecked or the lookup failed
 }
 
 type savedQueryResult struct {

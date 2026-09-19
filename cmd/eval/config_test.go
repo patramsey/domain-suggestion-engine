@@ -20,7 +20,7 @@ func TestParseConfigDefaults(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	want := evalConfig{Model: "gemini-3.5-flash-lite", ThinkingLevel: "minimal", Runs: 1, QuerySet: "core", VariantFilter: "current"}
+	want := evalConfig{Model: "gemini-3.5-flash-lite", ThinkingLevel: "minimal", Runs: 1, QuerySet: "core", VariantFilter: "current", Resolver: "1.1.1.1:53"}
 	if cfg != want {
 		t.Errorf("cfg = %+v, want %+v", cfg, want)
 	}

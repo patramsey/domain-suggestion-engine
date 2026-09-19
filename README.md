@@ -381,12 +381,16 @@ make eval ARGS="-model gemini-3.1-flash-lite -thinking low"
 | `-variant` | `current` | Prompt variants to run, comma-separated, or `all` |
 | `-label` | — | Appended to the snapshot filename |
 | `-rescore` | — | Re-annotate an existing snapshot with quality metrics, without API calls |
+| `-avail` | off | DNS-check each query's top 20 names and report the likely-registrable share for the top 10 and top 20 (also works with `-rescore`) |
+| `-resolver` | `1.1.1.1:53` | DNS resolver for `-avail` |
 
 The report flags three deterministic quality signals, for all kept names and for each query's top 10:
 
 - **Typo** — not a word, 5+ letters, and one edit away from a common word (`pizzaria`). Validated against blind human ratings: flagged names are rated good far less often.
 - **Common word** — SCOWL level ≤ 20 (`late`, `mint`). An availability proxy, not a quality problem: people like these names, they just can't register them.
 - **Specificity** — relevance to its own query minus average relevance to the other queries. Only comparable between snapshots run on the same query set.
+
+**Likely registrable** (`-avail`) — the share of each query's top 10 and top 20 with no DNS delegation, using the same lookups as `make gen-tld-crowding`. It is a fast screen, not a registrar check: it never marks an available name as taken, but it counts premium-priced and reserved names as free, so it reads 8–13 points above a registrar's standard-price availability. Confirm winners with a registrar check. The eval makes these lookups; the engine never does.
 
 **Blind human ratings** (`cmd/ratings`) check the metrics — and compare models — against human judgement:
 

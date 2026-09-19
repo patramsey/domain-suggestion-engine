@@ -23,6 +23,8 @@ type evalConfig struct {
 	VariantFilter string // -variant: comma-separated variant names, or "all"
 	Label         string
 	Rescore       string // snapshot path to re-annotate instead of running the eval
+	Avail         bool   // -avail: DNS-check each query's top 20 names
+	Resolver      string // DNS resolver for -avail
 }
 
 var labelRe = regexp.MustCompile(`^[A-Za-z0-9._-]*$`)
@@ -41,6 +43,8 @@ func parseConfig(args []string, getenv func(string) string) (evalConfig, error) 
 	variant := fs.String("variant", "current", "prompt variant(s) to run: comma-separated names, or all")
 	label := fs.String("label", "", "short label added to the snapshot filename")
 	rescore := fs.String("rescore", "", "re-annotate an existing snapshot with quality metrics (no API calls)")
+	avail := fs.Bool("avail", false, "DNS-check each query's top 20 names for likely availability")
+	resolver := fs.String("resolver", "1.1.1.1:53", "DNS resolver host:port for -avail")
 	if err := fs.Parse(args); err != nil {
 		return evalConfig{}, err
 	}
@@ -54,6 +58,8 @@ func parseConfig(args []string, getenv func(string) string) (evalConfig, error) 
 		VariantFilter: *variant,
 		Label:         *label,
 		Rescore:       *rescore,
+		Avail:         *avail,
+		Resolver:      *resolver,
 	}
 	if cfg.Model == "" {
 		cfg.Model = getenv("GEMINI_MODEL")
