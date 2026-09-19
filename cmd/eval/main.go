@@ -420,6 +420,7 @@ type savedSuggestion struct {
 	Source      string   `json:"source"`
 	Typo        bool     `json:"typo"`
 	CommonWord  bool     `json:"common_word"`
+	Compound    bool     `json:"compound"`
 	Specificity *float64 `json:"specificity"`   // null when not computable
 	DNS         string   `json:"dns,omitempty"` // -avail: "free" or "delegated"; empty when unchecked or the lookup failed
 }
