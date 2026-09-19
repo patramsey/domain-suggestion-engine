@@ -361,4 +361,76 @@ The gap is wider in the top 20 (−16 pts, ≈3.2 fewer registrable names per qu
 
 \*20% of 3.5's top-10 SLDs were outside the cached level lookup; the share is between 10% and 30%.
 
-The penalty removed very common words as designed, but 3.5 fills those slots with SCOWL-35 words, which are also mostly taken. 3.1 coins more names, and coined names are usually free. Across all rating rounds, names made of two real words (`duskbrew`, `nightcap`) were rated good 93% of the time (14/15), dictionary words 88% (278/315), and other coinages 38% (23/61) — which is why both earlier "coin new words" prompts lowered ratings. Follow-up: steer 3.5 toward two-word compounds without suffix coinages (tracked in issue #4).
+The penalty removed very common words as designed, but 3.5 fills those slots with SCOWL-35 words, which are also mostly taken. 3.1 coins more names, and coined names are usually free. Follow-up tracked in issue #4. (An earlier version of this paragraph said two-word compounds rated 93% good; that used an incomplete word list and is corrected below.)
+
+### DNS availability metric (`make eval -avail`) — calibration, 2026-09-19
+
+Issue #4, step 1. `-avail` checks each query's top 20 names for an NS delegation (`internal/dnscheck`, resolver 1.1.1.1) and reports the share with none. Calibrated with `-rescore -avail` on three snapshots that already have registrar results:
+
+| Snapshot | DNS free, top 10 / top 20 | Registrar standard-price available, top 10 / top 20 | Offset |
+|---|---|---|---|
+| 3.1 baseline (3 runs) | 47.2% / 52.8% | 38.6% / 44.4% | +8.6 / +8.4 |
+| 3.5 untuned (3 runs) | 33.4% / 36.2% | 20.7% / 24.2% | +12.7 / +12.0 |
+| 3.5 final build (1 run) | 40.8% / 38.8% | 28.7% / 26.2% | +12.1 / +12.6 |
+
+Per name, DNS agreed with the registrar on 91.6% (3.1), 86.1% and 87.5% (3.5) of names. Every disagreement was DNS saying "free" for a name that is premium-priced or registered without nameservers; DNS never called an available name taken. 3.5's names are premium more often (7.3% vs 3.2%, mostly dictionary words on newer TLDs), so DNS flatters 3.5 by about 4 points relative to 3.1.
+
+**Use:** screen prompt variants with `-avail`, and treat a 3.5 variant as a candidate only if it clears 3.1's DNS figures by that margin — about **≥ 51% top 10 and ≥ 57% top 20** (3.1's registrar numbers plus 3.5's offset). Confirm candidates with a registrar check; if a variant produces fewer dictionary words, its offset should shrink toward 3.1's, which the registrar check will show.
+
+### Two-word compounds — ratings and availability, 2026-09-19
+
+`quality.IsCompound` flags an SLD that is not itself a word but splits into two common SCOWL words (≤ level 50, 3+ letters each): `corebound`, `hopcrate`. Suffix coinages (`blendora`) don't count. Share of compounds in each snapshot (all kept names / each query's top 10):
+
+| Snapshot | Compound, all | Compound, top 10 | DNS free, top 10 / top 20 |
+|---|---|---|---|
+| 3.1 baseline | 18.4% | 13.2% | 47.2% / 52.8% |
+| 3.5 current prompt | 2.4% | 2.2% | 33.4% / 36.2% |
+| 3.5 `r3-briefs` | 27.8% | 19.9% | 41.2% / 46.4% |
+
+Blind ratings of compounds across all rounds: **57% good (21/37), 2 bad** — most of the rest "okay" (`pinecrest`, `meritgrid`, `mossline`). 3.1's compounds rated better (13/20: `corebound`, `wavecast`, `moontide`) than r3's (7/15). Other non-common names rated 69–82% good; very common words ~95%. Compounds are the most registrable kind of name (81–86% DNS-free for 3.1 and r3).
+
+So compounds buy availability but, as r3 produced them, cost rated quality. Next: add a minority of compounds grounded in the concept to the current prompt, rather than a whole batch of them.
+
+### Issue #4, round 1: `c1-grounded` vs current — 2026-09-19
+
+Snapshot `run-2026-09-19T200530.335-issue4-r1.json` (`-variant current,c1-grounded,c2-mix -runs 3 -queries all -avail`). `c1-grounded` keeps the production prompt and replaces only the crafted brief with a request for compounds of two ordinary words, one for what the concept makes or does and one for the feeling it evokes. `c2-mix` (a one-line "about one in five" request) had no measurable effect and was dropped.
+
+| | Current 3.5 | `c1-grounded` | 3.1 (earlier baseline) |
+|---|---|---|---|
+| Registrar standard-price available, top 10 | 28.6% (2.8 / query) | **52.1% (5.2 / query)** | 38.6% (3.9 / query) |
+| Registrar standard-price available, top 20 | 26.4% (5.3 / query) | **51.1% (10.2 / query)** | 44.4% (8.9 / query) |
+| Per run, top 10 | 25.0 / 34.5 / 26.2% | 48.5 / 57.3 / 50.4% | 37.9 / 36.8 / 41.0% |
+| DNS free, top 10 / top 20 | 41.6% / 38.7% | 62.4% / 59.0% | 47.2% / 52.8% |
+| Compound, top 10 | 4.9% | 47.1% | 13.2% |
+| Typo, top 10 | 8.3% | 4.6% | 8.8% |
+| Names kept / requested | 57% | 71% | — |
+| Cost / query, median latency | $0.0039, 1648 ms | $0.0038, 1621 ms | — |
+
+**Blind rating round 5** (seed 5, 50 top-10 names per arm, 2 prefilled from history):
+
+| | Good | Okay | Bad | Good **and** registrable |
+|---|---|---|---|---|
+| Current 3.5 | 48 (96%) | 2 | 0 | 16 / 50 (32%) |
+| `c1-grounded` | 41 (82%) | 9 | 0 | 22 / 50 (44%) |
+
+The good-rate gap is 14 points (Fisher p = 0.051); every lost "good" became "okay", none "bad". `c1-grounded`'s compounds rated 83% good (20/24) — far better than r3's — and its other names 81% (21/26). Round 5 rated current 3.5 higher than earlier rounds did (84–88%), so part of the gap is round-to-round variation. `c1-grounded` meets every completion criterion in #4 (≥ 80% good; registrar top 10 and top 20 above 3.1; typos below 3.1; cost unchanged).
+
+### Issue #4, round 2: `c3-concrete` vs `c1-grounded` — 2026-09-19
+
+Round 5's "okay" compounds from `c1-grounded` paired a concept word with an abstract quality word (`cashhaven`, `coreleap`, `stillcrest`); the "good" ones paired two concrete words. `c3-concrete` asks for the second word to be concrete and sensory (an object, material, place, season, time of day or natural element). Snapshot `run-2026-09-19T202316.878-issue4-r2.json` (3 runs, all queries).
+
+| | `c1-grounded` | `c3-concrete` |
+|---|---|---|
+| Registrar standard-price available, top 10 | 49.4% (4.9 / query) | 61.4% (6.1 / query) |
+| Registrar standard-price available, top 20 | 49.4% (9.9 / query) | 58.0% (11.6 / query) |
+| Compound, top 10 | 43.5% | 50.4% |
+| Typo, top 10 | 4.4% | 5.3% |
+| Cost / query | $0.0037 | $0.0038 |
+| **Blind rating round 6** (50 each): good / okay / bad | **41 (82%)** / 7 / 2 | 39 (78%) / 11 / 0 |
+| Good **and** registrable | 22 / 50 | 25 / 50 |
+
+The rating difference is noise (Fisher p = 0.80), but `c3-concrete` falls just under the ≥ 80% criterion while `c1-grounded` rated 82% in both rounds 5 and 6. `c3`'s "okay" names paired concrete words arbitrarily (`candypine`, `levelmoss`, `rootfrost`).
+
+**Decision:** ship `c1-grounded` as the production crafted brief (closes #4). Keep `c3-concrete` as an eval variant: more registrable, same cost, slightly lower rating — worth revisiting with a way to keep the pairing meaningful.
+
+**Pipeline and load with the new brief** (`cmd/suggestcheck`, `CACHE_SIZE=0`): 32/32 requests, 0 errors, 0 LLM failures; load n=200 c=5 with 0% failures, p50 / p95 / p99 = 1639 / 1847 / 2135 ms (previous prompt: 1617 / 1789 / 1939 ms).

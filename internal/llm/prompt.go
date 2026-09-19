@@ -45,7 +45,7 @@ type Variant int
 const (
 	VariantEvocative Variant = iota // metaphors, classical words, sensation/mood
 	VariantWordplay                  // domain hacks, TLD structural cleverness
-	VariantCrafted                   // portmanteaus, abstract concepts, coined words
+	VariantCrafted                   // compounds of two ordinary words grounded in the concept
 )
 
 // variantInstruction returns a focus instruction appended to the user message.
@@ -56,9 +56,21 @@ func variantInstruction(v Variant) string {
 	case VariantWordplay:
 		return "\n\nCreative focus for this batch: domain hacks and TLD wordplay. Look for SLD+TLD pairs that read as a complete word or phrase, or TLDs whose figurative meaning doubles the brand concept. Structural cleverness over thematic fit."
 	case VariantCrafted:
-		return "\n\nCreative focus for this batch: portmanteaus, abstract concepts, and coined words. Blend two relevant concepts into a new word, or use motion/energy, craft/process, or place/space territory words. Avoid common brand name patterns."
+		// Compounds are rarely registered, and grounding each half in the
+		// concept keeps them specific; see issue #4 in eval-results/README.md.
+		return "\n\nCreative focus for this batch: compound names — two short, ordinary English words joined into one name. One word names something THIS concept makes, does or works with; the other names the feeling, image or quality it should evoke. Both words must be instantly recognisable, and the joined name must read naturally aloud as one word. No invented prefixes or suffixes, and no words so general they could attach to any business."
 	}
 	return ""
+}
+
+// VariantInstructions returns the production focus instruction for each
+// parallel batch, in batch order. For prompt experiments in cmd/eval.
+func VariantInstructions() []string {
+	out := make([]string, len(llmVariants))
+	for i, v := range llmVariants {
+		out[i] = variantInstruction(v)
+	}
+	return out
 }
 
 // BuildRequest constructs the user message for a suggestion request.

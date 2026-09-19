@@ -7,6 +7,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/patlivet/domain-suggestion-engine/internal/dnscheck"
 	"github.com/patlivet/domain-suggestion-engine/internal/wordlist"
 )
 
@@ -27,14 +28,14 @@ func TestProbeLabelsDeterministic(t *testing.T) {
 }
 
 func TestMeasureCountsOutcomes(t *testing.T) {
-	fake := func(_ context.Context, name string) outcome {
+	fake := func(_ context.Context, name string) dnscheck.Outcome {
 		switch {
 		case strings.HasPrefix(name, "x"):
-			return unknown
+			return dnscheck.Unknown
 		case strings.HasSuffix(name, ".crowded"):
-			return delegated
+			return dnscheck.Delegated
 		default:
-			return free
+			return dnscheck.Free
 		}
 	}
 	c := measure(context.Background(), []string{"crowded", "roomy"}, []string{"alpha", "beta", "xray"}, fake, 2)

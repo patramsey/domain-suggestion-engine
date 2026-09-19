@@ -18,6 +18,7 @@ type qualityStats struct {
 	Names              int     `json:"names"`
 	TypoRate           float64 `json:"typo_rate"`
 	CommonWordRate     float64 `json:"common_word_rate"`
+	CompoundRate       float64 `json:"compound_rate"`
 	MeanSpecificity    float64 `json:"mean_specificity"`    // over names with known specificity
 	UnknownSpecificity int     `json:"unknown_specificity"` // names where it can't be computed
 }
@@ -48,6 +49,7 @@ func annotateRun(run *savedRun, icannSet map[string]struct{}) {
 			s := &r.Suggestions[j]
 			s.Typo = quality.IsTypo(s.SLD)
 			s.CommonWord = quality.IsCommonWord(s.SLD)
+			s.Compound = quality.IsCompound(s.SLD)
 			s.Specificity = nil
 			if v, ok := quality.Specificity(s.SLD, tokens[r.Query], others); ok {
 				s.Specificity = &v
@@ -81,7 +83,7 @@ func summarize(sugs []savedSuggestion) qualityStats {
 		return qualityStats{}
 	}
 	st := qualityStats{Names: len(sugs)}
-	var typo, common, known int
+	var typo, common, compound, known int
 	var spec float64
 	for _, s := range sugs {
 		if s.Typo {
@@ -89,6 +91,9 @@ func summarize(sugs []savedSuggestion) qualityStats {
 		}
 		if s.CommonWord {
 			common++
+		}
+		if s.Compound {
+			compound++
 		}
 		if s.Specificity != nil {
 			spec += *s.Specificity
@@ -99,6 +104,7 @@ func summarize(sugs []savedSuggestion) qualityStats {
 	}
 	st.TypoRate = float64(typo) / float64(len(sugs))
 	st.CommonWordRate = float64(common) / float64(len(sugs))
+	st.CompoundRate = float64(compound) / float64(len(sugs))
 	if known > 0 {
 		st.MeanSpecificity = spec / float64(known)
 	}
@@ -109,9 +115,9 @@ func summarize(sugs []savedSuggestion) qualityStats {
 // and for each query's top 10.
 func printQuality(run savedRun) {
 	fmt.Printf("\n\n=== QUALITY METRICS (pooled across queries and runs) ===\n\n")
-	fmt.Printf("%-20s  %-6s  %6s  %6s  %8s  %9s  %12s\n",
-		"Variant", "Scope", "Names", "Typo%", "Common%", "Mean spec", "Unknown spec")
-	fmt.Println(strings.Repeat("-", 80))
+	fmt.Printf("%-20s  %-6s  %6s  %6s  %8s  %10s  %9s  %12s\n",
+		"Variant", "Scope", "Names", "Typo%", "Common%", "Compound%", "Mean spec", "Unknown spec")
+	fmt.Println(strings.Repeat("-", 92))
 	for _, v := range run.Variants {
 		var all, top []savedSuggestion
 		for _, r := range run.Results {
@@ -125,18 +131,19 @@ func printQuality(run savedRun) {
 			scope string
 			st    qualityStats
 		}{{"all", summarize(all)}, {"top10", summarize(top)}} {
-			fmt.Printf("%-20s  %-6s  %6d  %5.1f%%  %7.1f%%  %9.3f  %12d\n",
-				v, row.scope, row.st.Names, row.st.TypoRate*100, row.st.CommonWordRate*100,
+			fmt.Printf("%-20s  %-6s  %6d  %5.1f%%  %7.1f%%  %9.1f%%  %9.3f  %12d\n",
+				v, row.scope, row.st.Names, row.st.TypoRate*100, row.st.CommonWordRate*100, row.st.CompoundRate*100,
 				row.st.MeanSpecificity, row.st.UnknownSpecificity)
 		}
 	}
-	fmt.Println("  Typo/Common: lower is better. Mean spec: higher = more specific to the query.")
+	fmt.Println("  Typo/Common: lower is better. Compound: two real words joined (usually registrable).")
+	fmt.Println("  Mean spec: higher = more specific to the query.")
 }
 
-// rescoreFile annotates an existing snapshot with the quality metrics and
-// writes it back in place. Snapshots saved before the queries list existed
+// rescoreFile annotates an existing snapshot with the quality metrics, runs
+// any extra annotation hooks, and writes it back in place. Snapshots saved before the queries list existed
 // fall back to the queries found in their results.
-func rescoreFile(path string, icannSet map[string]struct{}) (savedRun, error) {
+func rescoreFile(path string, icannSet map[string]struct{}, hooks ...func(*savedRun)) (savedRun, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
 		return savedRun{}, err
@@ -155,6 +162,9 @@ func rescoreFile(path string, icannSet map[string]struct{}) (savedRun, error) {
 		}
 	}
 	annotateRun(&run, icannSet)
+	for _, hook := range hooks {
+		hook(&run)
+	}
 	out, err := json.MarshalIndent(run, "", "  ")
 	if err != nil {
 		return savedRun{}, err

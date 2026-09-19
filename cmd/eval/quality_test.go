@@ -21,11 +21,11 @@ func TestSummarize(t *testing.T) {
 	sugs := []savedSuggestion{
 		{SLD: "pizzaria", Typo: true, Specificity: specPtr(0.2)},
 		{SLD: "late", CommonWord: true, Specificity: specPtr(0.0)},
-		{SLD: "hopsmith"}, // specificity unknown
+		{SLD: "hopsmith", Compound: true}, // specificity unknown
 		{SLD: "ovenly", Specificity: specPtr(0.1)},
 	}
 	got := summarize(sugs)
-	if got.Names != 4 || got.TypoRate != 0.25 || got.CommonWordRate != 0.25 || got.UnknownSpecificity != 1 {
+	if got.Names != 4 || got.TypoRate != 0.25 || got.CommonWordRate != 0.25 || got.CompoundRate != 0.25 || got.UnknownSpecificity != 1 {
 		t.Errorf("summarize = %+v", got)
 	}
 	if math.Abs(got.MeanSpecificity-0.1) > 1e-9 { // mean of 0.2, 0.0, 0.1

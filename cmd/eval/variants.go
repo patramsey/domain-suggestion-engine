@@ -48,6 +48,28 @@ const craftedBriefR3 = "\n\nThis request is one of three batches generated in pa
 // r3Briefs is separatedBriefs with the crafted brief replaced.
 var r3Briefs = []string{separatedBriefs[0], separatedBriefs[1], craftedBriefR3}
 
+// --- Issue #4: registrable names ---
+// Current 3.5 almost never returns two-word compounds (2.4% of names vs 18.4%
+// for 3.1), and compounds are the most registrable kind of name. r3 made a
+// whole batch of them and lost rated quality with generic pairs, so these
+// variants keep the current prompt and ask for compounds grounded in the
+// concept. The winner, c1-grounded (one word for what the concept makes or
+// does, one for the feeling it evokes), is now the production crafted brief;
+// c2-mix (a one-line "one in five" request) had no effect and was removed.
+
+// concreteCraftedBrief replaces the crafted brief in c3-concrete. In round 5,
+// c1-grounded's "okay" compounds paired a concept word with an abstract
+// quality word (a generic virtue or feeling); its "good" ones paired two
+// concrete words. Round 6: more registrable, rated 78% good vs c1's 82%.
+const concreteCraftedBrief = "\n\nCreative focus for this batch: compound names — two short, ordinary English words joined into one name. One word names something THIS concept makes, does or works with; the other is a concrete, sensory word — an object, material, place, season, time of day or natural element — that brings the right picture to mind. Avoid abstract words for generic qualities, virtues or feelings that could suit any brand. Both words must be instantly recognisable, and the joined name must read naturally aloud as one word. No invented prefixes or suffixes."
+
+// c3Briefs is the production briefs with the concrete crafted brief.
+func c3Briefs() []string {
+	b := llm.VariantInstructions()
+	b[2] = concreteCraftedBrief
+	return b
+}
+
 // allVariants lists every prompt variant the eval can run; -variant selects
 // which run (default "current"). Candidates for the 3.5 migration are added
 // below "current" — see docs/superpowers/specs/2026-09-19-flash-lite-35-migration-design.md.
@@ -59,6 +81,8 @@ var allVariants = []promptVariant{
 	{name: "r2-uncommon", system: llm.SystemPrompt + tldAdherence + commonWordGuidance, temperature: 1.0, variantOverrides: separatedBriefs},
 	// Round 3: r1 with the crafted brief rewritten after the blind-rating failure.
 	{name: "r3-briefs", system: llm.SystemPrompt + tldAdherence, temperature: 1.0, variantOverrides: r3Briefs},
+	// Issue #4: production crafted brief with the second word concrete and sensory, not an abstract quality.
+	{name: "c3-concrete", system: llm.SystemPrompt, temperature: 1.0, variantOverrides: c3Briefs()},
 }
 
 // variants is the selected subset for this invocation (set in main).

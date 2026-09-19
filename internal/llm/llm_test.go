@@ -233,3 +233,24 @@ func TestBuildRequestOverrequestsByThree(t *testing.T) {
 		t.Errorf("should request 30 (3×10) suggestions; got: %s", user)
 	}
 }
+
+func TestVariantInstructionsMatchBatches(t *testing.T) {
+	got := VariantInstructions()
+	if len(got) != len(llmVariants) {
+		t.Fatalf("got %d instructions, want %d", len(got), len(llmVariants))
+	}
+	for i, v := range llmVariants {
+		if got[i] != variantInstruction(v) || got[i] == "" {
+			t.Errorf("instruction %d does not match variant %d", i, v)
+		}
+	}
+}
+
+func TestCraftedBriefAsksForGroundedCompounds(t *testing.T) {
+	b := variantInstruction(VariantCrafted)
+	for _, want := range []string{"compound names", "two short, ordinary English words", "No invented prefixes or suffixes"} {
+		if !strings.Contains(b, want) {
+			t.Errorf("crafted brief missing %q", want)
+		}
+	}
+}

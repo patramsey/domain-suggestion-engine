@@ -20,7 +20,7 @@ func TestParseConfigDefaults(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	want := evalConfig{Model: "gemini-3.5-flash-lite", ThinkingLevel: "minimal", Runs: 1, QuerySet: "core", VariantFilter: "current"}
+	want := evalConfig{Model: "gemini-3.5-flash-lite", ThinkingLevel: "minimal", Runs: 1, QuerySet: "core", VariantFilter: "current", Resolver: "1.1.1.1:53"}
 	if cfg != want {
 		t.Errorf("cfg = %+v, want %+v", cfg, want)
 	}
@@ -218,5 +218,19 @@ func TestR3BriefsReplacesOnlyCraftedBrief(t *testing.T) {
 	}
 	if !strings.HasPrefix(r3.variantOverrides[2], "\n\n") {
 		t.Error("the new crafted brief must start with a blank line like the others")
+	}
+}
+
+func TestConcreteVariantReplacesOnlyCraftedBrief(t *testing.T) {
+	var c3 promptVariant
+	for _, v := range allVariants {
+		if v.name == "c3-concrete" {
+			c3 = v
+		}
+	}
+	prod := llm.VariantInstructions()
+	if c3.system != llm.SystemPrompt || len(c3.variantOverrides) != 3 ||
+		c3.variantOverrides[0] != prod[0] || c3.variantOverrides[1] != prod[1] || c3.variantOverrides[2] != concreteCraftedBrief {
+		t.Error("c3-concrete must keep production briefs 1–2 and replace the crafted brief")
 	}
 }
