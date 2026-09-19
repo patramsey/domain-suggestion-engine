@@ -337,3 +337,28 @@ Pipeline and load (`cmd/suggestcheck`, CACHE_SIZE=0, all 32 requests; load n=200
 | 3.5 final build | 0 / 0 | 7.5% | 5.0% | 1617 / 1789 / 1939 ms |
 
 Both pass. Open trade-off for the merge decision: rated quality equal, latency better, top-10 availability ~31% vs 38.6% (≈0.8 fewer registrable names per query).
+
+### Availability — top 10 and top 20, 2026-09-19
+
+Standard-price availability from a registrar availability API (read-only; premium-priced names count as unavailable). 3.1 and untuned 3.5 are the three baseline runs; "3.5 + penalty" is those three 3.5 runs re-ranked with the penalty plus one fresh run of the final build. 20 is the API's default `count`.
+
+| | Top 10 available | Per query | Top 20 available | Per query |
+|---|---|---|---|---|
+| 3.1 (runs: 37.9 / 36.8 / 41.0%; top 20: 43.4 / 43.5 / 46.3%) | **38.6%** | 3.9 | **44.4%** | 8.9 |
+| 3.5 untuned | 20.7% | 1.8 | 24.2% | 4.1 |
+| 3.5 + penalty (runs: 35.4 / 33.3 / 26.7 / 28.7%; top 20: 29.6 / 31.9 / 26.0 / 26.2%) | **31.0%** | 3.1 | **28.4%** | 5.7 |
+
+The gap is wider in the top 20 (−16 pts, ≈3.2 fewer registrable names per query) than in the top 10 (−7.6 pts). The penalty helps less further down the list because 3.5's deeper candidates are also mostly dictionary words.
+
+**Why 3.5 is less available.** TLDs are not the cause: both models put 2–3% of their top 10 on crowded TLDs (free rate < 0.4). The difference is the kind of name (top 10, SCOWL level of the SLD):
+
+| Kind of name | 3.1 share | 3.1 available | 3.5 + penalty share | 3.5 + penalty available |
+|---|---|---|---|---|
+| Not a dictionary word | 29% | 75% | ~10–30%* | 57% |
+| Rarer word (SCOWL 40–70) | 12% | 38% | 21% | 24% |
+| SCOWL 35 | 23% | 38% | 47% | 32% |
+| Very common (SCOWL ≤ 20) | 37% | 22% | 2% | 0% |
+
+\*20% of 3.5's top-10 SLDs were outside the cached level lookup; the share is between 10% and 30%.
+
+The penalty removed very common words as designed, but 3.5 fills those slots with SCOWL-35 words, which are also mostly taken. 3.1 coins more names, and coined names are usually free. Across all rating rounds, names made of two real words (`duskbrew`, `nightcap`) were rated good 93% of the time (14/15), dictionary words 88% (278/315), and other coinages 38% (23/61) — which is why both earlier "coin new words" prompts lowered ratings. Follow-up: steer 3.5 toward two-word compounds without suffix coinages (tracked in issue #4).

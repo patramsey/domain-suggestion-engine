@@ -170,7 +170,7 @@ The engine never checks whether a domain is registered, but some names are almos
 
 Word commonness comes from [SCOWL](http://wordlist.aspell.net/) frequency levels (very common: level ≤ 20; moderately common: level 35). TLD crowding comes from a table generated offline by checking which of a fixed set of probe words have DNS delegations on each TLD (`make gen-tld-crowding`). Both are embedded, so ranking makes no network calls.
 
-In evaluation, this raised the share of registrable names in the top 10 from about 21% to about 31% without lowering blind human ratings. The experiment history is in [`eval-results/README.md`](./eval-results/README.md).
+In evaluation, this raised the share of registrable names from about 21% to 31% in the top 10 and from about 24% to 28% in the top 20, without lowering blind human ratings. The experiment history is in [`eval-results/README.md`](./eval-results/README.md).
 
 ### How the signals work
 
