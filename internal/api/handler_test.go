@@ -389,3 +389,51 @@ func TestAlgoDisabledHealth(t *testing.T) {
 		t.Error("generators check should fail when algo enabled but no generators active")
 	}
 }
+
+func TestCacheSizeZeroDisablesCache(t *testing.T) {
+	h, err := NewHandler(Config{
+		GeminiAPIKey:     "test-key",
+		GeminiModel:      "gemini-2.5-flash-lite",
+		CacheSize:        0,
+		LLMShare:         0.60,
+		AlgoEnabled:      true,
+		ActiveGenerators: []string{"hacks"},
+		AllGenerators:    []string{"hacks"},
+		Version:          "test",
+		BuiltAt:          "now",
+	})
+	if err != nil {
+		t.Fatalf("NewHandler with CacheSize 0: %v", err)
+	}
+	if h.cache != nil {
+		t.Error("cache should be nil when CacheSize is 0")
+	}
+	var resp ConfigResponse
+	if err := json.Unmarshal(get(h, "/config").Body.Bytes(), &resp); err != nil {
+		t.Fatalf("unmarshal: %v", err)
+	}
+	if resp.Cache.Enabled {
+		t.Error("/config should report the cache as disabled")
+	}
+	body := `{"input":"coffee shop"}`
+	for i := 0; i < 2; i++ {
+		w := post(h, body, "")
+		if w.Code != http.StatusOK {
+			t.Fatalf("request %d: want 200, got %d", i, w.Code)
+		}
+		if w.Header().Get("Age") != "" {
+			t.Errorf("request %d served from cache (Age header set)", i)
+		}
+	}
+}
+
+func TestConfigReportsCacheEnabledByDefault(t *testing.T) {
+	h := newTestHandler(t)
+	var resp ConfigResponse
+	if err := json.Unmarshal(get(h, "/config").Body.Bytes(), &resp); err != nil {
+		t.Fatalf("unmarshal: %v", err)
+	}
+	if !resp.Cache.Enabled {
+		t.Error("/config should report the cache as enabled when CacheSize > 0")
+	}
+}

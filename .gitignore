@@ -6,7 +6,7 @@ CLAUDE.md
 build-glove
 build-ngrams
 build-tld-scores
-eval
+/eval
 
 # Secrets
 .env

@@ -1,0 +1,2954 @@
+[
+  {
+    "query": "AI-powered legal document review tool for small law firms",
+    "domain": "arguo.center",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "AI-powered legal document review tool for small law firms",
+    "domain": "bar.vision",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "AI-powered legal document review tool for small law firms",
+    "domain": "brief.expert",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "AI-powered legal document review tool for small law firms",
+    "domain": "citation.network",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "AI-powered legal document review tool for small law firms",
+    "domain": "clarity.legal",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "AI-powered legal document review tool for small law firms",
+    "domain": "clause.legal",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "AI-powered legal document review tool for small law firms",
+    "domain": "court.chat",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "AI-powered legal document review tool for small law firms",
+    "domain": "covenant.expert",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "AI-powered legal document review tool for small law firms",
+    "domain": "forum.solutions",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "AI-powered legal document review tool for small law firms",
+    "domain": "legisync.dev",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "AI-powered legal document review tool for small law firms",
+    "domain": "lexicon.legal",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "AI-powered legal document review tool for small law firms",
+    "domain": "lexis.tools",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "AI-powered legal document review tool for small law firms",
+    "domain": "notary.services",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "AI-powered legal document review tool for small law firms",
+    "domain": "pact.build",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "AI-powered legal document review tool for small law firms",
+    "domain": "plaintiff.center",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "AI-powered legal document review tool for small law firms",
+    "domain": "pravity.legal",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "AI-powered legal document review tool for small law firms",
+    "domain": "precedent.expert",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "AI-powered legal document review tool for small law firms",
+    "domain": "pro.bar",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "AI-powered legal document review tool for small law firms",
+    "domain": "scriptease.legal",
+    "rating": "okay",
+    "round": 3
+  },
+  {
+    "query": "AI-powered legal document review tool for small law firms",
+    "domain": "statute.co",
+    "rating": "okay",
+    "round": 4
+  },
+  {
+    "query": "AI-powered legal document review tool for small law firms",
+    "domain": "summons.works",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "AI-powered legal document review tool for small law firms",
+    "domain": "tenetize.dev",
+    "rating": "bad",
+    "round": 3
+  },
+  {
+    "query": "AI-powered legal document review tool for small law firms",
+    "domain": "testify.me",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "AI-powered legal document review tool for small law firms",
+    "domain": "testimony.codes",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "AI-powered legal document review tool for small law firms",
+    "domain": "testimony.digital",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "AI-powered legal document review tool for small law firms",
+    "domain": "trial.net",
+    "rating": "okay",
+    "round": 3
+  },
+  {
+    "query": "AI-powered legal document review tool for small law firms",
+    "domain": "verdict.ai",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "AI-powered legal document review tool for small law firms",
+    "domain": "verdict.cloud",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "AI-powered legal document review tool for small law firms",
+    "domain": "verdict.software",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "AI-powered legal document review tool for small law firms",
+    "domain": "verdictiq.com",
+    "rating": "okay",
+    "round": 2
+  },
+  {
+    "query": "AI-powered legal document review tool for small law firms",
+    "domain": "vericase.com",
+    "rating": "okay",
+    "round": 3
+  },
+  {
+    "query": "SOC 2 compliance automation for mid-market fintech companies",
+    "domain": "basis.network",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "SOC 2 compliance automation for mid-market fintech companies",
+    "domain": "bureau.legal",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "SOC 2 compliance automation for mid-market fintech companies",
+    "domain": "catalyst.investments",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "SOC 2 compliance automation for mid-market fintech companies",
+    "domain": "catalyst.solutions",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "SOC 2 compliance automation for mid-market fintech companies",
+    "domain": "governance.works",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "SOC 2 compliance automation for mid-market fintech companies",
+    "domain": "paladin.ventures",
+    "rating": "okay",
+    "round": 4
+  },
+  {
+    "query": "SOC 2 compliance automation for mid-market fintech companies",
+    "domain": "standard.ly",
+    "rating": "okay",
+    "round": 2
+  },
+  {
+    "query": "SOC 2 compliance automation for mid-market fintech companies",
+    "domain": "tessera.systems",
+    "rating": "okay",
+    "round": 3
+  },
+  {
+    "query": "SOC 2 compliance automation for mid-market fintech companies",
+    "domain": "valid.run",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "SOC 2 compliance automation for mid-market fintech companies",
+    "domain": "validore.ai",
+    "rating": "okay",
+    "round": 3
+  },
+  {
+    "query": "SOC 2 compliance automation for mid-market fintech companies",
+    "domain": "valutrack.com",
+    "rating": "okay",
+    "round": 3
+  },
+  {
+    "query": "SOC 2 compliance automation for mid-market fintech companies",
+    "domain": "verify.cloud",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "a denver based coffee shop that serves beer at night",
+    "domain": "after.cafe",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "a denver based coffee shop that serves beer at night",
+    "domain": "altimeter.coffee",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "a denver based coffee shop that serves beer at night",
+    "domain": "altitude.beer",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "a denver based coffee shop that serves beer at night",
+    "domain": "amper.beer",
+    "rating": "okay",
+    "round": 2
+  },
+  {
+    "query": "a denver based coffee shop that serves beer at night",
+    "domain": "beacon.bar",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "a denver based coffee shop that serves beer at night",
+    "domain": "bean.beer",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "a denver based coffee shop that serves beer at night",
+    "domain": "brewing.cafe",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "a denver based coffee shop that serves beer at night",
+    "domain": "cask.bar",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "a denver based coffee shop that serves beer at night",
+    "domain": "den.beer",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "a denver based coffee shop that serves beer at night",
+    "domain": "duskbrew.cafe",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "a denver based coffee shop that serves beer at night",
+    "domain": "equinox.beer",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "a denver based coffee shop that serves beer at night",
+    "domain": "espresso.bar",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "a denver based coffee shop that serves beer at night",
+    "domain": "grounded.beer",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "a denver based coffee shop that serves beer at night",
+    "domain": "haze.beer",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "a denver based coffee shop that serves beer at night",
+    "domain": "java.pub",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "a denver based coffee shop that serves beer at night",
+    "domain": "mellow.pub",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "a denver based coffee shop that serves beer at night",
+    "domain": "meridian.live",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "a denver based coffee shop that serves beer at night",
+    "domain": "peak.me",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "a denver based coffee shop that serves beer at night",
+    "domain": "pioneer.bar",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "a denver based coffee shop that serves beer at night",
+    "domain": "porter.coffee",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "a denver based coffee shop that serves beer at night",
+    "domain": "pour.pub",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "a denver based coffee shop that serves beer at night",
+    "domain": "roast.bar",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "a denver based coffee shop that serves beer at night",
+    "domain": "roastcraft.agency",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "a denver based coffee shop that serves beer at night",
+    "domain": "shadebrew.beer",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "a denver based coffee shop that serves beer at night",
+    "domain": "solstice.bar",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "a denver based coffee shop that serves beer at night",
+    "domain": "stout.coffee",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "a denver based coffee shop that serves beer at night",
+    "domain": "stumptown.live",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "a denver based coffee shop that serves beer at night",
+    "domain": "summit.cafe",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "a denver based coffee shop that serves beer at night",
+    "domain": "sunsettle.coffee",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "a denver based coffee shop that serves beer at night",
+    "domain": "velvet.bar",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "a denver based coffee shop that serves beer at night",
+    "domain": "zenith.pub",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "craft beer subscription box monthly delivery",
+    "domain": "alebundle.pub",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "craft beer subscription box monthly delivery",
+    "domain": "barrel.limited",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "craft beer subscription box monthly delivery",
+    "domain": "batchbox.market",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "craft beer subscription box monthly delivery",
+    "domain": "crate.pub",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "craft beer subscription box monthly delivery",
+    "domain": "draftquest.info",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "craft beer subscription box monthly delivery",
+    "domain": "grain.market",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "craft beer subscription box monthly delivery",
+    "domain": "grain.works",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "craft beer subscription box monthly delivery",
+    "domain": "harvest.delivery",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "craft beer subscription box monthly delivery",
+    "domain": "hop.bar",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "craft beer subscription box monthly delivery",
+    "domain": "hopsource.shop",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "craft beer subscription box monthly delivery",
+    "domain": "kegpost.pub",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "craft beer subscription box monthly delivery",
+    "domain": "malt.rocks",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "craft beer subscription box monthly delivery",
+    "domain": "malthaven.zone",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "craft beer subscription box monthly delivery",
+    "domain": "monthly.delivery",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "craft beer subscription box monthly delivery",
+    "domain": "stoutdrop.beer",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "craft beer subscription box monthly delivery",
+    "domain": "vessel.pub",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "craft beer subscription box monthly delivery",
+    "domain": "vessel.shop",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "craft beer subscription box monthly delivery",
+    "domain": "vesselvet.shop",
+    "rating": "bad",
+    "round": 4
+  },
+  {
+    "query": "developer tool for automating code reviews with AI",
+    "domain": "clean.software",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "developer tool for automating code reviews with AI",
+    "domain": "cleanshift.solutions",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "developer tool for automating code reviews with AI",
+    "domain": "codemetric.tv",
+    "rating": "okay",
+    "round": 2
+  },
+  {
+    "query": "developer tool for automating code reviews with AI",
+    "domain": "codex.run",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "developer tool for automating code reviews with AI",
+    "domain": "codexia.dev",
+    "rating": "bad",
+    "round": 1
+  },
+  {
+    "query": "developer tool for automating code reviews with AI",
+    "domain": "compile.net",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "developer tool for automating code reviews with AI",
+    "domain": "glitchmend.io",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "developer tool for automating code reviews with AI",
+    "domain": "index.cloud",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "developer tool for automating code reviews with AI",
+    "domain": "lint.dev",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "developer tool for automating code reviews with AI",
+    "domain": "linter.co",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "developer tool for automating code reviews with AI",
+    "domain": "merge.software",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "developer tool for automating code reviews with AI",
+    "domain": "refine.software",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "developer tool for automating code reviews with AI",
+    "domain": "runtime.app",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "developer tool for automating code reviews with AI",
+    "domain": "sanction.engineering",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "developer tool for automating code reviews with AI",
+    "domain": "scout.codes",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "developer tool for automating code reviews with AI",
+    "domain": "sentinel.io",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "developer tool for automating code reviews with AI",
+    "domain": "sift.software",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "developer tool for automating code reviews with AI",
+    "domain": "test.net",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "developer tool for automating code reviews with AI",
+    "domain": "trace.info",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "developer tool for automating code reviews with AI",
+    "domain": "tracelet.cloud",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "freelance marketplace for creative professionals",
+    "domain": "agora.market",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "freelance marketplace for creative professionals",
+    "domain": "canvas.live",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "freelance marketplace for creative professionals",
+    "domain": "collab.market",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "freelance marketplace for creative professionals",
+    "domain": "coven.io",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "freelance marketplace for creative professionals",
+    "domain": "craftly.community",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "freelance marketplace for creative professionals",
+    "domain": "createnest.works",
+    "rating": "okay",
+    "round": 2
+  },
+  {
+    "query": "freelance marketplace for creative professionals",
+    "domain": "creativ.am",
+    "rating": "okay",
+    "round": 4
+  },
+  {
+    "query": "freelance marketplace for creative professionals",
+    "domain": "creatives.cafe",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "freelance marketplace for creative professionals",
+    "domain": "curate.gallery",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "freelance marketplace for creative professionals",
+    "domain": "evokera.expert",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "freelance marketplace for creative professionals",
+    "domain": "maker.community",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "freelance marketplace for creative professionals",
+    "domain": "mentora.ventures",
+    "rating": "okay",
+    "round": 3
+  },
+  {
+    "query": "freelance marketplace for creative professionals",
+    "domain": "merit.zone",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "freelance marketplace for creative professionals",
+    "domain": "portfolio.exchange",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "freelance marketplace for creative professionals",
+    "domain": "pro.ventures",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "freelance marketplace for creative professionals",
+    "domain": "scope.media",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "freelance marketplace for creative professionals",
+    "domain": "talent.boutique",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "freelance marketplace for creative professionals",
+    "domain": "talent.digital",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "freelance marketplace for creative professionals",
+    "domain": "talent.studio",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "freelance marketplace for creative professionals",
+    "domain": "talent.ventures",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "freelance marketplace for creative professionals",
+    "domain": "talentio.ai",
+    "rating": "okay",
+    "round": 3
+  },
+  {
+    "query": "freelance marketplace for creative professionals",
+    "domain": "talentix.ai",
+    "rating": "okay",
+    "round": 2
+  },
+  {
+    "query": "freelance marketplace for creative professionals",
+    "domain": "tapestry.media",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "freelance marketplace for creative professionals",
+    "domain": "trade.market",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "freelance marketplace for creative professionals",
+    "domain": "trove.vision",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "freelance marketplace for creative professionals",
+    "domain": "vivid.vision",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "freelance marketplace for creative professionals",
+    "domain": "work.place",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "getfitnow.net",
+    "domain": "active.zone",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "getfitnow.net",
+    "domain": "drive.solutions",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "getfitnow.net",
+    "domain": "fit.me",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "getfitnow.net",
+    "domain": "forge.build",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "getfitnow.net",
+    "domain": "form.guide",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "getfitnow.net",
+    "domain": "formo.agency",
+    "rating": "okay",
+    "round": 4
+  },
+  {
+    "query": "getfitnow.net",
+    "domain": "fusion.center",
+    "rating": "okay",
+    "round": 3
+  },
+  {
+    "query": "getfitnow.net",
+    "domain": "hasten.agency",
+    "rating": "okay",
+    "round": 3
+  },
+  {
+    "query": "getfitnow.net",
+    "domain": "hearten.community",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "getfitnow.net",
+    "domain": "momentum.co",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "getfitnow.net",
+    "domain": "resolve.dev",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "getfitnow.net",
+    "domain": "strive.io",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "getfitnow.net",
+    "domain": "thrive.me",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "getfitnow.net",
+    "domain": "vita.am",
+    "rating": "okay",
+    "round": 4
+  },
+  {
+    "query": "getfitnow.net",
+    "domain": "vital.app",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "getfitnow.net",
+    "domain": "zeal.clinic",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "indie game developer community and showcase",
+    "domain": "artisan.build",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "indie game developer community and showcase",
+    "domain": "beacon.network",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "indie game developer community and showcase",
+    "domain": "codemelt.io",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "indie game developer community and showcase",
+    "domain": "console.academy",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "indie game developer community and showcase",
+    "domain": "console.community",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "indie game developer community and showcase",
+    "domain": "core.zone",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "indie game developer community and showcase",
+    "domain": "corebound.cloud",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "indie game developer community and showcase",
+    "domain": "fable.design",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "indie game developer community and showcase",
+    "domain": "forge.works",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "indie game developer community and showcase",
+    "domain": "habitat.community",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "indie game developer community and showcase",
+    "domain": "haven.ai",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "indie game developer community and showcase",
+    "domain": "ludoverse.community",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "indie game developer community and showcase",
+    "domain": "novagrid.software",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "indie game developer community and showcase",
+    "domain": "realm.world",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "indie game developer community and showcase",
+    "domain": "sandbox.io",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "indie game developer community and showcase",
+    "domain": "sprite.gg",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "indie game developer community and showcase",
+    "domain": "vector.zone",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "law firm",
+    "domain": "arguesphere.cloud",
+    "rating": "bad",
+    "round": 2
+  },
+  {
+    "query": "law firm",
+    "domain": "boundless.agency",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "law firm",
+    "domain": "briefing.guide",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "law firm",
+    "domain": "counsel.company",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "law firm",
+    "domain": "counsel.expert",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "law firm",
+    "domain": "counsel.works",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "law firm",
+    "domain": "counsela.academy",
+    "rating": "okay",
+    "round": 2
+  },
+  {
+    "query": "law firm",
+    "domain": "covenant.solutions",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "law firm",
+    "domain": "crestlegal.services",
+    "rating": "okay",
+    "round": 3
+  },
+  {
+    "query": "law firm",
+    "domain": "just.legal",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "law firm",
+    "domain": "legal.cafe",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "law firm",
+    "domain": "meritgrid.net",
+    "rating": "okay",
+    "round": 3
+  },
+  {
+    "query": "law firm",
+    "domain": "plea.ai",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "law firm",
+    "domain": "pleader.co",
+    "rating": "okay",
+    "round": 3
+  },
+  {
+    "query": "law firm",
+    "domain": "precedent.services",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "law firm",
+    "domain": "testimony.io",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "law firm",
+    "domain": "tribunal.com",
+    "rating": "okay",
+    "round": 3
+  },
+  {
+    "query": "law firm",
+    "domain": "verdict.agency",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "law firm",
+    "domain": "verdict.solutions",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "meditation and mindfulness app for anxiety",
+    "domain": "anchora.care",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "meditation and mindfulness app for anxiety",
+    "domain": "aura.zone",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "meditation and mindfulness app for anxiety",
+    "domain": "breath.am",
+    "rating": "okay",
+    "round": 3
+  },
+  {
+    "query": "meditation and mindfulness app for anxiety",
+    "domain": "breath.fm",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "meditation and mindfulness app for anxiety",
+    "domain": "breathly.co",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "meditation and mindfulness app for anxiety",
+    "domain": "center.ai",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "meditation and mindfulness app for anxiety",
+    "domain": "mind.center",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "meditation and mindfulness app for anxiety",
+    "domain": "mindward.me",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "meditation and mindfulness app for anxiety",
+    "domain": "pause.academy",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "meditation and mindfulness app for anxiety",
+    "domain": "pauseon.life",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "meditation and mindfulness app for anxiety",
+    "domain": "placate.ai",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "meditation and mindfulness app for anxiety",
+    "domain": "plunge.io",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "meditation and mindfulness app for anxiety",
+    "domain": "quietis.academy",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "meditation and mindfulness app for anxiety",
+    "domain": "respite.academy",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "meditation and mindfulness app for anxiety",
+    "domain": "rest.center",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "meditation and mindfulness app for anxiety",
+    "domain": "seren.am",
+    "rating": "okay",
+    "round": 4
+  },
+  {
+    "query": "meditation and mindfulness app for anxiety",
+    "domain": "stillia.me",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "meditation and mindfulness app for anxiety",
+    "domain": "stillos.io",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "meditation and mindfulness app for anxiety",
+    "domain": "tether.care",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "meditation and mindfulness app for anxiety",
+    "domain": "tide.works",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "meditation and mindfulness app for anxiety",
+    "domain": "zen.academy",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "meditation and mindfulness app for anxiety",
+    "domain": "zenflow.cloud",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "meditation and mindfulness app for anxiety",
+    "domain": "zenora.co",
+    "rating": "okay",
+    "round": 2
+  },
+  {
+    "query": "meditation and mindfulness app for anxiety",
+    "domain": "zenpulse.media",
+    "rating": "okay",
+    "round": 2
+  },
+  {
+    "query": "neighborhood barbershop in brooklyn",
+    "domain": "beacon.guide",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "neighborhood barbershop in brooklyn",
+    "domain": "beacon.place",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "neighborhood barbershop in brooklyn",
+    "domain": "bloke.shop",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "neighborhood barbershop in brooklyn",
+    "domain": "brook.ly",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "neighborhood barbershop in brooklyn",
+    "domain": "clipper.zone",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "neighborhood barbershop in brooklyn",
+    "domain": "cobble.shop",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "neighborhood barbershop in brooklyn",
+    "domain": "crop.salon",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "neighborhood barbershop in brooklyn",
+    "domain": "edgenest.place",
+    "rating": "okay",
+    "round": 2
+  },
+  {
+    "query": "neighborhood barbershop in brooklyn",
+    "domain": "fade.zone",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "neighborhood barbershop in brooklyn",
+    "domain": "groom.place",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "neighborhood barbershop in brooklyn",
+    "domain": "honed.studio",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "neighborhood barbershop in brooklyn",
+    "domain": "lather.house",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "neighborhood barbershop in brooklyn",
+    "domain": "part.bar",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "neighborhood barbershop in brooklyn",
+    "domain": "proper.salon",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "neighborhood barbershop in brooklyn",
+    "domain": "razor.studio",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "neighborhood barbershop in brooklyn",
+    "domain": "razorclad.shop",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "neighborhood barbershop in brooklyn",
+    "domain": "razorly.bar",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "neighborhood barbershop in brooklyn",
+    "domain": "snipyard.center",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "neighborhood barbershop in brooklyn",
+    "domain": "taper.me",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "neighborhood barbershop in brooklyn",
+    "domain": "tapered.works",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "neighborhood barbershop in brooklyn",
+    "domain": "trim.studio",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "neighborhood barbershop in brooklyn",
+    "domain": "urban.camera",
+    "rating": "bad",
+    "round": 3
+  },
+  {
+    "query": "neighborhood barbershop in brooklyn",
+    "domain": "urban.style",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "neighborhood barbershop in brooklyn",
+    "domain": "urbanfringe.shop",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "nonprofit that plants trees in cities",
+    "domain": "arbora.fund",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "nonprofit that plants trees in cities",
+    "domain": "base.camp",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "nonprofit that plants trees in cities",
+    "domain": "branchout.fund",
+    "rating": "okay",
+    "round": 3
+  },
+  {
+    "query": "nonprofit that plants trees in cities",
+    "domain": "canoply.cloud",
+    "rating": "okay",
+    "round": 2
+  },
+  {
+    "query": "nonprofit that plants trees in cities",
+    "domain": "fund.io",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "nonprofit that plants trees in cities",
+    "domain": "greencenter.me",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "nonprofit that plants trees in cities",
+    "domain": "leafline.io",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "nonprofit that plants trees in cities",
+    "domain": "municipal.land",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "nonprofit that plants trees in cities",
+    "domain": "root.org",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "nonprofit that plants trees in cities",
+    "domain": "timber.co",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "nonprofit that plants trees in cities",
+    "domain": "verdict.org",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "online learning platform for professional photography",
+    "domain": "apertext.education",
+    "rating": "okay",
+    "round": 2
+  },
+  {
+    "query": "online learning platform for professional photography",
+    "domain": "composition.studio",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "online learning platform for professional photography",
+    "domain": "exposio.ai",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "online learning platform for professional photography",
+    "domain": "exposura.education",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "online learning platform for professional photography",
+    "domain": "exposures.guru",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "online learning platform for professional photography",
+    "domain": "focal.guru",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "online learning platform for professional photography",
+    "domain": "focus.training",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "online learning platform for professional photography",
+    "domain": "frame.expert",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "online learning platform for professional photography",
+    "domain": "framelab.school",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "online learning platform for professional photography",
+    "domain": "image.coach",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "online learning platform for professional photography",
+    "domain": "iso.training",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "online learning platform for professional photography",
+    "domain": "latent.dev",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "online learning platform for professional photography",
+    "domain": "lumen.academy",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "online learning platform for professional photography",
+    "domain": "negative.media",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "online learning platform for professional photography",
+    "domain": "plate.works",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "online learning platform for professional photography",
+    "domain": "primer.photography",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "online learning platform for professional photography",
+    "domain": "render.photos",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "online learning platform for professional photography",
+    "domain": "retro.app",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "online learning platform for professional photography",
+    "domain": "revelation.photography",
+    "rating": "okay",
+    "round": 3
+  },
+  {
+    "query": "online learning platform for professional photography",
+    "domain": "tether.works",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "online learning platform for professional photography",
+    "domain": "tone.gallery",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "online learning platform for professional photography",
+    "domain": "view.camera",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "online learning platform for professional photography",
+    "domain": "viewfinder.app",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "online learning platform for professional photography",
+    "domain": "viewfinder.live",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "online learning platform for professional photography",
+    "domain": "vivid.media",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "online learning platform for professional photography",
+    "domain": "vivida.photos",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "online learning platform for professional photography",
+    "domain": "zenith.photos",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "panadería artesanal en madrid",
+    "domain": "amas.coffee",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "panadería artesanal en madrid",
+    "domain": "amas.io",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "panadería artesanal en madrid",
+    "domain": "candeal.shop",
+    "rating": "okay",
+    "round": 4
+  },
+  {
+    "query": "panadería artesanal en madrid",
+    "domain": "candil.wine",
+    "rating": "okay",
+    "round": 3
+  },
+  {
+    "query": "panadería artesanal en madrid",
+    "domain": "encostra.solutions",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "panadería artesanal en madrid",
+    "domain": "espinaca.farm",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "panadería artesanal en madrid",
+    "domain": "galleta.gifts",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "panadería artesanal en madrid",
+    "domain": "grano.expert",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "panadería artesanal en madrid",
+    "domain": "harinart.me",
+    "rating": "okay",
+    "round": 2
+  },
+  {
+    "query": "panadería artesanal en madrid",
+    "domain": "mas.cafe",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "panadería artesanal en madrid",
+    "domain": "masa.studio",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "panadería artesanal en madrid",
+    "domain": "masa.world",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "panadería artesanal en madrid",
+    "domain": "migas.cafe",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "panadería artesanal en madrid",
+    "domain": "panaliz.agency",
+    "rating": "okay",
+    "round": 4
+  },
+  {
+    "query": "panadería artesanal en madrid",
+    "domain": "panaroma.city",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "panadería artesanal en madrid",
+    "domain": "panera.bar",
+    "rating": "okay",
+    "round": 3
+  },
+  {
+    "query": "panadería artesanal en madrid",
+    "domain": "panes.cafe",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "panadería artesanal en madrid",
+    "domain": "trigomad.co",
+    "rating": "okay",
+    "round": 3
+  },
+  {
+    "query": "patspizza.com",
+    "domain": "baker.restaurant",
+    "rating": "okay",
+    "round": 3
+  },
+  {
+    "query": "patspizza.com",
+    "domain": "bakeshop.guide",
+    "rating": "bad",
+    "round": 3
+  },
+  {
+    "query": "patspizza.com",
+    "domain": "basil.world",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "patspizza.com",
+    "domain": "blister.cafe",
+    "rating": "okay",
+    "round": 4
+  },
+  {
+    "query": "patspizza.com",
+    "domain": "char.pizza",
+    "rating": "okay",
+    "round": 4
+  },
+  {
+    "query": "patspizza.com",
+    "domain": "crustacean.pizza",
+    "rating": "okay",
+    "round": 2
+  },
+  {
+    "query": "patspizza.com",
+    "domain": "crustal.studio",
+    "rating": "okay",
+    "round": 3
+  },
+  {
+    "query": "patspizza.com",
+    "domain": "doughver.pizza",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "patspizza.com",
+    "domain": "emberso.co",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "patspizza.com",
+    "domain": "farina.cafe",
+    "rating": "bad",
+    "round": 2
+  },
+  {
+    "query": "patspizza.com",
+    "domain": "fire.pub",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "patspizza.com",
+    "domain": "fold.io",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "patspizza.com",
+    "domain": "leaven.bar",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "patspizza.com",
+    "domain": "leaven.co",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "patspizza.com",
+    "domain": "ovenwise.me",
+    "rating": "bad",
+    "round": 3
+  },
+  {
+    "query": "patspizza.com",
+    "domain": "patina.studio",
+    "rating": "okay",
+    "round": 3
+  },
+  {
+    "query": "patspizza.com",
+    "domain": "patt.pizza",
+    "rating": "bad",
+    "round": 4
+  },
+  {
+    "query": "patspizza.com",
+    "domain": "pizzala.co",
+    "rating": "okay",
+    "round": 2
+  },
+  {
+    "query": "patspizza.com",
+    "domain": "tessera.pizza",
+    "rating": "okay",
+    "round": 2
+  },
+  {
+    "query": "patspizza.com",
+    "domain": "yeast.express",
+    "rating": "okay",
+    "round": 4
+  },
+  {
+    "query": "patspizza.com",
+    "domain": "yeast.studio",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "personal finance and budgeting app for millennials",
+    "domain": "asset.ventures",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "personal finance and budgeting app for millennials",
+    "domain": "balanc.ee",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "personal finance and budgeting app for millennials",
+    "domain": "balance.consulting",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "personal finance and budgeting app for millennials",
+    "domain": "budgetry.app",
+    "rating": "okay",
+    "round": 2
+  },
+  {
+    "query": "personal finance and budgeting app for millennials",
+    "domain": "cushion.me",
+    "rating": "okay",
+    "round": 3
+  },
+  {
+    "query": "personal finance and budgeting app for millennials",
+    "domain": "dividend.studio",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "personal finance and budgeting app for millennials",
+    "domain": "fund.ai",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "personal finance and budgeting app for millennials",
+    "domain": "funddrift.me",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "personal finance and budgeting app for millennials",
+    "domain": "fundora.net",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "personal finance and budgeting app for millennials",
+    "domain": "fundza.app",
+    "rating": "okay",
+    "round": 2
+  },
+  {
+    "query": "personal finance and budgeting app for millennials",
+    "domain": "grove.fund",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "personal finance and budgeting app for millennials",
+    "domain": "haven.credit",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "personal finance and budgeting app for millennials",
+    "domain": "interest.life",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "personal finance and budgeting app for millennials",
+    "domain": "nestable.finance",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "personal finance and budgeting app for millennials",
+    "domain": "planora.co",
+    "rating": "okay",
+    "round": 3
+  },
+  {
+    "query": "personal finance and budgeting app for millennials",
+    "domain": "prosperous.capital",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "personal finance and budgeting app for millennials",
+    "domain": "reserve.capital",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "personal finance and budgeting app for millennials",
+    "domain": "reserve.ventures",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "personal finance and budgeting app for millennials",
+    "domain": "savetide.money",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "personal finance and budgeting app for millennials",
+    "domain": "smartin.cash",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "personal finance and budgeting app for millennials",
+    "domain": "spendly.finance",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "personal finance and budgeting app for millennials",
+    "domain": "stashbound.financial",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "personal finance and budgeting app for millennials",
+    "domain": "stashed.cloud",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "personal finance and budgeting app for millennials",
+    "domain": "stashfund.app",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "personal finance and budgeting app for millennials",
+    "domain": "tenet.capital",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "personal finance and budgeting app for millennials",
+    "domain": "venture.capital",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "personal finance and budgeting app for millennials",
+    "domain": "wealth.center",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "personal finance and budgeting app for millennials",
+    "domain": "wealthloom.studio",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "personal finance and budgeting app for millennials",
+    "domain": "zenith.co",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "podcast hosting and analytics platform",
+    "domain": "acoustic.cloud",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "podcast hosting and analytics platform",
+    "domain": "articulate.agency",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "podcast hosting and analytics platform",
+    "domain": "cantus.fm",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "podcast hosting and analytics platform",
+    "domain": "cast.run",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "podcast hosting and analytics platform",
+    "domain": "cast.studio",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "podcast hosting and analytics platform",
+    "domain": "equalizer.software",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "podcast hosting and analytics platform",
+    "domain": "mic.chat",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "podcast hosting and analytics platform",
+    "domain": "phonetic.digital",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "podcast hosting and analytics platform",
+    "domain": "phono.co",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "podcast hosting and analytics platform",
+    "domain": "resonance.fm",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "podcast hosting and analytics platform",
+    "domain": "resonant.media",
+    "rating": "okay",
+    "round": 4
+  },
+  {
+    "query": "podcast hosting and analytics platform",
+    "domain": "stre.am",
+    "rating": "okay",
+    "round": 4
+  },
+  {
+    "query": "podcast hosting and analytics platform",
+    "domain": "synchra.build",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "podcast hosting and analytics platform",
+    "domain": "tone.studio",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "podcast hosting and analytics platform",
+    "domain": "vocal.works",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "podcast hosting and analytics platform",
+    "domain": "vocalis.ai",
+    "rating": "okay",
+    "round": 2
+  },
+  {
+    "query": "podcast hosting and analytics platform",
+    "domain": "wavecast.systems",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "podcast hosting and analytics platform",
+    "domain": "waveform.dev",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "something for my side hustle",
+    "domain": "bootstrap.guide",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "something for my side hustle",
+    "domain": "catalyst.systems",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "something for my side hustle",
+    "domain": "forge.center",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "something for my side hustle",
+    "domain": "fringe.build",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "something for my side hustle",
+    "domain": "hatchery.zone",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "something for my side hustle",
+    "domain": "horizon.vision",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "something for my side hustle",
+    "domain": "leverage.expert",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "something for my side hustle",
+    "domain": "moontide.studio",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "something for my side hustle",
+    "domain": "niche.run",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "something for my side hustle",
+    "domain": "sidecar.solutions",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "something for my side hustle",
+    "domain": "sidecar.studio",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "something for my side hustle",
+    "domain": "sideline.media",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "something for my side hustle",
+    "domain": "sidestep.systems",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "something for my side hustle",
+    "domain": "strive.dev",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "something for my side hustle",
+    "domain": "tide.cafe",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "something for my side hustle",
+    "domain": "ventu.biz",
+    "rating": "okay",
+    "round": 2
+  },
+  {
+    "query": "something for my side hustle",
+    "domain": "vivid.media",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "sustainable outdoor gear and apparel brand",
+    "domain": "base.camp",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "sustainable outdoor gear and apparel brand",
+    "domain": "cirquedure.shop",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "sustainable outdoor gear and apparel brand",
+    "domain": "driftclad.style",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "sustainable outdoor gear and apparel brand",
+    "domain": "ever.run",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "sustainable outdoor gear and apparel brand",
+    "domain": "forage.shop",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "sustainable outdoor gear and apparel brand",
+    "domain": "green.ventures",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "sustainable outdoor gear and apparel brand",
+    "domain": "moss.shop",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "sustainable outdoor gear and apparel brand",
+    "domain": "mossline.live",
+    "rating": "okay",
+    "round": 3
+  },
+  {
+    "query": "sustainable outdoor gear and apparel brand",
+    "domain": "path.guide",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "sustainable outdoor gear and apparel brand",
+    "domain": "perma.life",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "sustainable outdoor gear and apparel brand",
+    "domain": "pinecrest.clothing",
+    "rating": "okay",
+    "round": 3
+  },
+  {
+    "query": "sustainable outdoor gear and apparel brand",
+    "domain": "root.land",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "sustainable outdoor gear and apparel brand",
+    "domain": "terraflow.camp",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "sustainable outdoor gear and apparel brand",
+    "domain": "thicket.camp",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "sustainable outdoor gear and apparel brand",
+    "domain": "valiant.ventures",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "sustainable outdoor gear and apparel brand",
+    "domain": "verdant.design",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "sustainable outdoor gear and apparel brand",
+    "domain": "vista.world",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "sustainable outdoor gear and apparel brand",
+    "domain": "wildloom.clothing",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "tea",
+    "domain": "blendora.studio",
+    "rating": "okay",
+    "round": 2
+  },
+  {
+    "query": "tea",
+    "domain": "brewed.biz",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "tea",
+    "domain": "decant.bar",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "tea",
+    "domain": "harvest.farm",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "tea",
+    "domain": "harvest.net",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "tea",
+    "domain": "herba.ly",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "tea",
+    "domain": "infusion.com",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "tea",
+    "domain": "oolong.world",
+    "rating": "okay",
+    "round": 4
+  },
+  {
+    "query": "tea",
+    "domain": "wither.market",
+    "rating": "okay",
+    "round": 2
+  },
+  {
+    "query": "team project management and async communication tool",
+    "domain": "compass.solutions",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "team project management and async communication tool",
+    "domain": "fluxo.community",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "team project management and async communication tool",
+    "domain": "focus.academy",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "team project management and async communication tool",
+    "domain": "interleave.solutions",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "team project management and async communication tool",
+    "domain": "kindle.academy",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "team project management and async communication tool",
+    "domain": "nexus.systems",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "team project management and async communication tool",
+    "domain": "parallel.build",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "team project management and async communication tool",
+    "domain": "parallelia.ai",
+    "rating": "okay",
+    "round": 3
+  },
+  {
+    "query": "team project management and async communication tool",
+    "domain": "relay.gg",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "team project management and async communication tool",
+    "domain": "signal.io",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "team project management and async communication tool",
+    "domain": "stride.app",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "team project management and async communication tool",
+    "domain": "synergy.ventures",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "team project management and async communication tool",
+    "domain": "tea.am",
+    "rating": "okay",
+    "round": 2
+  },
+  {
+    "query": "team project management and async communication tool",
+    "domain": "tessera.management",
+    "rating": "okay",
+    "round": 4
+  },
+  {
+    "query": "team project management and async communication tool",
+    "domain": "tether.engineering",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "team project management and async communication tool",
+    "domain": "vecto.cloud",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "vintage clothing resale marketplace",
+    "domain": "cabinet.clothing",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "vintage clothing resale marketplace",
+    "domain": "chic.ly",
+    "rating": "okay",
+    "round": 2
+  },
+  {
+    "query": "vintage clothing resale marketplace",
+    "domain": "curated.clothing",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "vintage clothing resale marketplace",
+    "domain": "curio.shop",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "vintage clothing resale marketplace",
+    "domain": "ephemera.style",
+    "rating": "bad",
+    "round": 1
+  },
+  {
+    "query": "vintage clothing resale marketplace",
+    "domain": "fablement.exchange",
+    "rating": "okay",
+    "round": 2
+  },
+  {
+    "query": "vintage clothing resale marketplace",
+    "domain": "find.sale",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "vintage clothing resale marketplace",
+    "domain": "found.exchange",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "vintage clothing resale marketplace",
+    "domain": "heritage.zone",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "vintage clothing resale marketplace",
+    "domain": "memory.place",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "vintage clothing resale marketplace",
+    "domain": "mended.studio",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "vintage clothing resale marketplace",
+    "domain": "past.style",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "vintage clothing resale marketplace",
+    "domain": "pastchic.boutique",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "vintage clothing resale marketplace",
+    "domain": "provenance.market",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "vintage clothing resale marketplace",
+    "domain": "relove.shop",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "vintage clothing resale marketplace",
+    "domain": "revintage.network",
+    "rating": "okay",
+    "round": 2
+  },
+  {
+    "query": "vintage clothing resale marketplace",
+    "domain": "revisite.style",
+    "rating": "bad",
+    "round": 1
+  },
+  {
+    "query": "vintage clothing resale marketplace",
+    "domain": "shiftward.community",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "vintage clothing resale marketplace",
+    "domain": "spunage.world",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "vintage clothing resale marketplace",
+    "domain": "threaden.app",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "vintage clothing resale marketplace",
+    "domain": "timeless.design",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "vintage clothing resale marketplace",
+    "domain": "vestment.exchange",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "vintage clothing resale marketplace",
+    "domain": "wardrobe.exchange",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "vintage clothing resale marketplace",
+    "domain": "woven.place",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "we're a small family-run business in vermont that makes maple syrup and maple candy, we sell at farmers markets and online and want to start doing corporate holiday gift boxes",
+    "domain": "branchmelt.market",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "we're a small family-run business in vermont that makes maple syrup and maple candy, we sell at farmers markets and online and want to start doing corporate holiday gift boxes",
+    "domain": "forest.holiday",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "we're a small family-run business in vermont that makes maple syrup and maple candy, we sell at farmers markets and online and want to start doing corporate holiday gift boxes",
+    "domain": "frostline.com",
+    "rating": "okay",
+    "round": 4
+  },
+  {
+    "query": "we're a small family-run business in vermont that makes maple syrup and maple candy, we sell at farmers markets and online and want to start doing corporate holiday gift boxes",
+    "domain": "grove.company",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "we're a small family-run business in vermont that makes maple syrup and maple candy, we sell at farmers markets and online and want to start doing corporate holiday gift boxes",
+    "domain": "grove.delivery",
+    "rating": "okay",
+    "round": 4
+  },
+  {
+    "query": "we're a small family-run business in vermont that makes maple syrup and maple candy, we sell at farmers markets and online and want to start doing corporate holiday gift boxes",
+    "domain": "grove.land",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "we're a small family-run business in vermont that makes maple syrup and maple candy, we sell at farmers markets and online and want to start doing corporate holiday gift boxes",
+    "domain": "grovecrest.holiday",
+    "rating": "okay",
+    "round": 3
+  },
+  {
+    "query": "we're a small family-run business in vermont that makes maple syrup and maple candy, we sell at farmers markets and online and want to start doing corporate holiday gift boxes",
+    "domain": "harvest.farm",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "we're a small family-run business in vermont that makes maple syrup and maple candy, we sell at farmers markets and online and want to start doing corporate holiday gift boxes",
+    "domain": "harvest.works",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "we're a small family-run business in vermont that makes maple syrup and maple candy, we sell at farmers markets and online and want to start doing corporate holiday gift boxes",
+    "domain": "hollow.farm",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "we're a small family-run business in vermont that makes maple syrup and maple candy, we sell at farmers markets and online and want to start doing corporate holiday gift boxes",
+    "domain": "maplecrest.farm",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "we're a small family-run business in vermont that makes maple syrup and maple candy, we sell at farmers markets and online and want to start doing corporate holiday gift boxes",
+    "domain": "maplevale.shop",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "we're a small family-run business in vermont that makes maple syrup and maple candy, we sell at farmers markets and online and want to start doing corporate holiday gift boxes",
+    "domain": "sapharvest.shop",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "we're a small family-run business in vermont that makes maple syrup and maple candy, we sell at farmers markets and online and want to start doing corporate holiday gift boxes",
+    "domain": "sugaring.farm",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "we're a small family-run business in vermont that makes maple syrup and maple candy, we sell at farmers markets and online and want to start doing corporate holiday gift boxes",
+    "domain": "timber.express",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "we're a small family-run business in vermont that makes maple syrup and maple candy, we sell at farmers markets and online and want to start doing corporate holiday gift boxes",
+    "domain": "vermont.company",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "we're a small family-run business in vermont that makes maple syrup and maple candy, we sell at farmers markets and online and want to start doing corporate holiday gift boxes",
+    "domain": "woodsman.co",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "yoga studio",
+    "domain": "asanas.academy",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "yoga studio",
+    "domain": "auraline.fitness",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "yoga studio",
+    "domain": "bandha.coach",
+    "rating": "okay",
+    "round": 3
+  },
+  {
+    "query": "yoga studio",
+    "domain": "bandha.zone",
+    "rating": "okay",
+    "round": 2
+  },
+  {
+    "query": "yoga studio",
+    "domain": "breath.app",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "yoga studio",
+    "domain": "breathe.academy",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "yoga studio",
+    "domain": "center.biz",
+    "rating": "bad",
+    "round": 3
+  },
+  {
+    "query": "yoga studio",
+    "domain": "chandra.org",
+    "rating": "okay",
+    "round": 3
+  },
+  {
+    "query": "yoga studio",
+    "domain": "exhal.me",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "yoga studio",
+    "domain": "flowise.studio",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "yoga studio",
+    "domain": "kinetics.center",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "yoga studio",
+    "domain": "mantra.productions",
+    "rating": "good",
+    "round": 2
+  },
+  {
+    "query": "yoga studio",
+    "domain": "mat.camp",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "yoga studio",
+    "domain": "mind.guide",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "yoga studio",
+    "domain": "mindasana.academy",
+    "rating": "okay",
+    "round": 2
+  },
+  {
+    "query": "yoga studio",
+    "domain": "mindwave.center",
+    "rating": "good",
+    "round": 3
+  },
+  {
+    "query": "yoga studio",
+    "domain": "mudra.design",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "yoga studio",
+    "domain": "pranaspire.academy",
+    "rating": "bad",
+    "round": 1
+  },
+  {
+    "query": "yoga studio",
+    "domain": "samadhi.zone",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "yoga studio",
+    "domain": "sol.agency",
+    "rating": "good",
+    "round": 4
+  },
+  {
+    "query": "yoga studio",
+    "domain": "spiritus.io",
+    "rating": "okay",
+    "round": 4
+  },
+  {
+    "query": "yoga studio",
+    "domain": "stretch.care",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "yoga studio",
+    "domain": "tapas.guru",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "yoga studio",
+    "domain": "vitalis.center",
+    "rating": "okay",
+    "round": 1
+  },
+  {
+    "query": "yoga studio",
+    "domain": "yogaspark.biz",
+    "rating": "okay",
+    "round": 2
+  },
+  {
+    "query": "yoga studio",
+    "domain": "yogast.io",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "yoga studio",
+    "domain": "zen.codes",
+    "rating": "good",
+    "round": 1
+  },
+  {
+    "query": "yoga studio",
+    "domain": "zenpath.academy",
+    "rating": "okay",
+    "round": 3
+  }
+]

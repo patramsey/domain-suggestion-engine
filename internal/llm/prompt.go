@@ -104,7 +104,13 @@ func BuildRequest(rawInput string, tokens []string, tlds []string, count int, un
 	}
 
 	if len(unavailable) > 0 {
-		msg += fmt.Sprintf("\n\nThese domains are unavailable — do not suggest them:\n%s", strings.Join(unavailable, ", "))
+		if len(inspireFrom) > 0 {
+			// inspire_from already sets creative direction; unavailable is exclusion only
+			msg += fmt.Sprintf("\n\nDo not suggest these domains (already taken):\n%s", strings.Join(unavailable, ", "))
+		} else {
+			// No inspire_from: use taken domains as a quality calibration signal
+			msg += fmt.Sprintf("\n\nThese domains are already registered — do not suggest them, but study them: they represent the quality bar that real people found compelling enough to claim. Use them to understand the creative territory and caliber, then find alternatives of similar strength that are not on this list:\n%s", strings.Join(unavailable, ", "))
+		}
 	}
 
 	user = msg

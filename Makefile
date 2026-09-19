@@ -1,4 +1,4 @@
-.PHONY: build test eval update-psl gen-tld-scores gen-ngrams gen-glove clean
+.PHONY: build test eval update-psl gen-tld-scores gen-ngrams gen-glove gen-wordlist gen-tld-crowding clean
 
 VERSION := $(shell git describe --tags --always 2>/dev/null || echo "dev")
 BUILT_AT := $(shell date -u +%Y-%m-%dT%H:%M:%SZ)
@@ -12,7 +12,7 @@ test:
 	go test ./...
 
 eval:
-	GEMINI_API_KEY=$$(cat ~/.gemini-api-key) go run ./cmd/eval
+	GEMINI_API_KEY=$$(cat ~/.gemini-api-key) go run ./cmd/eval $(ARGS)
 
 update-psl:
 	curl -fsSL https://publicsuffix.org/list/public_suffix_list.dat -o data/tlds/public_suffix_list.dat
@@ -29,6 +29,14 @@ gen-ngrams:
 gen-glove:
 	go run ./cmd/gen/glove
 	@echo "GloVe embeddings regenerated. Run 'make test' to verify."
+
+gen-wordlist:
+	go run ./cmd/gen/wordlist
+	@echo "Word list regenerated. Run 'make test' to verify."
+
+gen-tld-crowding:
+	go run ./cmd/gen/tld-crowding
+	@echo "TLD crowding table regenerated. Run 'make test' to verify."
 
 clean:
 	rm -rf bin/

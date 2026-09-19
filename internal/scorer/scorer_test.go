@@ -16,14 +16,23 @@ func TestKnownGoodNamesScoreHighly(t *testing.T) {
 		tld    string
 		tokens []string
 		minScore float64
+		base   bool // true: assert baseScore (pre-availability-penalty), not the shipped Score
 	}{
-		{"studio", "io", []string{"studio"}, 0.65},
-		{"coffee", "com", []string{"coffee"}, 0.65},
-		{"ember", "coffee", []string{"coffee"}, 0.60},
-		{"bloom", "studio", []string{"studio"}, 0.55},
+		{"studio", "io", []string{"studio"}, 0.65, false},
+		// baseScore: "coffee" is SCOWL level 10 (≤ wordlist.CommonMaxLevel=20,
+		// −0.20) and .com has the lowest free rate in tldFreeRate (0.0645,
+		// −0.14 crowding) — the availability penalty intentionally drops this
+		// below 0.65 under Score (0.528), so only the base signals are asserted here.
+		{"coffee", "com", []string{"coffee"}, 0.65, true},
+		{"ember", "coffee", []string{"coffee"}, 0.60, false},
+		{"bloom", "studio", []string{"studio"}, 0.55, false},
 	}
 	for _, tc := range cases {
-		s := Score(cand(tc.sld, tc.tld, "llm"), tc.tokens)
+		c := cand(tc.sld, tc.tld, "llm")
+		s := Score(c, tc.tokens)
+		if tc.base {
+			s = baseScore(c, tc.tokens)
+		}
 		if s < tc.minScore {
 			t.Errorf("%s.%s scored %.3f, want >= %.3f", tc.sld, tc.tld, s, tc.minScore)
 		}
@@ -46,8 +55,11 @@ func TestGarbageScoresLow(t *testing.T) {
 }
 
 func TestComScoresHigherThanOtherGTLD(t *testing.T) {
-	base := Score(cand("coffee", "com", "llm"), nil)
-	other := Score(cand("coffee", "xyz", "llm"), nil)
+	// baseScore: this tests the TLD premium signal specifically (.com vs.
+	// another gTLD) — the availability penalty intentionally narrows the gap
+	// because .com is the most crowded TLD in tldFreeRate.
+	base := baseScore(cand("coffee", "com", "llm"), nil)
+	other := baseScore(cand("coffee", "xyz", "llm"), nil)
 	if base <= other {
 		t.Errorf(".com (%.3f) should score higher than .xyz (%.3f)", base, other)
 	}
