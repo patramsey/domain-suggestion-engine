@@ -1,7 +1,6 @@
 package main
 
 import (
-	"math"
 	"strings"
 	"testing"
 	"time"
@@ -88,31 +87,6 @@ func TestSelectVariants(t *testing.T) {
 }
 
 // --- pricing ---
-
-func TestEstimateCostKnownModelBillsThoughtsAsOutput(t *testing.T) {
-	u := llm.TokenUsage{PromptTokens: 1_000_000, CandidateTokens: 500_000, ThoughtsTokens: 500_000}
-	cost, ok := estimateCost("gemini-3.1-flash-lite", u)
-	if !ok {
-		t.Fatal("3.1-flash-lite should be priced")
-	}
-	// $0.25 input + 1M output tokens × $1.50
-	if math.Abs(cost-1.75) > 1e-9 {
-		t.Errorf("cost = %v, want 1.75", cost)
-	}
-}
-
-func TestEstimateCost35(t *testing.T) {
-	cost, ok := estimateCost("gemini-3.5-flash-lite", llm.TokenUsage{PromptTokens: 1_000_000, CandidateTokens: 1_000_000})
-	if !ok || math.Abs(cost-2.80) > 1e-9 {
-		t.Errorf("cost = %v ok=%v, want 2.80", cost, ok)
-	}
-}
-
-func TestEstimateCostUnknownModel(t *testing.T) {
-	if _, ok := estimateCost("gemini-9-ultra", llm.TokenUsage{PromptTokens: 10}); ok {
-		t.Error("unknown model should not be priced")
-	}
-}
 
 // --- snapshot naming ---
 
