@@ -44,8 +44,8 @@ type Variant int
 
 const (
 	VariantEvocative Variant = iota // metaphors, classical words, sensation/mood
-	VariantWordplay                  // domain hacks, TLD structural cleverness
-	VariantCrafted                   // compounds of two ordinary words grounded in the concept
+	VariantWordplay                 // domain hacks, TLD structural cleverness
+	VariantCrafted                  // compounds of two ordinary words grounded in the concept
 )
 
 // variantInstruction returns a focus instruction appended to the user message.
@@ -73,6 +73,12 @@ func VariantInstructions() []string {
 	return out
 }
 
+// overRequestFactor is how many names to ask for per name returned. The
+// surplus absorbs names lost to SLD dedup, TLD validation and cross-batch
+// duplicates. Measured yield is ~68-71% of requested names, so 2x leaves
+// room while keeping output tokens — the main driver of latency — down.
+const overRequestFactor = 2
+
 // BuildRequest constructs the user message for a suggestion request.
 // rawInput is the original user input (for fallback path).
 // tokens is the parsed token list (empty on fallback path).
@@ -80,8 +86,7 @@ func VariantInstructions() []string {
 func BuildRequest(rawInput string, tokens []string, tlds []string, count int, unavailable, inspireFrom []string) (system, user string) {
 	system = SystemPrompt
 
-	// over-request by 3× to absorb SLD-dedup and TLD-validation losses
-	requestCount := int(math.Ceil(float64(count) * 3))
+	requestCount := int(math.Ceil(float64(count) * overRequestFactor))
 	tldList := strings.Join(tlds, ", ")
 
 	var msg string
@@ -132,7 +137,7 @@ func BuildRequest(rawInput string, tokens []string, tlds []string, count int, un
 // BuildRetryRequest builds a retry user message that calls out hallucinated TLDs.
 func BuildRetryRequest(rawInput string, tokens []string, tlds []string, count int, badTLDs []string) (system, user string) {
 	system = SystemPrompt
-	requestCount := int(math.Ceil(float64(count) * 3))
+	requestCount := int(math.Ceil(float64(count) * overRequestFactor))
 	tldList := strings.Join(tlds, ", ")
 
 	var context string

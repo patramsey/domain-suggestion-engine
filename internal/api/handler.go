@@ -251,11 +251,11 @@ func (h *Handler) handleSuggest(w http.ResponseWriter, r *http.Request) {
 	afterMerge := len(merged)
 
 	// 9. Score
-	scored := scorer.Rank(merged, tokens)
+	ranked := scorer.Rank(merged, tokens)
 
 	// 10. TLD diversity cap applied to the full pool before tier-selection,
 	//     so tierBalance can find non-homogeneous candidates.
-	scored = diversityCap(scored, req.Count)
+	scored := diversityCap(ranked, req.Count)
 	afterDiversityCap := len(scored)
 
 	// 11. Tier balance: 60/40 LLM/algo split
@@ -273,8 +273,12 @@ func (h *Handler) handleSuggest(w http.ResponseWriter, r *http.Request) {
 
 	// 13. Filter unavailable domains
 	if len(unavailable) > 0 {
+		ranked = filterUnavailable(ranked, unavailable)
 		final = filterUnavailable(final, unavailable)
 	}
+
+	// 13b. Top up from the pre-cap pool if the cap left the result short.
+	final = backfillToCount(final, ranked, req.Count)
 
 	// 14. Reserve slots for very common single words: great names that are
 	//     usually taken, ranked by quality instead of being demoted out.

@@ -91,7 +91,7 @@ Input (keywords, description, or existing domain like "patspizza.com")
   ▼
 Parser — tokenises, strips stopwords, extracts the SLD from existing domains
   │
-  ├─── LLM tier ──────────────────────────────────────────── ~1.6s
+  ├─── LLM tier ──────────────────────────────────────────── ~1.25s
   │    Three parallel Gemini 3.5 Flash-Lite calls, each with a different
   │    creative brief to maximise variety:
   │
@@ -115,7 +115,7 @@ Score + rank (four quality signals, minus an availability penalty)
 Tier balance (default 60% LLM / 40% algorithmic) + 25% per-TLD diversity cap
   │
   ▼
-Remove unavailable_domains
+Remove unavailable_domains, top up if the cap left the list short
   │
   ▼
 Reserve 2 of every 10 results for very common single words, return the top N
@@ -131,8 +131,8 @@ Reserve 2 of every 10 results for very common single words, return the top N
 
 | | |
 |---|---|
-| Latency | ~1.6s median, ~1.8s p95 (measured at 5 concurrent requests) |
-| Cost per request | ~$0.004 at Gemini paid-tier prices |
+| Latency | ~1.25s median, ~1.45s p95 (measured at 5 concurrent requests) |
+| Cost per request | ~$0.003 at Gemini paid-tier prices |
 | LLM model | `gemini-3.5-flash-lite` (override with `GEMINI_MODEL`) |
 | Throughput | Bounded by your Gemini rate limits |
 
@@ -229,7 +229,7 @@ Add `?debug=true` to include `tlds_used` and `active_generators` in the response
 }
 ```
 
-`source` is `llm` or `algorithmic`. Results come in blocks of 10, each sorted by score; each block holds at most 2 very common single words (see [Common-word slots](#common-word-slots)). `partial: true` means only one tier contributed (for example, the LLM call failed, or the input was all stopwords).
+`source` is `llm` or `algorithmic`. A response holds `count` names whenever the tiers produce enough; the per-TLD diversity cap never shortens it (with a narrow `tld_filter`, results concentrate in the TLDs you asked for). Results come in blocks of 10, each sorted by score; each block holds at most 2 very common single words (see [Common-word slots](#common-word-slots)). `partial: true` means only one tier contributed (for example, the LLM call failed, or the input was all stopwords).
 
 **Errors** are returned as `{"error": "...", "code": "..."}`:
 

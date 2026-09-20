@@ -449,3 +449,19 @@ Very common single words (SCOWL ≤ 20) are strong names the user wants to see e
 | Common words registrable | 1 / 17 | 12 / 101 | — |
 
 Cost: about 2 registrable names per 20 results, as expected from swapping in words that are ~12% registrable. The full response stays near 3.1's level (44% top 20) while every page of 10 shows 2 strong common words.
+
+### Over-request factor 3× → 2× — 2026-09-20
+
+The LLM was asked for 3 names per name returned, sized when yield was low. Yield is now ~70%, so the surplus was mostly wasted output tokens — and output is both the largest cost (2.50/M vs 0.30/M input) and the main driver of latency. Three same-day runs of all 24 queries each:
+
+| Over-request | p50 | p90 | Cost / query | Kept / query | DNS free, top 10 / top 20 |
+|---|---|---|---|---|---|
+| 3× | 1594 ms | 1759 ms | $0.00374 | 43 | 61.7% / 59.0% |
+| 2.5× | 1442 ms | 1684 ms | $0.00344 | 37 | 62.0% / 56.8% |
+| **2× (shipped)** | **1209 ms** | **1340 ms** | **$0.00288** | 29 | 57.2% / 54.1% |
+
+**Blind rating round 7** (50 top-10 names per arm, seed 7): 3× 38/50 good (76%), 9 okay, 3 bad; 2× **42/50 good (84%)**, 8 okay, 0 bad (Fisher p = 0.45 — a tie, and no drop). Deterministic metrics unchanged: typo ~5%, compound ~39%.
+
+At 2× the smaller pool left 2 of 28 requests short of `count` after the TLD diversity cap, so the handler now tops up from the pre-cap ranked pool (`backfillToCount`). Server checks after that fix: 32/32 requests, every response full at 20 names, load n=200 c=5 p50 / p95 / p99 = 1241 / 1467 / 1717 ms (3×: 1639 / 1847 / 2135 ms). The top-up also fixes narrow `tld_filter` requests, which the cap had limited to 10 names.
+
+Availability may be 3–5 points lower than at 3× (per-run spread is 52–65%, so this is within noise). Worth re-checking against a registrar if the top-20 registrable share matters more than the 400 ms.
