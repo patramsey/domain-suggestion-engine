@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -8,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/patlivet/domain-suggestion-engine/internal/algorithmic"
+	"github.com/patlivet/domain-suggestion-engine/internal/dnscheck"
 	"github.com/patlivet/domain-suggestion-engine/internal/scorer"
 )
 
@@ -515,6 +517,37 @@ func TestTierBalanceSortsCorrectly(t *testing.T) {
 	for i := 1; i < len(out); i++ {
 		if out[i].Score > out[i-1].Score {
 			t.Errorf("tierBalance output not sorted descending: %v > %v", out[i].Score, out[i-1].Score)
+		}
+	}
+}
+
+func TestCheckAvailabilityFlagDisabledByDefault(t *testing.T) {
+	h := newTestHandler(t)
+	h.dnsLookup = func(ctx context.Context, name string) dnscheck.Outcome {
+		return dnscheck.Free
+	}
+	w := post(h, `{"input":"coffee shop"}`, "")
+	var resp SuggestResponse
+	json.Unmarshal(w.Body.Bytes(), &resp)
+	if len(resp.Suggestions) > 0 && resp.Suggestions[0].Available != nil {
+		t.Error("expected available field to be nil when check_availability is false")
+	}
+}
+
+func TestCheckAvailabilityFlagEnabled(t *testing.T) {
+	h := newTestHandler(t)
+	h.dnsLookup = func(ctx context.Context, name string) dnscheck.Outcome {
+		return dnscheck.Free
+	}
+	w := post(h, `{"input":"coffee shop", "check_availability": true}`, "")
+	var resp SuggestResponse
+	json.Unmarshal(w.Body.Bytes(), &resp)
+	if len(resp.Suggestions) > 0 {
+		if resp.Suggestions[0].Available == nil {
+			t.Fatal("expected available field to be non-nil when check_availability is true")
+		}
+		if !*resp.Suggestions[0].Available {
+			t.Errorf("expected available to be true, got %v", *resp.Suggestions[0].Available)
 		}
 	}
 }

@@ -34,8 +34,8 @@ func New(maxSize int, ttl time.Duration) (*Cache, error) {
 	return &Cache{lru: l, ttl: ttl}, nil
 }
 
-// Key builds a cache key from the normalized input, count, debug flag, TLD filter, unavailable domains, and inspire_from list.
-func Key(input string, count int, debug bool, tlds, unavailable, inspireFrom []string) string {
+// Key builds a cache key from the normalized input, count, debug flag, checkAvailability flag, TLD filter, unavailable domains, and inspire_from list.
+func Key(input string, count int, debug, checkAvailability bool, tlds, unavailable, inspireFrom []string) string {
 	normalized := strings.ToLower(strings.TrimSpace(input))
 	sorted := make([]string, len(tlds))
 	copy(sorted, tlds)
@@ -50,8 +50,12 @@ func Key(input string, count int, debug bool, tlds, unavailable, inspireFrom []s
 	if debug {
 		debugStr = "1"
 	}
-	raw := fmt.Sprintf("%s\x00%d\x00%s\x00%s\x00%s\x00%s",
-		normalized, count, debugStr,
+	availStr := "0"
+	if checkAvailability {
+		availStr = "1"
+	}
+	raw := fmt.Sprintf("%s\x00%d\x00%s\x00%s\x00%s\x00%s\x00%s",
+		normalized, count, debugStr, availStr,
 		strings.Join(sorted, ","),
 		strings.Join(unavailSorted, ","),
 		strings.Join(inspireSorted, ","),

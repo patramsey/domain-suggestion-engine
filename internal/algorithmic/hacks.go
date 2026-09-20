@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-var sldRe = regexp.MustCompile(`^[a-z]{2,14}$`)
+var sldRe = regexp.MustCompile(`^[a-z]{2,20}$`)
 
 // HacksGenerator finds domain hacks: tokens whose suffix matches a TLD.
 // e.g. "coffee" ends with "ee" → "coff.ee"; "studio" ends with "io" → "stud.io"

@@ -31,9 +31,11 @@ func main() {
 		LLMShare:         envFloat("LLM_SHARE", 0.60),
 		CommonWordSlots:  envInt("COMMON_WORD_SLOTS", 2),
 		AlgoEnabled:      envBool("ALGO_ENABLED", true),
-		ActiveGenerators: envStrings("GENERATORS", "hacks,exact"),
-		AllGenerators:    []string{"hacks", "exact"},
-		Version:          version,
+		ActiveGenerators:  envStrings("GENERATORS", "hacks,exact,compounds,affixes"),
+		AllGenerators:     []string{"hacks", "exact", "compounds", "affixes"},
+		CheckAvailability: envBool("CHECK_AVAILABILITY", false),
+		DNSResolverAddr:   envString("DNS_RESOLVER", "1.1.1.1:53"),
+		Version:           version,
 		BuiltAt:          builtAt,
 	}
 

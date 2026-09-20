@@ -10,15 +10,19 @@ func TestKeyDistinguishesCountAndDebug(t *testing.T) {
 	unavail := []string{"foo.com"}
 	inspire := []string{"bar.com"}
 
-	k1 := Key("coffee", 10, false, tlds, unavail, inspire)
-	k2 := Key("coffee", 20, false, tlds, unavail, inspire)
-	k3 := Key("coffee", 10, true, tlds, unavail, inspire)
+	k1 := Key("coffee", 10, false, false, tlds, unavail, inspire)
+	k2 := Key("coffee", 20, false, false, tlds, unavail, inspire)
+	k3 := Key("coffee", 10, true, false, tlds, unavail, inspire)
+	k4 := Key("coffee", 10, false, true, tlds, unavail, inspire)
 
 	if k1 == k2 {
 		t.Error("cache keys with different count should not collide")
 	}
 	if k1 == k3 {
 		t.Error("cache keys with different debug flag should not collide")
+	}
+	if k1 == k4 {
+		t.Error("cache keys with different checkAvailability flag should not collide")
 	}
 }
 

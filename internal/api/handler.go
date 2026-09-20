@@ -13,6 +13,7 @@ import (
 
 	"github.com/patlivet/domain-suggestion-engine/internal/algorithmic"
 	"github.com/patlivet/domain-suggestion-engine/internal/cache"
+	"github.com/patlivet/domain-suggestion-engine/internal/dnscheck"
 	"github.com/patlivet/domain-suggestion-engine/internal/llm"
 	"github.com/patlivet/domain-suggestion-engine/internal/parser"
 	"github.com/patlivet/domain-suggestion-engine/internal/scorer"
@@ -27,25 +28,28 @@ const maxInspireFrom = 5
 
 // Config holds all runtime configuration for the handler.
 type Config struct {
-	GeminiAPIKey     string
-	GeminiModel      string
-	CacheSize        int
-	LLMShare         float64
-	CommonWordSlots  int // results per 10 reserved for very common single words; 0 disables
-	AlgoEnabled      bool
-	ActiveGenerators []string
-	AllGenerators    []string
-	Version          string
-	BuiltAt          string
+	GeminiAPIKey      string
+	GeminiModel       string
+	CacheSize         int
+	LLMShare          float64
+	CommonWordSlots   int // results per 10 reserved for very common single words; 0 disables
+	AlgoEnabled       bool
+	ActiveGenerators  []string
+	AllGenerators     []string
+	CheckAvailability bool // check DNS availability for returned names; default false
+	DNSResolverAddr   string
+	Version           string
+	BuiltAt           string
 }
 
 // Handler handles all API routes.
 type Handler struct {
-	cfg      Config
-	engine   *algorithmic.Engine
-	llm      *llm.Client
-	cache    *cache.Cache
-	icannSet map[string]struct{} // cached once at init, safe for concurrent read
+	cfg       Config
+	engine    *algorithmic.Engine
+	llm       *llm.Client
+	cache     *cache.Cache
+	icannSet  map[string]struct{} // cached once at init, safe for concurrent read
+	dnsLookup dnscheck.Lookup
 }
 
 // NewHandler wires all components together from the given config.
@@ -70,12 +74,18 @@ func NewHandler(cfg Config) (*Handler, error) {
 		}
 	}
 
+	resolverAddr := cfg.DNSResolverAddr
+	if resolverAddr == "" {
+		resolverAddr = "1.1.1.1:53"
+	}
+
 	return &Handler{
-		cfg:      cfg,
-		engine:   engine,
-		llm:      llmClient,
-		cache:    c,
-		icannSet: tlds.DefaultRegistry.ICANNSet(),
+		cfg:       cfg,
+		engine:    engine,
+		llm:       llmClient,
+		cache:     c,
+		icannSet:  tlds.DefaultRegistry.ICANNSet(),
+		dnsLookup: dnscheck.Resolver(resolverAddr),
 	}, nil
 }
 
@@ -168,7 +178,8 @@ func (h *Handler) handleSuggest(w http.ResponseWriter, r *http.Request) {
 	// 3. Normalize unavailable/inspire lists and check cache
 	unavailable := normalizeUnavailable(req.UnavailableDomains)
 	inspireFrom := normalizeUnavailable(req.InspireFrom) // same normalization: lowercase + dedupe
-	cacheKey := cache.Key(req.Input, req.Count, debug, resolvedTLDs, unavailable, inspireFrom)
+	checkAvail := req.CheckAvailability || h.cfg.CheckAvailability
+	cacheKey := cache.Key(req.Input, req.Count, debug, checkAvail, resolvedTLDs, unavailable, inspireFrom)
 	if cached, ok := h.cacheGet(cacheKey); ok {
 		w.Header().Set("Content-Type", "application/json")
 		w.Header().Set("Age", "1")
@@ -324,6 +335,26 @@ func (h *Handler) handleSuggest(w http.ResponseWriter, r *http.Request) {
 			TLD:    sc.TLD,
 			Score:  sc.Score,
 			Source: sc.Source,
+		}
+	}
+
+	if checkAvail && len(suggestions) > 0 {
+		names := make([]string, len(suggestions))
+		for i, s := range suggestions {
+			names[i] = s.Name
+		}
+		outcomes := dnscheck.CheckAll(r.Context(), names, h.dnsLookup, 10)
+		for i, s := range suggestions {
+			if o, ok := outcomes[s.Name]; ok {
+				switch o {
+				case dnscheck.Free:
+					avail := true
+					suggestions[i].Available = &avail
+				case dnscheck.Delegated:
+					avail := false
+					suggestions[i].Available = &avail
+				}
+			}
 		}
 	}
 	resp := SuggestResponse{
