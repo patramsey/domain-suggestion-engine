@@ -183,26 +183,54 @@ func memorability(sld string) float64 {
 	return float64(matched) / float64(n)
 }
 
-// ConceptRelevance returns the GloVe relevance of sld to the query tokens,
-// in [0.1, 1.0]. ok is false when it cannot be computed: no tokens, or no
-// recognisable English sub-words in sld or in the tokens.
+// ConceptRelevance returns the semantic relevance of sld to the query tokens,
+// in [0.1, 1.0]. ok is false when it cannot be computed (e.g. no tokens or no
+// recognizable subwords).
+//
+// Hybrid Architecture:
+// 1. Attempts exact GloVe subword lookup on the SLD and query tokens.
+// 2. If any part cannot be resolved (coined brand names, neologisms, or OOV
+//    query tokens), it falls back to FastText quantized subword character
+//    n-grams to compute embeddings in the same coordinate space.
 func ConceptRelevance(sld string, tokens []string) (float64, bool) {
 	if len(tokens) == 0 {
 		return 0, false
 	}
-	sldVec, ok := avgVec(subWords(sld))
-	if !ok {
-		return 0, false
+	sw := subWords(sld)
+	if len(sw) == 0 {
+		return 0.5, false
 	}
-	qVec, ok := avgVec(tokens)
-	if !ok {
-		return 0, false
+
+	sldVec, sldOK := avgVec(sw)
+	qVec, qOK := avgVec(tokens)
+	if sldOK && qOK {
+		cos := float64(cosine(sldVec, qVec))
+		return math.Max(0.1, math.Min(1.0, 0.5+cos*0.8)), true
 	}
-	cos := float64(cosine(sldVec, qVec))
-	// Typical cosine similarities for related words: 0.3–0.7.
-	// Scale so that cos=0.5 → score≈0.75, cos=0 → 0.5, cos<0 → below 0.5.
-	// Mapping: score = clamp(0.5 + cos*0.5, 0.1, 1.0)
-	return math.Max(0.1, math.Min(1.0, 0.5+cos*0.8)), true
+
+	if fasttext != nil {
+		var sVec, qvVec [gloveDims]float32
+		var sFound, qFound bool
+
+		if sldOK {
+			sVec, sFound = sldVec, true
+		} else {
+			sVec, sFound = fasttext.EmbedWord(sld)
+		}
+
+		if qOK {
+			qvVec, qFound = qVec, true
+		} else {
+			qvVec, qFound = fasttext.EmbedTokens(tokens)
+		}
+
+		if sFound && qFound {
+			cos := float64(cosine(sVec, qvVec))
+			return math.Max(0.1, math.Min(1.0, 0.5+cos*0.8)), true
+		}
+	}
+
+	return 0.5, false
 }
 
 // conceptRelevance is ConceptRelevance with a neutral 0.5 when relevance

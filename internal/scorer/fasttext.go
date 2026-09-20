@@ -1,10 +1,141 @@
 package scorer
 
 import (
+	"encoding/binary"
 	"fmt"
 	"math"
 	"strings"
 )
+
+// QuantizedFastText holds pre-trained quantized subword bucket vectors.
+type QuantizedFastText struct {
+	dims    int
+	minN    int
+	maxN    int
+	buckets int
+	scales  [gloveDims]float32
+	offs    [gloveDims]float32
+	vecs    [][gloveDims]int8
+}
+
+var fasttext *QuantizedFastText
+
+func init() {
+	var err error
+	fasttext, err = decodeFastText(fasttextBin)
+	if err != nil {
+		panic(fmt.Sprintf("scorer: decode FastText: %v", err))
+	}
+}
+
+func decodeFastText(data []byte) (*QuantizedFastText, error) {
+	if len(data) < 12 || string(data[:4]) != "FSTX" || data[4] != 1 {
+		return nil, fmt.Errorf("invalid FastText binary header")
+	}
+	d := data[5:]
+	fileDims := int(d[0])
+	if fileDims != gloveDims {
+		return nil, fmt.Errorf("expected %d dims, got %d", gloveDims, fileDims)
+	}
+	minN := int(d[1])
+	maxN := int(d[2])
+	d = d[3:]
+
+	buckets := int(binary.LittleEndian.Uint32(d[:4]))
+	d = d[4:]
+
+	floatBytes := gloveDims * 4
+	if len(d) < floatBytes*2+buckets*gloveDims {
+		return nil, fmt.Errorf("truncated FastText binary")
+	}
+
+	var scales, offs [gloveDims]float32
+	for i := range scales {
+		scales[i] = math.Float32frombits(binary.LittleEndian.Uint32(d[i*4:]))
+	}
+	d = d[floatBytes:]
+	for i := range offs {
+		offs[i] = math.Float32frombits(binary.LittleEndian.Uint32(d[i*4:]))
+	}
+	d = d[floatBytes:]
+
+	vecs := make([][gloveDims]int8, buckets)
+	for b := 0; b < buckets; b++ {
+		for j := 0; j < gloveDims; j++ {
+			vecs[b][j] = int8(d[j])
+		}
+		d = d[gloveDims:]
+	}
+
+	return &QuantizedFastText{
+		dims:    gloveDims,
+		minN:    minN,
+		maxN:    maxN,
+		buckets: buckets,
+		scales:  scales,
+		offs:    offs,
+		vecs:    vecs,
+	}, nil
+}
+
+// EmbedWord decomposes a word into character n-grams and computes its unit-normalized embedding.
+func (m *QuantizedFastText) EmbedWord(word string) ([gloveDims]float32, bool) {
+	grams := ExtractNGrams(word, m.minN, m.maxN)
+	if len(grams) == 0 {
+		return [gloveDims]float32{}, false
+	}
+	var sum [gloveDims]float32
+	for _, g := range grams {
+		b := HashNGram(g, m.buckets)
+		q := m.vecs[b]
+		for d := 0; d < gloveDims; d++ {
+			sum[d] += float32(int(q[d])+127)*m.scales[d] + m.offs[d]
+		}
+	}
+	var norm float32
+	for _, v := range sum {
+		norm += v * v
+	}
+	if norm == 0 {
+		return [gloveDims]float32{}, false
+	}
+	inv := float32(1.0 / math.Sqrt(float64(norm)))
+	for d := range sum {
+		sum[d] *= inv
+	}
+	return sum, true
+}
+
+// EmbedTokens computes the unit-normalized mean embedding for multiple tokens.
+func (m *QuantizedFastText) EmbedTokens(tokens []string) ([gloveDims]float32, bool) {
+	var sum [gloveDims]float32
+	n := 0
+	for _, tok := range tokens {
+		v, ok := m.EmbedWord(tok)
+		if !ok {
+			continue
+		}
+		for d := range sum {
+			sum[d] += v[d]
+		}
+		n++
+	}
+	if n == 0 {
+		return [gloveDims]float32{}, false
+	}
+	var norm float32
+	for _, v := range sum {
+		norm += v * v
+	}
+	if norm == 0 {
+		return [gloveDims]float32{}, false
+	}
+	inv := float32(1.0 / math.Sqrt(float64(norm)))
+	for d := range sum {
+		sum[d] *= inv
+	}
+	return sum, true
+}
 
 // SubwordModel provides character n-gram subword embeddings (FastText architecture).
 // Unlike GloVe, which only represents exact dictionary words and falls back to neutral

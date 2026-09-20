@@ -62,3 +62,47 @@ func TestCosineSimilarityOrthogonalAndIdentical(t *testing.T) {
 		t.Errorf("expected 0.5 for orthogonal vectors, got %f", sim)
 	}
 }
+
+func TestQuantizedFastTextLoaded(t *testing.T) {
+	if fasttext == nil {
+		t.Fatal("expected fasttext model to be loaded via init")
+	}
+	if fasttext.buckets != 65536 {
+		t.Errorf("expected 65536 buckets, got %d", fasttext.buckets)
+	}
+}
+
+func TestQuantizedFastTextSemanticCoherence(t *testing.T) {
+	if fasttext == nil {
+		t.Skip("fasttext model not initialized")
+	}
+	vTechify, ok1 := fasttext.EmbedWord("techify")
+	vTech, ok2 := fasttext.EmbedWord("technology")
+	vBanana, ok3 := fasttext.EmbedWord("banana")
+
+	if !ok1 || !ok2 || !ok3 {
+		t.Fatalf("EmbedWord failed: ok1=%v, ok2=%v, ok3=%v", ok1, ok2, ok3)
+	}
+
+	cosTech := cosine(vTechify, vTech)
+	cosBanana := cosine(vTechify, vBanana)
+
+	if cosTech <= cosBanana {
+		t.Errorf("expected techify to be closer to technology (%f) than banana (%f)", cosTech, cosBanana)
+	}
+}
+
+func TestConceptRelevanceFastTextEnrichment(t *testing.T) {
+	// "techify" has subword "tech" but is a coined word not in GloVe vocab.
+	// ConceptRelevance should compute a higher score for "technology" than "banana".
+	relTech, okTech := ConceptRelevance("techify", []string{"technology"})
+	relBanana, okBanana := ConceptRelevance("techify", []string{"banana"})
+
+	if !okTech || !okBanana {
+		t.Fatalf("expected ConceptRelevance to succeed for techify: okTech=%v, okBanana=%v", okTech, okBanana)
+	}
+	if relTech <= relBanana {
+		t.Errorf("expected ConceptRelevance(techify, technology) (%f) > ConceptRelevance(techify, banana) (%f)", relTech, relBanana)
+	}
+}
+
