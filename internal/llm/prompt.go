@@ -48,6 +48,72 @@ const (
 	VariantCrafted                  // compounds of two ordinary words grounded in the concept
 )
 
+func (v Variant) String() string {
+	switch v {
+	case VariantEvocative:
+		return "evocative"
+	case VariantWordplay:
+		return "wordplay"
+	case VariantCrafted:
+		return "crafted"
+	default:
+		return fmt.Sprintf("variant-%d", int(v))
+	}
+}
+
+// ParseVariant parses a single variant name.
+func ParseVariant(s string) (Variant, error) {
+	switch strings.ToLower(strings.TrimSpace(s)) {
+	case "evocative", "0":
+		return VariantEvocative, nil
+	case "wordplay", "1":
+		return VariantWordplay, nil
+	case "crafted", "2":
+		return VariantCrafted, nil
+	default:
+		return 0, fmt.Errorf("unknown variant %q: want evocative, wordplay, or crafted", s)
+	}
+}
+
+// ParseVariants parses a list of variant names or counts.
+// Formats:
+//   "1" -> [VariantEvocative]
+//   "2" -> [VariantEvocative, VariantWordplay]
+//   "3" or "all" -> [VariantEvocative, VariantWordplay, VariantCrafted]
+//   "evocative,crafted" -> [VariantEvocative, VariantCrafted]
+func ParseVariants(s string) ([]Variant, error) {
+	s = strings.TrimSpace(s)
+	switch s {
+	case "", "all", "3":
+		return []Variant{VariantEvocative, VariantWordplay, VariantCrafted}, nil
+	case "1":
+		return []Variant{VariantEvocative}, nil
+	case "2":
+		return []Variant{VariantEvocative, VariantWordplay}, nil
+	}
+	parts := strings.Split(s, ",")
+	seen := make(map[Variant]struct{}, len(parts))
+	var out []Variant
+	for _, p := range parts {
+		p = strings.TrimSpace(p)
+		if p == "" {
+			continue
+		}
+		v, err := ParseVariant(p)
+		if err != nil {
+			return nil, err
+		}
+		if _, dup := seen[v]; !dup {
+			seen[v] = struct{}{}
+			out = append(out, v)
+		}
+	}
+	if len(out) == 0 {
+		return []Variant{VariantEvocative, VariantWordplay, VariantCrafted}, nil
+	}
+	return out, nil
+}
+
 // variantInstruction returns a focus instruction appended to the user message.
 func variantInstruction(v Variant) string {
 	switch v {

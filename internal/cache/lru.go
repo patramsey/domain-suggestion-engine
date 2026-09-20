@@ -34,8 +34,8 @@ func New(maxSize int, ttl time.Duration) (*Cache, error) {
 	return &Cache{lru: l, ttl: ttl}, nil
 }
 
-// Key builds a cache key from the normalized input, count, debug flag, checkAvailability flag, TLD filter, unavailable domains, and inspire_from list.
-func Key(input string, count int, debug, checkAvailability bool, tlds, unavailable, inspireFrom []string) string {
+// Key builds a cache key from the normalized input, count, debug flag, checkAvailability flag, TLD filter, unavailable domains, inspire_from list, and active variants.
+func Key(input string, count int, debug, checkAvailability bool, tlds, unavailable, inspireFrom, variants []string) string {
 	normalized := strings.ToLower(strings.TrimSpace(input))
 	sorted := make([]string, len(tlds))
 	copy(sorted, tlds)
@@ -46,6 +46,9 @@ func Key(input string, count int, debug, checkAvailability bool, tlds, unavailab
 	inspireSorted := make([]string, len(inspireFrom))
 	copy(inspireSorted, inspireFrom)
 	sort.Strings(inspireSorted)
+	varsSorted := make([]string, len(variants))
+	copy(varsSorted, variants)
+	sort.Strings(varsSorted)
 	debugStr := "0"
 	if debug {
 		debugStr = "1"
@@ -54,11 +57,12 @@ func Key(input string, count int, debug, checkAvailability bool, tlds, unavailab
 	if checkAvailability {
 		availStr = "1"
 	}
-	raw := fmt.Sprintf("%s\x00%d\x00%s\x00%s\x00%s\x00%s\x00%s",
+	raw := fmt.Sprintf("%s\x00%d\x00%s\x00%s\x00%s\x00%s\x00%s\x00%s",
 		normalized, count, debugStr, availStr,
 		strings.Join(sorted, ","),
 		strings.Join(unavailSorted, ","),
 		strings.Join(inspireSorted, ","),
+		strings.Join(varsSorted, ","),
 	)
 	sum := sha256.Sum256([]byte(raw))
 	return fmt.Sprintf("%x", sum)

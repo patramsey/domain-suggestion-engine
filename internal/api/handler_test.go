@@ -230,6 +230,9 @@ func TestConfigEndpoint(t *testing.T) {
 	if resp.Build.Version != "test" {
 		t.Errorf("unexpected version: %s", resp.Build.Version)
 	}
+	if len(resp.LLM.Variants) == 0 {
+		t.Error("llm variants should be non-empty")
+	}
 }
 
 func TestConfigNeverExposesAPIKey(t *testing.T) {
@@ -628,4 +631,31 @@ func TestStreamSuggestViaAcceptHeader(t *testing.T) {
 		t.Errorf("unexpected body format: %s", body)
 	}
 }
+
+func TestConfigCustomLLMVariants(t *testing.T) {
+	cfg := Config{
+		GeminiAPIKey: "test-key",
+		GeminiModel:  "test-model",
+		LLMVariants:  []string{"evocative"},
+	}
+	h, err := NewHandler(cfg)
+	if err != nil {
+		t.Fatalf("NewHandler: %v", err)
+	}
+	w := get(h, "/config")
+	var resp ConfigResponse
+	json.Unmarshal(w.Body.Bytes(), &resp)
+	if len(resp.LLM.Variants) != 1 || resp.LLM.Variants[0] != "evocative" {
+		t.Errorf("expected variants ['evocative'], got %v", resp.LLM.Variants)
+	}
+}
+
+func TestSuggestRequestInvalidVariants(t *testing.T) {
+	h := newTestHandler(t)
+	w := post(h, `{"input":"coffee shop","variants":["bad_variant"]}`, "")
+	if w.Code != http.StatusBadRequest {
+		t.Errorf("want 400 for invalid variants, got %d", w.Code)
+	}
+}
+
 
