@@ -36,8 +36,10 @@ func main() {
 		LLMVariants:       envStrings("LLM_VARIANTS", "evocative,wordplay,crafted"),
 		CheckAvailability: envBool("CHECK_AVAILABILITY", false),
 		DNSResolverAddr:   envString("DNS_RESOLVER", "1.1.1.1:53"),
+		DNSCacheSize:      envInt("DNS_CACHE_SIZE", 5000),
+		DNSCacheTTL:       envDuration("DNS_CACHE_TTL", 1*time.Hour),
 		Version:           version,
-		BuiltAt:          builtAt,
+		BuiltAt:           builtAt,
 	}
 
 	handler, err := api.NewHandler(cfg)
@@ -129,4 +131,13 @@ func envStrings(key, def string) []string {
 		}
 	}
 	return out
+}
+
+func envDuration(key string, def time.Duration) time.Duration {
+	if v := os.Getenv(key); v != "" {
+		if d, err := time.ParseDuration(v); err == nil {
+			return d
+		}
+	}
+	return def
 }
