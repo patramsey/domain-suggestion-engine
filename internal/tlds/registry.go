@@ -79,16 +79,19 @@ func (r *Registry) Resolve(f Filter) ([]string, error) {
 	}
 	// explicit list — validate each entry
 	var unknown []string
+	normalized := make([]string, 0, len(f.List))
 	for _, tld := range f.List {
-		tld = strings.ToLower(strings.TrimPrefix(tld, "."))
-		if _, ok := r.icann[tld]; !ok {
-			unknown = append(unknown, tld)
+		norm := strings.ToLower(strings.TrimPrefix(strings.TrimSpace(tld), "."))
+		if _, ok := r.icann[norm]; !ok {
+			unknown = append(unknown, norm)
+		} else {
+			normalized = append(normalized, norm)
 		}
 	}
 	if len(unknown) > 0 {
 		return nil, &UnknownTLDError{TLDs: unknown}
 	}
-	return dedupeStrings(f.List), nil
+	return dedupeStrings(normalized), nil
 }
 
 // CategoryNames returns all available category names.

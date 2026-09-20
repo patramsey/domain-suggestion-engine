@@ -143,7 +143,9 @@ func TestOverRequestMatchesBuildRequest(t *testing.T) {
 // --- PromptFingerprint ---
 
 func TestPromptFingerprintStable(t *testing.T) {
-	if PromptFingerprint(SystemPrompt, nil) != PromptFingerprint(SystemPrompt, nil) {
+	fp1 := PromptFingerprint(SystemPrompt, nil)
+	fp2 := PromptFingerprint(SystemPrompt, nil)
+	if fp1 != fp2 {
 		t.Error("fingerprint not deterministic")
 	}
 }

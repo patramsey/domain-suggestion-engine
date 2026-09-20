@@ -118,6 +118,16 @@ func TestExplicitListValid(t *testing.T) {
 	}
 }
 
+func TestExplicitListNormalizes(t *testing.T) {
+	tlds, err := Resolve(Filter{List: []string{".COM", " Io ", "com"}})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if len(tlds) != 2 || tlds[0] != "com" || tlds[1] != "io" {
+		t.Errorf("got %v, want [com, io]", tlds)
+	}
+}
+
 func TestExplicitListUnknownTLD(t *testing.T) {
 	_, err := Resolve(Filter{List: []string{"com", "fakemadeuptld999"}})
 	if err == nil {

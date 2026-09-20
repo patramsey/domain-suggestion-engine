@@ -16,6 +16,7 @@ import (
 	"time"
 
 	"github.com/patlivet/domain-suggestion-engine/internal/algorithmic"
+	"github.com/patlivet/domain-suggestion-engine/internal/wordlist"
 )
 
 const geminiBase = "https://generativelanguage.googleapis.com/v1beta/models/"
@@ -188,11 +189,11 @@ func (c *Client) Generate(ctx context.Context, rawInput string, tokens []string,
 		return nil, totalUsage, fmt.Errorf("all llm variants failed")
 	}
 
-	// retry once if >50% of merged pairs are invalid (hallucinated TLDs)
+	// retry once if >50% of merged pairs are invalid
 	_, invalid := parseAndValidate(allPairs, tldSet)
 	if len(allPairs) > 0 && float64(len(invalid))/float64(len(allPairs)) > 0.5 {
-		badTLDs := uniqueTLDs(invalid)
-		retrySystem, retryUser := BuildRetryRequest(rawInput, tokens, tlds, count, badTLDs)
+		badTLDs := hallucinatedTLDs(invalid, tldSet)
+		retrySystem, retryUser := BuildRetryRequest(rawInput, tokens, tlds, count, badTLDs, unavailable, inspireFrom)
 		retry, retryErr := c.call(ctx, retrySystem, retryUser)
 		totalUsage = totalUsage.add(retry.usage)
 		if retryErr == nil {
@@ -502,15 +503,19 @@ func findFirstJSONArray(s string) string {
 
 var sldRe = regexp.MustCompile(`^[a-z]{3,14}$`)
 
-const vowels = "aeiou"
+const vowels = "aeiouy"
 
 // looksLikeTruncation returns true for consonant-heavy strings that are likely
-// mid-word fragments ("crea", "agenc", "ind"). 3-char strings are exempt —
-// they're treated as abbreviations ("dns", "css", "crm") not truncations.
-// For lengths 4-6, requires at least 25% vowel ratio.
+// mid-word fragments ("crea", "agenc", "ind"). Real dictionary words are never
+// truncations. 3-char strings are exempt — they're treated as abbreviations
+// ("dns", "css", "crm") not truncations. For lengths 4-6 not in the dictionary,
+// requires at least 20% vowel ratio and at least one vowel.
 func looksLikeTruncation(s string) bool {
 	n := len(s)
 	if n > 6 || n <= 3 {
+		return false
+	}
+	if _, ok := wordlist.Level(s); ok {
 		return false
 	}
 	vowelCount := 0
@@ -519,7 +524,7 @@ func looksLikeTruncation(s string) bool {
 			vowelCount++
 		}
 	}
-	return vowelCount == 0 || float64(vowelCount)/float64(n) < 0.25
+	return vowelCount == 0 || float64(vowelCount)/float64(n) < 0.20
 }
 
 func parseAndValidate(pairs []rawPair, tldSet map[string]struct{}) (valid, invalid []rawPair) {
@@ -546,13 +551,15 @@ func rankedCandidates(perVariant [][]rawPair, tldSet map[string]struct{}) []algo
 	return out
 }
 
-func uniqueTLDs(pairs []rawPair) []string {
+func hallucinatedTLDs(pairs []rawPair, tldSet map[string]struct{}) []string {
 	seen := make(map[string]struct{})
 	var out []string
 	for _, p := range pairs {
-		if _, ok := seen[p.TLD]; !ok {
-			seen[p.TLD] = struct{}{}
-			out = append(out, p.TLD)
+		if _, allowed := tldSet[p.TLD]; !allowed {
+			if _, dup := seen[p.TLD]; !dup {
+				seen[p.TLD] = struct{}{}
+				out = append(out, p.TLD)
+			}
 		}
 	}
 	return out

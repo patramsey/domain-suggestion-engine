@@ -72,7 +72,11 @@ func reserveCommonWords(final, pool []scorer.ScoredCandidate, count, slotsPer10 
 			continue
 		}
 		if i := lowestReplaceable(out, c.Source); i >= 0 {
-			out[i] = c
+			// Only displace if the common word meets a quality threshold and is
+			// not significantly worse than the candidate it replaces.
+			if c.Score >= 0.50 && c.Score >= out[i].Score-0.15 {
+				out[i] = c
+			}
 		}
 	}
 	return layoutBlocks(out, slotsPer10)
