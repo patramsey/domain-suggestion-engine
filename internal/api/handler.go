@@ -168,7 +168,7 @@ func (h *Handler) handleSuggest(w http.ResponseWriter, r *http.Request) {
 	// 3. Normalize unavailable/inspire lists and check cache
 	unavailable := normalizeUnavailable(req.UnavailableDomains)
 	inspireFrom := normalizeUnavailable(req.InspireFrom) // same normalization: lowercase + dedupe
-	cacheKey := cache.Key(req.Input, resolvedTLDs, unavailable, inspireFrom)
+	cacheKey := cache.Key(req.Input, req.Count, debug, resolvedTLDs, unavailable, inspireFrom)
 	if cached, ok := h.cacheGet(cacheKey); ok {
 		w.Header().Set("Content-Type", "application/json")
 		w.Header().Set("Age", "1")
@@ -250,7 +250,7 @@ func (h *Handler) handleSuggest(w http.ResponseWriter, r *http.Request) {
 
 	// 10. TLD diversity cap applied to the full pool before tier-selection,
 	//     so tierBalance can find non-homogeneous candidates.
-	scored := diversityCap(ranked, req.Count)
+	scored := diversityCap(ranked, req.Count, len(resolvedTLDs))
 	afterDiversityCap := len(scored)
 
 	// 11. Tier balance: 60/40 LLM/algo split
@@ -508,21 +508,38 @@ func tierBalance(scored []scorer.ScoredCandidate, count int, llmShare float64) [
 	}
 
 	// re-sort by score
-	for i := 0; i < len(out); i++ {
-		for j := i + 1; j < len(out); j++ {
-			if out[j].Score > out[i].Score {
-				out[i], out[j] = out[j], out[i]
-			}
-		}
-	}
+	sort.SliceStable(out, func(i, j int) bool {
+		return out[i].Score > out[j].Score
+	})
 	return out
 }
 
-// diversityCap filters the candidate pool so no single TLD appears more than 30%
-// of the requested count. It operates on the full pool (before tier-selection) so
-// tierBalance has diverse candidates to choose from.
-func diversityCap(scored []scorer.ScoredCandidate, count int) []scorer.ScoredCandidate {
-	tldCap := max(1, int(math.Ceil(float64(count)*0.25)))
+// diversityCap filters the candidate pool so no single TLD appears more than 25%
+// of the requested count (when there are at least 4 TLDs available). It scales
+// the per-TLD cap when fewer TLDs are available so the candidate pool is not starved.
+func diversityCap(scored []scorer.ScoredCandidate, count int, numTLDs int) []scorer.ScoredCandidate {
+	if numTLDs <= 0 {
+		seenTLD := make(map[string]struct{})
+		for _, sc := range scored {
+			seenTLD[sc.TLD] = struct{}{}
+		}
+		numTLDs = len(seenTLD)
+	}
+	if numTLDs <= 1 {
+		return scored
+	}
+
+	var maxShare float64
+	switch numTLDs {
+	case 2:
+		maxShare = 0.75
+	case 3:
+		maxShare = 0.50
+	default:
+		maxShare = 0.25
+	}
+
+	tldCap := max(1, int(math.Ceil(float64(count)*maxShare)))
 	tldCount := make(map[string]int)
 	out := make([]scorer.ScoredCandidate, 0, len(scored))
 	for _, sc := range scored {

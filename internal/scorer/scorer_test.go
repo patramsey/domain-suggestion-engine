@@ -18,7 +18,7 @@ func TestKnownGoodNamesScoreHighly(t *testing.T) {
 		minScore float64
 		base   bool // true: assert baseScore (pre-availability-penalty), not the shipped Score
 	}{
-		{"studio", "io", []string{"studio"}, 0.65, false},
+		{"studio", "io", []string{"studio"}, 0.60, false},
 		// baseScore: "coffee" is SCOWL level 10 (≤ wordlist.CommonMaxLevel=20,
 		// −0.20) and .com has the lowest free rate in tldFreeRate (0.0645,
 		// −0.14 crowding) — the availability penalty intentionally drops this
@@ -148,26 +148,61 @@ func TestScoreInRange(t *testing.T) {
 // --- TLD premium ---
 
 func TestCCTLDScoresLowerThanCom(t *testing.T) {
-	com := tldPremium("com", nil)
-	cc := tldPremium("de", nil) // 2-char ccTLD, no semantic match
+	com := tldPremium("", "com", nil)
+	cc := tldPremium("", "de", nil) // 2-char ccTLD, no semantic match
 	if cc >= com {
 		t.Errorf(".de (%.3f) should score below .com (%.3f)", cc, com)
 	}
 }
 
 func TestWordTLDWithSemanticMatch(t *testing.T) {
-	noMatch := tldPremium("pizza", nil)
-	withMatch := tldPremium("pizza", []string{"pizza"})
+	noMatch := tldPremium("", "pizza", nil)
+	withMatch := tldPremium("", "pizza", []string{"pizza"})
 	if withMatch <= noMatch {
 		t.Errorf("semantic match on word TLD should boost score: no=%.3f with=%.3f", noMatch, withMatch)
 	}
 }
 
 func TestAiIoScoreHigherThanWordTLD(t *testing.T) {
-	ai := tldPremium("ai", nil)
-	word := tldPremium("pizza", nil)
+	ai := tldPremium("", "ai", nil)
+	word := tldPremium("", "pizza", nil)
 	if ai <= word {
 		t.Errorf(".ai (%.3f) should score higher than .pizza base (%.3f)", ai, word)
+	}
+}
+
+func TestDomainHackRequiresSLDMatch(t *testing.T) {
+	tokens := []string{"shoes"}
+	// sho.es forms "shoes" -> domain hack match
+	shoEs := tldPremium("sho", "es", tokens)
+	// boringcompany.es does not form "shoes" -> should not get domain hack boost
+	boringEs := tldPremium("boringcompany", "es", tokens)
+	baseEs := tldPremium("boringcompany", "es", nil)
+
+	if shoEs <= boringEs {
+		t.Errorf("sho.es (%.3f) should score higher than boringcompany.es (%.3f) for query 'shoes'", shoEs, boringEs)
+	}
+	if boringEs != baseEs {
+		t.Errorf("boringcompany.es (%.3f) should not get a boost over base (%.3f) for query 'shoes'", boringEs, baseEs)
+	}
+}
+
+func TestThreeLetterTLDPrefixMatch(t *testing.T) {
+	cases := []struct {
+		tld   string
+		token string
+		want  bool
+	}{
+		{"dev", "developer", true},
+		{"app", "application", true},
+		{"law", "lawyer", true},
+		{"art", "smart", false}, // "art" is not a prefix of "smart"
+	}
+	for _, tc := range cases {
+		got := semanticMatch("", tc.tld, []string{tc.token})
+		if got != tc.want {
+			t.Errorf("semanticMatch(\"\", %q, [%q]) = %v, want %v", tc.tld, tc.token, got, tc.want)
+		}
 	}
 }
 
@@ -222,6 +257,15 @@ func TestMemorabilityFullWord(t *testing.T) {
 	// Whole word recognised → coverage 1.0.
 	if m := memorability("coffee"); m != 1.0 {
 		t.Errorf("memorability(coffee) = %.2f, want 1.0", m)
+	}
+}
+
+func TestMemorabilityTwoLetterWord(t *testing.T) {
+	if m := memorability("ai"); m != 1.0 {
+		t.Errorf("memorability(ai) = %.2f, want 1.0", m)
+	}
+	if m := memorability("go"); m != 1.0 {
+		t.Errorf("memorability(go) = %.2f, want 1.0", m)
 	}
 }
 

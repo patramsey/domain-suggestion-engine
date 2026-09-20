@@ -62,7 +62,7 @@ func integrationSuggest(t *testing.T, input string, count int) []Suggestion {
 
 	merged := merge(llmCands, algoCands)
 	scored := scorer.Rank(merged, tokens)
-	scored = diversityCap(scored, count)
+	scored = diversityCap(scored, count, len(resolvedTLDs))
 	final := tierBalance(scored, count, 0.60)
 	final = sldDedup(final)
 	sort.Slice(final, func(i, j int) bool { return final[i].Score > final[j].Score })

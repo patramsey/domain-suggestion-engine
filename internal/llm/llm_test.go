@@ -33,9 +33,15 @@ func TestBuildRequestFallbackPath(t *testing.T) {
 }
 
 func TestBuildRetryIncludesBadTLDs(t *testing.T) {
-	_, user := BuildRetryRequest("coffee", []string{"coffee"}, []string{"com"}, 10, []string{"xyz", "fakeland"})
+	_, user := BuildRetryRequest("coffee", []string{"coffee"}, []string{"com"}, 10, []string{"xyz", "fakeland"}, []string{"taken.com"}, []string{"liked.io"})
 	if !strings.Contains(user, "xyz") || !strings.Contains(user, "fakeland") {
 		t.Errorf("retry prompt should name bad TLDs; got: %s", user)
+	}
+	if !strings.Contains(user, "taken.com") {
+		t.Errorf("retry prompt should include unavailable domains; got: %s", user)
+	}
+	if !strings.Contains(user, "liked.io") {
+		t.Errorf("retry prompt should include inspire_from domains; got: %s", user)
 	}
 }
 
@@ -178,6 +184,8 @@ func TestLooksLikeTruncationAllowsGoodShortWords(t *testing.T) {
 	// Good short words and valid abbreviations should not be flagged.
 	good := []string{
 		"lex", "rev", "arc", "hub", "dev", "app", "flux", "nova", "stud",
+		// 5- and 6-letter real words with single vowel or y
+		"craft", "brand", "smart", "fresh", "trend", "swift", "spring", "crypt",
 		// 3-char abbreviations are always allowed regardless of vowels
 		"dns", "css", "crm", "mkt", "sql",
 	}
@@ -231,6 +239,23 @@ func TestBuildRequestOverRequests(t *testing.T) {
 	_, user := BuildRequest("pizza", []string{"pizza"}, []string{"com"}, 10, nil, nil)
 	if want := fmt.Sprintf("Generate %d ", overRequest(10)); !strings.Contains(user, want) {
 		t.Errorf("should request %q; got: %s", want, user)
+	}
+}
+
+func TestBuildRequestNarrowTLDFilter(t *testing.T) {
+	// Single TLD: should not ask for multiple distinct TLDs or restrict to at most twice
+	_, user1 := BuildRequest("pizza", []string{"pizza"}, []string{"com"}, 10, nil, nil)
+	if strings.Contains(user1, "distinct TLDs") || strings.Contains(user1, "no TLD more than twice") {
+		t.Errorf("single TLD request should not contain multi-TLD instructions; got: %s", user1)
+	}
+
+	// 2 TLDs: should ask for at least 2 distinct TLDs, but not restrict to at most twice
+	_, user2 := BuildRequest("pizza", []string{"pizza"}, []string{"com", "io"}, 10, nil, nil)
+	if !strings.Contains(user2, "Use at least 2 distinct TLDs") {
+		t.Errorf("expected 'Use at least 2 distinct TLDs' in: %s", user2)
+	}
+	if strings.Contains(user2, "no TLD more than twice") {
+		t.Errorf("2-TLD request with 20 names should not restrict to at most twice; got: %s", user2)
 	}
 }
 

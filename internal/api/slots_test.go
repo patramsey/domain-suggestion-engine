@@ -147,3 +147,20 @@ func TestReserveCommonWordsCapsEachBlockOfTen(t *testing.T) {
 		t.Errorf("best common words should lead block 1: %v", names(out[:10]))
 	}
 }
+
+func TestReserveCommonWordsDoesNotDisplaceHighScoring(t *testing.T) {
+	// A high-scoring list should not have its candidates replaced by a low-scoring common word
+	final := []scorer.ScoredCandidate{
+		sc("duskbrew", "cafe", "llm", 0.90),
+		sc("hopchest", "pub", "llm", 0.85),
+	}
+	// mint.cafe has a low rescored score of 0.35 (below floor 0.50 and far below 0.85)
+	pool := append([]scorer.ScoredCandidate{sc("mint", "cafe", "llm", 0.15)}, final...)
+	rescore := plus20(map[string]float64{"mint.cafe": 0.35})
+
+	out := reserveCommonWords(final, pool, 2, 10, rescore)
+	got := names(out)
+	if len(got) != 2 || got[0] != "duskbrew.cafe" || got[1] != "hopchest.pub" {
+		t.Errorf("low-scoring common word should not displace high-scoring candidates, got: %v", got)
+	}
+}

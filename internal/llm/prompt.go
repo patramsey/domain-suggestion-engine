@@ -113,8 +113,14 @@ func BuildRequest(rawInput string, tokens []string, tlds []string, count int, un
 		msg += fmt.Sprintf("\n\nAllowed TLDs:\n%s", tldList)
 	}
 
-	minTLDs := int(math.Ceil(float64(requestCount) / 3))
-	msg += fmt.Sprintf("\n\nUse at least %d distinct TLDs across all suggestions — no TLD more than twice.", minTLDs)
+	if len(tlds) > 1 {
+		minTLDs := min(len(tlds), int(math.Ceil(float64(requestCount)/3)))
+		if len(tlds) >= int(math.Ceil(float64(requestCount)/2)) {
+			msg += fmt.Sprintf("\n\nUse at least %d distinct TLDs across all suggestions — no TLD more than twice.", minTLDs)
+		} else {
+			msg += fmt.Sprintf("\n\nUse at least %d distinct TLDs across all suggestions.", minTLDs)
+		}
+	}
 
 	if len(inspireFrom) > 0 {
 		msg += fmt.Sprintf("\n\nThe user liked these domains — generate suggestions in a similar creative direction (same vibe, tone, and style, but different names):\n%s", strings.Join(inspireFrom, ", "))
@@ -134,8 +140,9 @@ func BuildRequest(rawInput string, tokens []string, tlds []string, count int, un
 	return
 }
 
-// BuildRetryRequest builds a retry user message that calls out hallucinated TLDs.
-func BuildRetryRequest(rawInput string, tokens []string, tlds []string, count int, badTLDs []string) (system, user string) {
+// BuildRetryRequest builds a retry user message that calls out hallucinated TLDs
+// and preserves unavailable and inspire_from constraints.
+func BuildRetryRequest(rawInput string, tokens []string, tlds []string, count int, badTLDs, unavailable, inspireFrom []string) (system, user string) {
 	system = SystemPrompt
 	requestCount := int(math.Ceil(float64(count) * overRequestFactor))
 	tldList := strings.Join(tlds, ", ")
@@ -147,9 +154,22 @@ func BuildRetryRequest(rawInput string, tokens []string, tlds []string, count in
 		context = rawInput
 	}
 
-	user = fmt.Sprintf(
-		"Your previous response included TLDs not in the allowed list: %s.\nYou must choose only from: %s\n\nRegenerate %d suggestions for: %s\n\nReturn a JSON array of objects: [{\"sld\": \"...\", \"tld\": \"...\"}, ...]",
-		strings.Join(badTLDs, ", "), tldList, requestCount, context,
-	)
+	var intro string
+	if len(badTLDs) > 0 {
+		intro = fmt.Sprintf("Your previous response included TLDs not in the allowed list: %s.\nYou must choose only from: %s\n\n", strings.Join(badTLDs, ", "), tldList)
+	} else {
+		intro = fmt.Sprintf("Your previous response had invalid format or disallowed names.\nYou must choose only from: %s\n\n", tldList)
+	}
+
+	msg := intro + fmt.Sprintf("Regenerate %d suggestions for: %s\n\nReturn a JSON array of objects: [{\"sld\": \"...\", \"tld\": \"...\"}, ...]", requestCount, context)
+
+	if len(inspireFrom) > 0 {
+		msg += fmt.Sprintf("\n\nThe user liked these domains — generate suggestions in a similar creative direction:\n%s", strings.Join(inspireFrom, ", "))
+	}
+	if len(unavailable) > 0 {
+		msg += fmt.Sprintf("\n\nDo not suggest these domains (already registered):\n%s", strings.Join(unavailable, ", "))
+	}
+
+	user = msg
 	return
 }

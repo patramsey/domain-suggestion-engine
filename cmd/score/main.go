@@ -60,14 +60,14 @@ func main() {
 	candidates := make([]algorithmic.Candidate, 0, len(rawDomains))
 	for _, d := range rawDomains {
 		d = strings.ToLower(strings.TrimSpace(d))
-		idx := strings.LastIndex(d, ".")
-		if idx <= 0 || idx == len(d)-1 {
+		sld, tld, ok := splitDomain(d, icann)
+		if !ok {
 			fmt.Fprintf(os.Stderr, "skipping %q: not a valid domain\n", d)
 			continue
 		}
 		candidates = append(candidates, algorithmic.Candidate{
-			SLD:    d[:idx],
-			TLD:    d[idx+1:],
+			SLD:    sld,
+			TLD:    tld,
 			Source: "external",
 		})
 	}
@@ -130,6 +130,26 @@ func printJSON(ranked []scorer.ScoredCandidate) {
 		}
 	}
 	enc := json.NewEncoder(os.Stdout)
-	enc.SetIndent("", "  ")
-	enc.Encode(out)
+	if err := enc.Encode(out); err != nil {
+		fmt.Fprintf(os.Stderr, "error encoding json: %v\n", err)
+	}
+}
+
+func splitDomain(d string, icann map[string]struct{}) (string, string, bool) {
+	for i := 0; i < len(d); i++ {
+		if d[i] == '.' {
+			tld := d[i+1:]
+			if _, ok := icann[tld]; ok {
+				sld := d[:i]
+				if sld != "" && tld != "" {
+					return sld, tld, true
+				}
+			}
+		}
+	}
+	idx := strings.LastIndex(d, ".")
+	if idx > 0 && idx < len(d)-1 {
+		return d[:idx], d[idx+1:], true
+	}
+	return "", "", false
 }

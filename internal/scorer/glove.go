@@ -4,6 +4,8 @@ import (
 	"encoding/binary"
 	"fmt"
 	"math"
+
+	"github.com/patlivet/domain-suggestion-engine/internal/wordlist"
 )
 
 const gloveDims = 50
@@ -96,19 +98,29 @@ func (m *gloveModel) vecFor(word string) ([gloveDims]float32, bool) {
 
 // subWords splits an SLD into known vocabulary sub-words using greedy
 // longest-match, skipping characters that don't start a recognised word.
-// Example: "forgeio" → ["forge"] (if "io" is too short to be in vocab).
+// Recognises GloVe vocabulary words (length 3+) and real 2-letter words from SCOWL.
+// Example: "forgeio" → ["forge", "io"].
 func subWords(sld string) []string {
 	var result []string
 	i := 0
 	for i < len(sld) {
 		found := false
 		end := min(i+14, len(sld))
-		for l := end - i; l >= 3; l-- {
-			if _, ok := glove.index[sld[i:i+l]]; ok {
-				result = append(result, sld[i:i+l])
+		for l := end - i; l >= 2; l-- {
+			cand := sld[i : i+l]
+			if _, ok := glove.index[cand]; ok {
+				result = append(result, cand)
 				i += l
 				found = true
 				break
+			}
+			if l == 2 {
+				if _, ok := wordlist.Level(cand); ok {
+					result = append(result, cand)
+					i += l
+					found = true
+					break
+				}
 			}
 		}
 		if !found {

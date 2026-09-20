@@ -22,7 +22,7 @@ func baseScore(c algorithmic.Candidate, tokens []string) float64 {
 	base := clamp(
 		brandability(c.SLD)*0.40 +
 			conceptRelevance(c.SLD, tokens)*0.30 +
-			tldPremium(c.TLD, tokens)*0.15 +
+			tldPremium(c.SLD, c.TLD, tokens)*0.15 +
 			lengthScore(c.SLD)*0.15,
 	)
 	if c.Source == "llm" {
@@ -121,7 +121,7 @@ func brandability(sld string) float64 {
 
 // --- TLD Premium ---
 
-func tldPremium(tld string, tokens []string) float64 {
+func tldPremium(sld, tld string, tokens []string) float64 {
 	base, ok := tldScores[tld]
 	if !ok {
 		// fallback for any TLD not in the generated map
@@ -131,7 +131,7 @@ func tldPremium(tld string, tokens []string) float64 {
 			base = 0.55
 		}
 	}
-	if semanticMatch(tld, tokens) {
+	if semanticMatch(sld, tld, tokens) {
 		switch {
 		case base >= 0.85:
 			base = 0.90
@@ -144,21 +144,25 @@ func tldPremium(tld string, tokens []string) float64 {
 	return clamp(base)
 }
 
-func semanticMatch(tld string, tokens []string) bool {
+func semanticMatch(sld, tld string, tokens []string) bool {
 	for _, tok := range tokens {
 		// Exact: .pizza for "pizza"
 		if tld == tok {
 			return true
 		}
-		// Domain hack: token ends with TLD ("shoes" + ".es" → sho.es)
-		if len(tld) >= 2 && len(tok) > len(tld) && strings.HasSuffix(tok, tld) {
+		// Domain hack: SLD + TLD forms the token or plural/singular inflection
+		// ("sho" + ".es" → sho.es for "shoes", "rad" + ".io" → rad.io for "radio")
+		if sld != "" && len(tld) >= 2 {
+			combined := sld + tld
+			if combined == tok || combined == tok+"s" || combined == tok+"es" || tok == combined+"s" || tok == combined+"es" {
+				return true
+			}
+		}
+		// Prefix overlap: min 3 chars to allow semantic TLDs (.dev for "developer", .app for "application", .law for "lawyer")
+		if len(tld) >= 3 && len(tok) > len(tld) && strings.HasPrefix(tok, tld) {
 			return true
 		}
-		// Prefix overlap — min 4 chars to avoid short accidental matches (.art ≠ "smart")
-		if len(tld) >= 4 && strings.HasPrefix(tok, tld) {
-			return true
-		}
-		if len(tok) >= 4 && strings.HasPrefix(tld, tok) {
+		if len(tok) >= 3 && len(tld) > len(tok) && strings.HasPrefix(tld, tok) {
 			return true
 		}
 	}

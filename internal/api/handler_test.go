@@ -6,6 +6,9 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+
+	"github.com/patlivet/domain-suggestion-engine/internal/algorithmic"
+	"github.com/patlivet/domain-suggestion-engine/internal/scorer"
 )
 
 func newTestHandler(t *testing.T) *Handler {
@@ -446,6 +449,72 @@ func TestNewHandlerRejectsBadCommonWordSlots(t *testing.T) {
 	for _, n := range []int{-1, 11} {
 		if _, err := NewHandler(Config{GeminiAPIKey: "k", GeminiModel: "m", CommonWordSlots: n}); err == nil {
 			t.Errorf("CommonWordSlots %d: want error", n)
+		}
+	}
+}
+
+func TestDiversityCapScaling(t *testing.T) {
+	makePool := func(tld string, n int) []scorer.ScoredCandidate {
+		var res []scorer.ScoredCandidate
+		for i := 0; i < n; i++ {
+			res = append(res, scorer.ScoredCandidate{
+				Candidate: algorithmic.Candidate{SLD: "name", TLD: tld, Source: "llm"},
+				Score:     1.0 - float64(i)*0.01,
+			})
+		}
+		return res
+	}
+
+	// 1 TLD: should not cap at 25% (for count 10, cap would be 3). Should return all 10.
+	pool1 := makePool("com", 10)
+	got1 := diversityCap(pool1, 10, 1)
+	if len(got1) != 10 {
+		t.Errorf("diversityCap with 1 TLD: want 10, got %d", len(got1))
+	}
+
+	// 2 TLDs: cap at 75% -> max 8 for count 10
+	pool2 := append(makePool("com", 10), makePool("io", 10)...)
+	got2 := diversityCap(pool2, 10, 2)
+	comCount, ioCount := 0, 0
+	for _, sc := range got2 {
+		switch sc.TLD {
+		case "com":
+			comCount++
+		case "io":
+			ioCount++
+		}
+	}
+	if comCount > 8 || ioCount > 8 {
+		t.Errorf("diversityCap with 2 TLDs: wanted <= 8 per TLD, got com=%d io=%d", comCount, ioCount)
+	}
+
+	// 4+ TLDs: cap at 25% -> max 3 for count 10
+	pool4 := append(makePool("com", 10), makePool("io", 10)...)
+	pool4 = append(pool4, makePool("ai", 10)...)
+	pool4 = append(pool4, makePool("app", 10)...)
+	got4 := diversityCap(pool4, 10, 4)
+	counts := make(map[string]int)
+	for _, sc := range got4 {
+		counts[sc.TLD]++
+	}
+	for tld, c := range counts {
+		if c > 3 {
+			t.Errorf("diversityCap with 4 TLDs: wanted <= 3 for %s, got %d", tld, c)
+		}
+	}
+}
+
+func TestTierBalanceSortsCorrectly(t *testing.T) {
+	pool := []scorer.ScoredCandidate{
+		{Candidate: algorithmic.Candidate{SLD: "a", TLD: "com", Source: "llm"}, Score: 0.5},
+		{Candidate: algorithmic.Candidate{SLD: "b", TLD: "com", Source: "llm"}, Score: 0.9},
+		{Candidate: algorithmic.Candidate{SLD: "c", TLD: "com", Source: "algo"}, Score: 0.8},
+		{Candidate: algorithmic.Candidate{SLD: "d", TLD: "com", Source: "algo"}, Score: 0.3},
+	}
+	out := tierBalance(pool, 4, 0.5)
+	for i := 1; i < len(out); i++ {
+		if out[i].Score > out[i-1].Score {
+			t.Errorf("tierBalance output not sorted descending: %v > %v", out[i].Score, out[i-1].Score)
 		}
 	}
 }
