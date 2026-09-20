@@ -3,6 +3,7 @@ package llm
 import (
 	"crypto/sha256"
 	"encoding/hex"
+	"math"
 
 	"github.com/patlivet/domain-suggestion-engine/internal/algorithmic"
 )
@@ -110,11 +111,11 @@ func rankedCandidatesWithFunnel(perVariant [][]rawPair, tldSet map[string]struct
 	return out, f
 }
 
-// overRequest mirrors BuildRequest's over-request factor (3×), so the eval can
+// overRequest mirrors BuildRequest's over-request factor, so the eval can
 // report how many names were asked for. TestOverRequestMatchesBuildRequest
 // guards against the two drifting apart.
 func overRequest(count int) int {
-	return count * 3
+	return int(math.Ceil(float64(count) * overRequestFactor))
 }
 
 // PromptFingerprint returns a short hash identifying the full prompt a

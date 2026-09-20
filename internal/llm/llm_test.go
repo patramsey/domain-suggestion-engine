@@ -1,6 +1,7 @@
 package llm
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 )
@@ -19,9 +20,8 @@ func TestBuildRequestTokenPath(t *testing.T) {
 	if !strings.Contains(user, "com, io") {
 		t.Errorf("user prompt should contain TLD list; got: %s", user)
 	}
-	// should request 3× count = 60
-	if !strings.Contains(user, "60") {
-		t.Errorf("user prompt should request 60 (3×20); got: %s", user)
+	if want := fmt.Sprintf("Generate %d ", overRequest(20)); !strings.Contains(user, want) {
+		t.Errorf("user prompt should request %q; got: %s", want, user)
 	}
 }
 
@@ -71,9 +71,9 @@ func TestParseAndValidateDropsHallucinatedTLD(t *testing.T) {
 
 func TestParseAndValidateDropsMalformedSLD(t *testing.T) {
 	cases := []rawPair{
-		{SLD: "ab", TLD: "com"},              // too short
-		{SLD: "cof3ee", TLD: "com"},          // digit
-		{SLD: "my-coffee", TLD: "com"},       // hyphen
+		{SLD: "ab", TLD: "com"},                 // too short
+		{SLD: "cof3ee", TLD: "com"},             // digit
+		{SLD: "my-coffee", TLD: "com"},          // hyphen
 		{SLD: "verylongdomainname", TLD: "com"}, // too long
 	}
 	for _, p := range cases {
@@ -227,10 +227,10 @@ func TestBuildRequestIncludesContext(t *testing.T) {
 	}
 }
 
-func TestBuildRequestOverrequestsByThree(t *testing.T) {
+func TestBuildRequestOverRequests(t *testing.T) {
 	_, user := BuildRequest("pizza", []string{"pizza"}, []string{"com"}, 10, nil, nil)
-	if !strings.Contains(user, "30") {
-		t.Errorf("should request 30 (3×10) suggestions; got: %s", user)
+	if want := fmt.Sprintf("Generate %d ", overRequest(10)); !strings.Contains(user, want) {
+		t.Errorf("should request %q; got: %s", want, user)
 	}
 }
 
