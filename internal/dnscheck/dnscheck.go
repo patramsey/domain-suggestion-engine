@@ -66,19 +66,15 @@ func Resolver(addr string) Lookup {
 	}
 }
 
-// CheckAll looks up every distinct name once, conc at a time.
-func CheckAll(ctx context.Context, names []string, look Lookup, conc int) map[string]Outcome {
-	out := make(map[string]Outcome, len(names))
+// CheckAllStream looks up every distinct name once, conc at a time, invoking onResult as each lookup finishes.
+func CheckAllStream(ctx context.Context, names []string, look Lookup, conc int, onResult func(name string, o Outcome)) {
 	jobs := make(chan string)
-	var mu sync.Mutex
 	var wg sync.WaitGroup
 	for range max(conc, 1) {
 		wg.Go(func() {
 			for n := range jobs {
 				o := look(ctx, n)
-				mu.Lock()
-				out[n] = o
-				mu.Unlock()
+				onResult(n, o)
 			}
 		})
 	}
@@ -91,5 +87,16 @@ func CheckAll(ctx context.Context, names []string, look Lookup, conc int) map[st
 	}
 	close(jobs)
 	wg.Wait()
+}
+
+// CheckAll looks up every distinct name once, conc at a time.
+func CheckAll(ctx context.Context, names []string, look Lookup, conc int) map[string]Outcome {
+	out := make(map[string]Outcome, len(names))
+	var mu sync.Mutex
+	CheckAllStream(ctx, names, look, conc, func(name string, o Outcome) {
+		mu.Lock()
+		out[name] = o
+		mu.Unlock()
+	})
 	return out
 }

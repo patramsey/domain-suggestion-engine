@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"sort"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/patlivet/domain-suggestion-engine/internal/algorithmic"
@@ -105,7 +106,7 @@ func (h *Handler) cacheSet(key string, value []byte) {
 
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	switch {
-	case r.Method == http.MethodPost && r.URL.Path == "/suggest":
+	case r.Method == http.MethodPost && (r.URL.Path == "/suggest" || r.URL.Path == "/suggest/stream"):
 		h.handleSuggest(w, r)
 	case r.Method == http.MethodGet && r.URL.Path == "/tlds/categories":
 		h.handleCategories(w, r)
@@ -179,8 +180,16 @@ func (h *Handler) handleSuggest(w http.ResponseWriter, r *http.Request) {
 	unavailable := normalizeUnavailable(req.UnavailableDomains)
 	inspireFrom := normalizeUnavailable(req.InspireFrom) // same normalization: lowercase + dedupe
 	checkAvail := req.CheckAvailability || h.cfg.CheckAvailability
+	isStream := r.URL.Path == "/suggest/stream" || r.Header.Get("Accept") == "text/event-stream"
 	cacheKey := cache.Key(req.Input, req.Count, debug, checkAvail, resolvedTLDs, unavailable, inspireFrom)
 	if cached, ok := h.cacheGet(cacheKey); ok {
+		if isStream {
+			var resp SuggestResponse
+			if err := json.Unmarshal(cached, &resp); err == nil {
+				h.streamSuggest(w, r, resp.Suggestions, false, resp.Partial, resp.TLDsUsed, debug)
+				return
+			}
+		}
 		w.Header().Set("Content-Type", "application/json")
 		w.Header().Set("Age", "1")
 		w.Write(cached)
@@ -338,6 +347,15 @@ func (h *Handler) handleSuggest(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	// set generation source header
+	src := generationSource(llmResult.err == nil, algoEnabled && len(algoResult.candidates) > 0)
+	w.Header().Set("X-Generation-Source", src)
+
+	if isStream {
+		h.streamSuggest(w, r, suggestions, checkAvail, partial, resolvedTLDs, debug)
+		return
+	}
+
 	if checkAvail && len(suggestions) > 0 {
 		names := make([]string, len(suggestions))
 		for i, s := range suggestions {
@@ -366,14 +384,74 @@ func (h *Handler) handleSuggest(w http.ResponseWriter, r *http.Request) {
 		resp.ActiveGenerators = h.engine.Active()
 	}
 
-	// set generation source header
-	src := generationSource(llmResult.err == nil, algoEnabled && len(algoResult.candidates) > 0)
-	w.Header().Set("X-Generation-Source", src)
 	w.Header().Set("Content-Type", "application/json")
 
 	encoded, _ := json.Marshal(resp)
 	h.cacheSet(cacheKey, encoded)
 	w.Write(encoded)
+}
+
+func (h *Handler) streamSuggest(w http.ResponseWriter, r *http.Request, suggestions []Suggestion, checkAvail bool, partial bool, resolvedTLDs []string, debug bool) {
+	flusher, ok := w.(http.Flusher)
+	if !ok {
+		WriteError(w, http.StatusInternalServerError, "streaming_unsupported", "streaming unsupported")
+		return
+	}
+
+	w.Header().Set("Content-Type", "text/event-stream")
+	w.Header().Set("Cache-Control", "no-cache")
+	w.Header().Set("Connection", "keep-alive")
+
+	resp := SuggestResponse{
+		Suggestions: suggestions,
+		Partial:     partial,
+	}
+	if debug {
+		resp.TLDsUsed = resolvedTLDs
+		resp.ActiveGenerators = h.engine.Active()
+	}
+
+	initData, _ := json.Marshal(resp)
+	fmt.Fprintf(w, "event: suggestions\ndata: %s\n\n", initData)
+	flusher.Flush()
+
+	// As configured: live availability lookups only execute when DNS checking is enabled!
+	if !checkAvail || len(suggestions) == 0 {
+		fmt.Fprintf(w, "event: done\ndata: {}\n\n")
+		flusher.Flush()
+		return
+	}
+
+	names := make([]string, len(suggestions))
+	for i, s := range suggestions {
+		names[i] = s.Name
+	}
+
+	type availEvent struct {
+		Name      string `json:"name"`
+		Available bool   `json:"available"`
+	}
+
+	var mu sync.Mutex
+	dnscheck.CheckAllStream(r.Context(), names, h.dnsLookup, 10, func(name string, o dnscheck.Outcome) {
+		if o == dnscheck.Unknown {
+			return
+		}
+		avail := (o == dnscheck.Free)
+		data, err := json.Marshal(availEvent{Name: name, Available: avail})
+		if err != nil {
+			return
+		}
+		mu.Lock()
+		defer mu.Unlock()
+		fmt.Fprintf(w, "event: availability\ndata: %s\n\n", data)
+		flusher.Flush()
+	})
+
+	mu.Lock()
+	fmt.Fprintf(w, "event: done\ndata: {}\n\n")
+	flusher.Flush()
+	mu.Unlock()
 }
 
 // handleCategories implements GET /tlds/categories.

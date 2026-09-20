@@ -44,6 +44,28 @@ func TestCheckAllEmpty(t *testing.T) {
 	}
 }
 
+func TestCheckAllStream(t *testing.T) {
+	var mu sync.Mutex
+	streamed := map[string]Outcome{}
+	fake := func(_ context.Context, name string) Outcome {
+		if name == "taken.com" {
+			return Delegated
+		}
+		return Free
+	}
+	CheckAllStream(context.Background(), []string{"taken.com", "open.coffee"}, fake, 2, func(name string, o Outcome) {
+		mu.Lock()
+		streamed[name] = o
+		mu.Unlock()
+	})
+	if len(streamed) != 2 {
+		t.Fatalf("got %d streamed results, want 2", len(streamed))
+	}
+	if streamed["taken.com"] != Delegated || streamed["open.coffee"] != Free {
+		t.Errorf("unexpected streamed results: %v", streamed)
+	}
+}
+
 func TestOutcomeString(t *testing.T) {
 	for o, s := range map[Outcome]string{Unknown: "", Free: "free", Delegated: "delegated"} {
 		if o.String() != s {

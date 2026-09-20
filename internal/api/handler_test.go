@@ -551,3 +551,81 @@ func TestCheckAvailabilityFlagEnabled(t *testing.T) {
 		}
 	}
 }
+
+func TestStreamSuggestWithoutDNSCheck(t *testing.T) {
+	h := newTestHandler(t)
+	dnsCalled := false
+	h.dnsLookup = func(ctx context.Context, name string) dnscheck.Outcome {
+		dnsCalled = true
+		return dnscheck.Free
+	}
+
+	req := httptest.NewRequest(http.MethodPost, "/suggest/stream", strings.NewReader(`{"input":"coffee shop","check_availability":false}`))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	h.ServeHTTP(w, req)
+
+	if w.Code != http.StatusOK {
+		t.Fatalf("want 200, got %d", w.Code)
+	}
+	if ct := w.Header().Get("Content-Type"); ct != "text/event-stream" {
+		t.Errorf("want Content-Type text/event-stream, got %s", ct)
+	}
+	body := w.Body.String()
+	if !strings.Contains(body, "event: suggestions") {
+		t.Error("expected suggestions event in stream output")
+	}
+	if !strings.Contains(body, "event: done") {
+		t.Error("expected done event in stream output")
+	}
+	if strings.Contains(body, "event: availability") {
+		t.Error("did not expect availability events when check_availability is false")
+	}
+	if dnsCalled {
+		t.Error("dnsLookup should never be called when check_availability is false")
+	}
+}
+
+func TestStreamSuggestWithDNSCheckEnabled(t *testing.T) {
+	h := newTestHandler(t)
+	h.dnsLookup = func(ctx context.Context, name string) dnscheck.Outcome {
+		return dnscheck.Free
+	}
+
+	req := httptest.NewRequest(http.MethodPost, "/suggest/stream", strings.NewReader(`{"input":"coffee shop","check_availability":true}`))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	h.ServeHTTP(w, req)
+
+	if w.Code != http.StatusOK {
+		t.Fatalf("want 200, got %d", w.Code)
+	}
+	body := w.Body.String()
+	if !strings.Contains(body, "event: suggestions") {
+		t.Error("expected suggestions event in stream output")
+	}
+	if !strings.Contains(body, "event: availability") {
+		t.Error("expected availability events when check_availability is true")
+	}
+	if !strings.Contains(body, "event: done") {
+		t.Error("expected done event in stream output")
+	}
+}
+
+func TestStreamSuggestViaAcceptHeader(t *testing.T) {
+	h := newTestHandler(t)
+	req := httptest.NewRequest(http.MethodPost, "/suggest", strings.NewReader(`{"input":"coffee shop"}`))
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Accept", "text/event-stream")
+	w := httptest.NewRecorder()
+	h.ServeHTTP(w, req)
+
+	if ct := w.Header().Get("Content-Type"); ct != "text/event-stream" {
+		t.Errorf("want Content-Type text/event-stream, got %s", ct)
+	}
+	body := w.Body.String()
+	if !strings.Contains(body, "event: suggestions") || !strings.Contains(body, "event: done") {
+		t.Errorf("unexpected body format: %s", body)
+	}
+}
+

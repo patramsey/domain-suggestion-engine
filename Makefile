@@ -1,4 +1,4 @@
-.PHONY: build test eval update-psl gen-tld-scores gen-ngrams gen-glove gen-wordlist gen-tld-crowding clean
+.PHONY: build test eval update-psl gen-tld-scores gen-ngrams gen-glove gen-fasttext gen-wordlist gen-tld-crowding clean
 
 VERSION := $(shell git describe --tags --always 2>/dev/null || echo "dev")
 BUILT_AT := $(shell date -u +%Y-%m-%dT%H:%M:%SZ)
@@ -29,6 +29,10 @@ gen-ngrams:
 gen-glove:
 	go run ./cmd/gen/glove
 	@echo "GloVe embeddings regenerated. Run 'make test' to verify."
+
+gen-fasttext:
+	go run ./cmd/gen/fasttext
+	@echo "FastText embeddings regenerated. Run 'make test' to verify."
 
 gen-wordlist:
 	go run ./cmd/gen/wordlist
