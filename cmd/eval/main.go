@@ -91,8 +91,8 @@ func main() {
 		fmt.Fprintln(os.Stderr, "GEMINI_API_KEY not set")
 		os.Exit(1)
 	}
-	if _, ok := prices[cfg.Model]; !ok {
-		fmt.Fprintf(os.Stderr, "warning: no price for %s in pricing.go; cost will be reported as n/a\n", cfg.Model)
+	if !llm.IsPriced(cfg.Model) {
+		fmt.Fprintf(os.Stderr, "warning: no price for %s in internal/llm/pricing.go; cost will be reported as n/a\n", cfg.Model)
 	}
 
 	resolvedTLDs, err := tlds.Resolve(tlds.Filter{})
@@ -137,7 +137,7 @@ func main() {
 					t0 := time.Now()
 					cands, usage, funnel, callErr := client.EvalGenerate(ctx, v.system, q, tokens, resolvedTLDs, tldSet, 20, v.variantOverrides)
 					durMs := time.Since(t0).Milliseconds()
-					cost, costKnown := estimateCost(cfg.Model, usage)
+					cost, costKnown := llm.EstimateCost(cfg.Model, usage)
 
 					r := queryResult{
 						variant:      v.name,

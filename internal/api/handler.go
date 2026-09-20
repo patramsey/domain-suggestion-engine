@@ -25,11 +25,6 @@ const maxCount = 100
 const maxUnavailable = 40
 const maxInspireFrom = 5
 
-// Gemini Flash-Lite pricing — update if Google changes rates.
-// https://ai.google.dev/pricing
-const llmInputPricePerToken = 0.075 / 1_000_000  // $0.075 per 1M input tokens
-const llmOutputPricePerToken = 0.30 / 1_000_000  // $0.30 per 1M output tokens
-
 // Config holds all runtime configuration for the handler.
 type Config struct {
 	GeminiAPIKey     string
@@ -290,8 +285,7 @@ func (h *Handler) handleSuggest(w http.ResponseWriter, r *http.Request) {
 
 	// 15. Log pipeline metrics
 	algoUnique := countSource("algorithmic", merged)
-	estimatedCostUSD := float64(llmResult.usage.PromptTokens)*llmInputPricePerToken +
-		float64(llmResult.usage.CandidateTokens)*llmOutputPricePerToken
+	estimatedCostUSD, costKnown := llm.EstimateCost(h.cfg.GeminiModel, llmResult.usage)
 	slog.Info("suggest",
 		"input_length", len(req.Input),
 		"token_count", len(tokens),
@@ -314,6 +308,7 @@ func (h *Handler) handleSuggest(w http.ResponseWriter, r *http.Request) {
 		"llm_candidate_tokens", llmResult.usage.CandidateTokens,
 		"llm_total_tokens", llmResult.usage.TotalTokens,
 		"estimated_cost_usd", estimatedCostUSD,
+		"cost_known", costKnown,
 	)
 
 	// 13. Build response
@@ -601,4 +596,3 @@ func filterUnavailable(scored []scorer.ScoredCandidate, unavailable []string) []
 	}
 	return out
 }
-
