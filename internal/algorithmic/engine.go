@@ -51,5 +51,8 @@ func (e *Engine) Active() []string {
 func DefaultGenerators(idTLDs []string, isIDTLD func(string) bool) []Generator {
 	return []Generator{
 		NewHacksGenerator(),
+		NewExactTLDGenerator(),
+		NewCompoundGenerator(),
+		NewAffixGenerator(),
 	}
 }

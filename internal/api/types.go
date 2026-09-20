@@ -12,14 +12,16 @@ type SuggestRequest struct {
 	TLDFilter          *TLDFilter `json:"tld_filter,omitempty"`
 	UnavailableDomains []string   `json:"unavailable_domains,omitempty"`
 	InspireFrom        []string   `json:"inspire_from,omitempty"`
+	CheckAvailability  bool       `json:"check_availability,omitempty"`
 }
 
 type Suggestion struct {
-	Name   string  `json:"name"`
-	SLD    string  `json:"sld"`
-	TLD    string  `json:"tld"`
-	Score  float64 `json:"score"`
-	Source string  `json:"source"`
+	Name      string  `json:"name"`
+	SLD       string  `json:"sld"`
+	TLD       string  `json:"tld"`
+	Score     float64 `json:"score"`
+	Source    string  `json:"source"`
+	Available *bool   `json:"available,omitempty"`
 }
 
 type SuggestResponse struct {
