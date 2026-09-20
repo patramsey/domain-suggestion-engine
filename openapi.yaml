@@ -4,7 +4,8 @@ info:
   version: "1.0.0"
   description: >
     Generates ranked domain name suggestions from flexible input (keywords,
-    descriptions, or existing domain strings). Does not check availability.
+    descriptions, or existing domain strings). Optionally verifies DNS
+    delegation and streams real-time availability.
 
 servers:
   - url: http://localhost:8080
@@ -56,6 +57,38 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/SuggestResponse"
+        "400":
+          $ref: "#/components/responses/Error"
+        "422":
+          $ref: "#/components/responses/Error"
+        "500":
+          $ref: "#/components/responses/Error"
+
+  /suggest/stream:
+    post:
+      summary: Stream domain name suggestions and availability updates
+      description: >
+        Emits domain suggestions immediately as a Server-Sent Event (event: suggestions),
+        followed by concurrent DNS availability lookups (event: avail), and closes with event: done.
+      parameters:
+        - in: query
+          name: debug
+          schema:
+            type: boolean
+          description: Include tlds_used and active_generators in response
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SuggestRequest"
+      responses:
+        "200":
+          description: Server-Sent Events stream
+          content:
+            text/event-stream:
+              schema:
+                type: string
         "400":
           $ref: "#/components/responses/Error"
         "422":
@@ -162,6 +195,19 @@ components:
             creative direction (same vibe and tone, different names).
             Typically combined with unavailable_domains on a follow-up call.
           example: ["ember.coffee", "vesper.bar"]
+        check_availability:
+          type: boolean
+          default: false
+          description: >
+            When true, queries DNS to check if suggestions are likely available (NXDOMAIN on NS lookup).
+            Results are populated in is_available.
+        variants:
+          type: array
+          items:
+            type: string
+          description: >
+            Optional creative LLM prompt variants to run. Defaults to ["evocative", "wordplay", "crafted"].
+          example: ["evocative", "crafted"]
 
     Suggestion:
       type: object
@@ -187,6 +233,12 @@ components:
         source:
           type: string
           enum: [algorithmic, llm]
+        is_available:
+          type: boolean
+          nullable: true
+          description: >
+            DNS availability outcome. True if unregistered (NXDOMAIN), false if delegated/registered,
+            or null if check_availability was false.
 
     SuggestResponse:
       type: object

@@ -7,10 +7,10 @@ curl -s -X POST localhost:8080/suggest -d '{"input": "denver coffee shop that se
 # → brewwave.beer, solstice.live, nightcap.coffee, alpenglow.pub, vesper.coffee, coff.ee, …
 ```
 
-- **Two generators, one ranking.** Gemini proposes creative, concept-specific names; a deterministic generator finds domain hacks (`coff.ee`, `stud.io`). Both are scored by the same data-driven ranker.
-- **Leans toward registrable names, without hiding great ones.** The engine does not check availability — that belongs to a separate service. It demotes names that are almost certainly taken (common dictionary words, crowded TLDs), but keeps 2 of every 10 results for the best very common single words (`mint.cafe`): strong names worth checking, even though most are taken.
+- **Hybrid LLM and algorithmic tiers, unified ranking.** Gemini proposes creative, concept-specific names; deterministic algorithmic generators find domain hacks (`coff.ee`), exact matches (`coffee.bar`), compounds (`brewcraft.coffee`), and affixes (`getcoffee.com`). Both tiers are scored by the same data-driven ranker.
+- **Leans toward registrable names, with optional live verification.** The engine demotes names that are almost certainly taken (common dictionary words, crowded TLDs), but keeps 2 of every 10 results for the best very common single words (`mint.cafe`). When live check is desired, the engine runs concurrent DNS delegation checks or streams real-time availability via SSE.
 - **Iterative.** Pass back names the user liked (`inspire_from`) and names that turned out to be taken (`unavailable_domains`) to steer the next batch.
-- **One self-contained binary.** Word embeddings, n-gram tables, TLD data and word lists are embedded; the only runtime dependency is the Gemini API.
+- **One self-contained binary.** Quantized FastText and GloVe embeddings, n-gram tables, TLD data and word lists are embedded; the only external runtime dependency is the Gemini API.
 
 ## Contents
 
@@ -105,8 +105,8 @@ Parser — tokenises, strips stopwords, extracts the SLD from existing domains
   │                      merge + SLD dedup
   │
   ├─── Algorithmic tier ──────────────────────────────────── <5ms, deterministic
-  │    Domain hacks: suffix-matches tokens against the TLD list
-  │    e.g. "coffee" → coff.ee,  "studio" → stud.io
+  │    Pluggable generators: hacks (coff.ee), exact (coffee.bar),
+  │    compounds (brewcraft.coffee), and affixes (getcoffee.com)
   │
   ▼
 Score + rank (four quality signals, minus an availability penalty)
@@ -183,7 +183,7 @@ Together with the compound brief, this makes about half of the LLM's top 20 regi
 
 - **Phonotactic quality** — a character bigram model (a 26×26 table of how often each letter pair appears in English) scores how naturally a name reads aloud. `coffee` is made of common pairs; `xkqvz` isn't.
 - **Sub-word recognisability** — the name is greedily split into the longest known words (`duskbrew` → `dusk` + `brew`). Names built from real words are more memorable. This is a bonus, not a penalty, so coined words aren't punished.
-- **Semantic similarity** — [GloVe](https://nlp.stanford.edu/projects/glove/) word embeddings place each word as a 50-dimensional vector, with related words close together (`coffee` near `espresso`, far from `skateboard`). The score is the cosine similarity between the name's sub-words and the query's keywords, so `roast.coffee` scores well for "coffee shop".
+- **Semantic similarity** — quantized [FastText](https://fasttext.cc/) subword embeddings (`fasttext.bin`) with [GloVe](https://nlp.stanford.edu/projects/glove/) 50d fallback (`glove.bin`) place each word and morpheme as a dense vector, with related words close together (`coffee` near `espresso`, far from `skateboard`). Subword vector representations allow scoring novel coined compounds and affixes even when unseen in vocabulary. The score is the cosine similarity between the name's sub-words and the query's keywords, so `roast.coffee` scores well for "coffee shop".
 - **TLD quality** — derived from the [Majestic Million](https://majestic.com/reports/majestic-million) and the [IANA root zone database](https://www.iana.org/domains/root/db): TLDs used by many popular sites rank higher, and TLDs that are real words (`.studio`, `.pizza`) get a bonus over letter-soup ones.
 
 ---
@@ -214,6 +214,8 @@ The full OpenAPI 3.1 spec is in [`openapi.yaml`](./openapi.yaml); paste it into 
 | `tld_filter.list` | []string | An explicit TLD list without dots, e.g. `["com", "io", "pizza"]`. |
 | `unavailable_domains` | []string | Domains known to be taken: removed from results and shown to the LLM. Max 40. |
 | `inspire_from` | []string | Domains the user liked; the LLM steers toward them. Max 5. |
+| `check_availability` | boolean | When `true`, runs concurrent DNS delegation checks and populates `is_available`. Default `false`. |
+| `variants` | []string | Creative LLM prompts to run (`evocative`, `wordplay`, `crafted`). Default: all three. |
 
 Add `?debug=true` to include `tlds_used` and `active_generators` in the response.
 
@@ -222,14 +224,22 @@ Add `?debug=true` to include `tlds_used` and `active_generators` in the response
 ```json
 {
   "suggestions": [
-    { "name": "nightcap.coffee", "sld": "nightcap", "tld": "coffee", "score": 0.83, "source": "llm" },
-    { "name": "coff.ee",         "sld": "coff",     "tld": "ee",     "score": 0.78, "source": "algorithmic" }
+    { "name": "nightcap.coffee", "sld": "nightcap", "tld": "coffee", "score": 0.83, "source": "llm", "is_available": true },
+    { "name": "coff.ee",         "sld": "coff",     "tld": "ee",     "score": 0.78, "source": "algorithmic", "is_available": false }
   ],
   "partial": false
 }
 ```
 
-`source` is `llm` or `algorithmic`. A response holds `count` names whenever the tiers produce enough; the per-TLD diversity cap never shortens it (with a narrow `tld_filter`, results concentrate in the TLDs you asked for). Results come in blocks of 10, each sorted by score; each block holds at most 2 very common single words (see [Common-word slots](#common-word-slots)). `partial: true` means only one tier contributed (for example, the LLM call failed, or the input was all stopwords).
+`source` is `llm` or `algorithmic`. `is_available` is populated when `check_availability: true` was requested (or server has `CHECK_AVAILABILITY=true`), or `null` otherwise. A response holds `count` names whenever the tiers produce enough; the per-TLD diversity cap never shortens it (with a narrow `tld_filter`, results concentrate in the TLDs you asked for). Results come in blocks of 10, each sorted by score; each block holds at most 2 very common single words (see [Common-word slots](#common-word-slots)). `partial: true` means only one tier contributed (for example, the LLM call failed, or the input was all stopwords).
+
+### `POST /suggest/stream`
+
+Streams domain suggestions and real-time DNS availability updates over Server-Sent Events (SSE). Accepts the exact same request body as `POST /suggest`.
+
+1. `event: suggestions` — Emits the full candidate list immediately.
+2. `event: avail` — Emits individual DNS results as concurrent workers resolve them (`{"name": "...", "available": true/false}`).
+3. `event: done` — Signals stream completion (`{}`).
 
 **Errors** are returned as `{"error": "...", "code": "..."}`:
 
@@ -296,7 +306,10 @@ All configuration is through environment variables.
 | `LLM_SHARE` | `0.60` | Share of result slots reserved for LLM suggestions. |
 | `ALGO_ENABLED` | `true` | `false` turns off the algorithmic tier (LLM-only results). |
 | `COMMON_WORD_SLOTS` | `2` | Results per 10 kept for very common single words, ranked by quality (0–10). `0` ranks them with the full availability penalty, which pushes nearly all of them out. |
-| `GENERATORS` | `hacks` | Comma-separated algorithmic generators. Only `hacks` exists today. |
+| `GENERATORS` | `hacks,exact,compounds,affixes` | Comma-separated list of active algorithmic generators (`hacks`, `exact`, `compounds`, `affixes`). |
+| `LLM_VARIANTS` | `evocative,wordplay,crafted` | Comma-separated creative briefs to run concurrently. |
+| `CHECK_AVAILABILITY` | `false` | When `true`, enables live DNS availability check by default on all `/suggest` requests. |
+| `DNS_RESOLVER` | `1.1.1.1:53` | Upstream DNS resolver host:port for live availability lookups. |
 
 ---
 
@@ -348,6 +361,7 @@ The server has no runtime file dependencies: everything below is compiled in wit
 | `make gen-tld-scores` | `internal/scorer/tld_scores_gen.go` | IANA root zone + Majestic Million |
 | `make gen-ngrams` | `internal/scorer/ngrams_gen.go` | English word corpus |
 | `make gen-glove` | `internal/scorer/data/glove.bin` | GloVe 6B (~860 MB download) |
+| `go run ./cmd/gen/fasttext` | `internal/scorer/data/fasttext.bin` | Quantized FastText English subwords model |
 | `make gen-wordlist` | `internal/wordlist/data/words.txt.gz` | SCOWL 2020.12.07 (see `internal/wordlist/data/NOTICE`) |
 | `make gen-tld-crowding` | `internal/scorer/tld_crowding_gen.go` | Live DNS lookups of probe words on each TLD |
 
