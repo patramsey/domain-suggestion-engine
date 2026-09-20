@@ -37,7 +37,8 @@ type Config struct {
 	AlgoEnabled       bool
 	ActiveGenerators  []string
 	AllGenerators     []string
-	CheckAvailability bool // check DNS availability for returned names; default false
+	LLMVariants       []string // creative variants to run, e.g. ["evocative", "wordplay", "crafted"] or ["1"]
+	CheckAvailability bool     // check DNS availability for returned names; default false
 	DNSResolverAddr   string
 	Version           string
 	BuiltAt           string
@@ -45,12 +46,13 @@ type Config struct {
 
 // Handler handles all API routes.
 type Handler struct {
-	cfg       Config
-	engine    *algorithmic.Engine
-	llm       *llm.Client
-	cache     *cache.Cache
-	icannSet  map[string]struct{} // cached once at init, safe for concurrent read
-	dnsLookup dnscheck.Lookup
+	cfg          Config
+	engine       *algorithmic.Engine
+	llm          *llm.Client
+	cache        *cache.Cache
+	icannSet     map[string]struct{} // cached once at init, safe for concurrent read
+	dnsLookup    dnscheck.Lookup
+	variantNames []string
 }
 
 // NewHandler wires all components together from the given config.
@@ -59,6 +61,21 @@ func NewHandler(cfg Config) (*Handler, error) {
 	engine := algorithmic.NewEngine(allGen, cfg.ActiveGenerators)
 
 	llmClient := llm.NewClient(cfg.GeminiAPIKey, cfg.GeminiModel)
+	var vars []llm.Variant
+	if len(cfg.LLMVariants) > 0 {
+		var err error
+		vars, err = llm.ParseVariants(strings.Join(cfg.LLMVariants, ","))
+		if err != nil {
+			return nil, fmt.Errorf("LLMVariants: %w", err)
+		}
+	} else {
+		vars = []llm.Variant{llm.VariantEvocative, llm.VariantWordplay, llm.VariantCrafted}
+	}
+	llmClient.Variants = vars
+	varNames := make([]string, len(vars))
+	for i, v := range vars {
+		varNames[i] = v.String()
+	}
 
 	if cfg.CommonWordSlots < 0 || cfg.CommonWordSlots > 10 {
 		return nil, fmt.Errorf("CommonWordSlots %d: want 0–10", cfg.CommonWordSlots)
@@ -81,12 +98,13 @@ func NewHandler(cfg Config) (*Handler, error) {
 	}
 
 	return &Handler{
-		cfg:       cfg,
-		engine:    engine,
-		llm:       llmClient,
-		cache:     c,
-		icannSet:  tlds.DefaultRegistry.ICANNSet(),
-		dnsLookup: dnscheck.Resolver(resolverAddr),
+		cfg:          cfg,
+		engine:       engine,
+		llm:          llmClient,
+		cache:        c,
+		icannSet:     tlds.DefaultRegistry.ICANNSet(),
+		dnsLookup:    dnscheck.Resolver(resolverAddr),
+		variantNames: varNames,
 	}, nil
 }
 
@@ -181,7 +199,26 @@ func (h *Handler) handleSuggest(w http.ResponseWriter, r *http.Request) {
 	inspireFrom := normalizeUnavailable(req.InspireFrom) // same normalization: lowercase + dedupe
 	checkAvail := req.CheckAvailability || h.cfg.CheckAvailability
 	isStream := r.URL.Path == "/suggest/stream" || r.Header.Get("Accept") == "text/event-stream"
-	cacheKey := cache.Key(req.Input, req.Count, debug, checkAvail, resolvedTLDs, unavailable, inspireFrom)
+
+	activeVariants := h.llm.Variants
+	if len(activeVariants) == 0 {
+		activeVariants = []llm.Variant{llm.VariantEvocative, llm.VariantWordplay, llm.VariantCrafted}
+	}
+	variantNames := h.variantNames
+	if len(req.Variants) > 0 {
+		var err error
+		activeVariants, err = llm.ParseVariants(strings.Join(req.Variants, ","))
+		if err != nil {
+			WriteError(w, http.StatusBadRequest, "invalid_variants", err.Error())
+			return
+		}
+		variantNames = make([]string, len(activeVariants))
+		for i, v := range activeVariants {
+			variantNames[i] = v.String()
+		}
+	}
+
+	cacheKey := cache.Key(req.Input, req.Count, debug, checkAvail, resolvedTLDs, unavailable, inspireFrom, variantNames)
 	if cached, ok := h.cacheGet(cacheKey); ok {
 		if isStream {
 			var resp SuggestResponse
@@ -243,7 +280,7 @@ func (h *Handler) handleSuggest(w http.ResponseWriter, r *http.Request) {
 
 	go func() {
 		t0 := time.Now()
-		cands, usage, err := h.llm.Generate(ctx, req.Input, tokens, resolvedTLDs, tldSet, req.Count, unavailable, inspireFrom)
+		cands, usage, err := h.llm.Generate(ctx, req.Input, tokens, resolvedTLDs, tldSet, req.Count, unavailable, inspireFrom, activeVariants...)
 		llmCh <- llmTierResult{candidates: cands, usage: usage, dur: time.Since(t0), err: err}
 	}()
 
@@ -531,6 +568,7 @@ func (h *Handler) handleConfig(w http.ResponseWriter, _ *http.Request) {
 			TimeoutMs: 8000,
 			LLMShare:  h.cfg.LLMShare,
 			APIKeySet: h.cfg.GeminiAPIKey != "",
+			Variants:  h.variantNames,
 		},
 		Algo: AlgoConfig{
 			Enabled:          h.cfg.AlgoEnabled,

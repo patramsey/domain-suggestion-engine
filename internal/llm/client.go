@@ -35,6 +35,9 @@ type Client struct {
 	// ThinkingLevel is the Gemini thinkingLevel ("minimal", "low", "medium",
 	// "high"); defaults to "minimal" if empty.
 	ThinkingLevel string
+	// Variants defines the active creative variants to run in parallel.
+	// Defaults to [VariantEvocative, VariantWordplay, VariantCrafted] if nil/empty.
+	Variants []Variant
 }
 
 // NewClient creates a Gemini client. model is the full model ID (e.g. "gemini-3.5-flash-lite").
@@ -66,27 +69,35 @@ func (c *Client) thinkingLevel() string {
 	return c.ThinkingLevel
 }
 
+func (c *Client) variants() []Variant {
+	if len(c.Variants) > 0 {
+		return c.Variants
+	}
+	return llmVariants
+}
+
 // EvalGenerate runs the full generation pipeline with a custom system prompt.
 // variantOverrides optionally replaces the per-variant instructions; must be
-// len(llmVariants) if non-nil. Intended for prompt experimentation only.
+// len(c.variants()) if non-nil. Intended for prompt experimentation only.
 // The Funnel reports how the raw responses were filtered down to candidates.
 func (c *Client) EvalGenerate(ctx context.Context, customSystem string, rawInput string, tokens []string, allTLDs []string, tldSet map[string]struct{}, count int, variantOverrides []string) ([]algorithmic.Candidate, TokenUsage, Funnel, error) {
-	variantCount := int(math.Ceil(float64(count) / float64(len(llmVariants))))
+	activeVars := c.variants()
+	variantCount := int(math.Ceil(float64(count) / float64(len(activeVars))))
 
 	type vResult struct {
 		r   callResult
 		err error
 	}
 
-	results := make([]vResult, len(llmVariants))
+	results := make([]vResult, len(activeVars))
 	var wg sync.WaitGroup
 
-	for i, v := range llmVariants {
+	for i, v := range activeVars {
 		wg.Add(1)
 		go func(i int, v Variant) {
 			defer wg.Done()
 			_, user := BuildRequest(rawInput, tokens, allTLDs, variantCount, nil, nil)
-			if len(variantOverrides) == len(llmVariants) {
+			if len(variantOverrides) == len(activeVars) {
 				user += variantOverrides[i]
 			} else {
 				user += variantInstruction(v)
@@ -144,9 +155,14 @@ func (a TokenUsage) add(b TokenUsage) TokenUsage {
 var llmVariants = []Variant{VariantEvocative, VariantWordplay, VariantCrafted}
 
 // Generate runs parallel LLM calls with different creative variants and merges results.
-// Each variant requests count/N suggestions so total budget ≈ count×3 (same as before).
-func (c *Client) Generate(ctx context.Context, rawInput string, tokens []string, tlds []string, tldSet map[string]struct{}, count int, unavailable, inspireFrom []string) ([]algorithmic.Candidate, TokenUsage, error) {
-	variantCount := int(math.Ceil(float64(count) / float64(len(llmVariants))))
+// If variantOverrides are provided, they take precedence over c.Variants / default variants.
+// Each variant requests count/N suggestions so total budget ≈ count×3 (or count if 1 variant).
+func (c *Client) Generate(ctx context.Context, rawInput string, tokens []string, tlds []string, tldSet map[string]struct{}, count int, unavailable, inspireFrom []string, variantOverrides ...Variant) ([]algorithmic.Candidate, TokenUsage, error) {
+	activeVars := c.variants()
+	if len(variantOverrides) > 0 {
+		activeVars = variantOverrides
+	}
+	variantCount := int(math.Ceil(float64(count) / float64(len(activeVars))))
 
 	type variantResult struct {
 		pairs []rawPair
@@ -154,10 +170,10 @@ func (c *Client) Generate(ctx context.Context, rawInput string, tokens []string,
 		err   error
 	}
 
-	results := make([]variantResult, len(llmVariants))
+	results := make([]variantResult, len(activeVars))
 	var wg sync.WaitGroup
 
-	for i, v := range llmVariants {
+	for i, v := range activeVars {
 		wg.Add(1)
 		go func(i int, v Variant) {
 			defer wg.Done()
@@ -177,7 +193,7 @@ func (c *Client) Generate(ctx context.Context, rawInput string, tokens []string,
 	for i, r := range results {
 		totalUsage = totalUsage.add(r.usage)
 		if r.err != nil {
-			slog.Warn("llm variant failed", "variant", i, "err", r.err)
+			slog.Warn("llm variant failed", "variant", activeVars[i].String(), "err", r.err)
 			continue
 		}
 		perVariant = append(perVariant, r.pairs)

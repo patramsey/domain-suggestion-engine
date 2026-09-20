@@ -279,3 +279,41 @@ func TestCraftedBriefAsksForGroundedCompounds(t *testing.T) {
 		}
 	}
 }
+
+func TestParseVariants(t *testing.T) {
+	v1, err := ParseVariants("1")
+	if err != nil || len(v1) != 1 || v1[0] != VariantEvocative {
+		t.Errorf("ParseVariants('1') = %v, err=%v, want [VariantEvocative]", v1, err)
+	}
+
+	v2, err := ParseVariants("2")
+	if err != nil || len(v2) != 2 || v2[0] != VariantEvocative || v2[1] != VariantWordplay {
+		t.Errorf("ParseVariants('2') = %v, err=%v, want 2 variants", v2, err)
+	}
+
+	v3, err := ParseVariants("all")
+	if err != nil || len(v3) != 3 {
+		t.Errorf("ParseVariants('all') = %v, err=%v, want 3 variants", v3, err)
+	}
+
+	vNamed, err := ParseVariants("evocative,crafted")
+	if err != nil || len(vNamed) != 2 || vNamed[0] != VariantEvocative || vNamed[1] != VariantCrafted {
+		t.Errorf("ParseVariants('evocative,crafted') = %v, err=%v", vNamed, err)
+	}
+
+	if _, err := ParseVariants("invalid"); err == nil {
+		t.Error("expected error for invalid variant name")
+	}
+}
+
+func TestClientCustomVariants(t *testing.T) {
+	c := NewClient("test-key", "test-model")
+	if len(c.variants()) != 3 {
+		t.Errorf("default variants count = %d, want 3", len(c.variants()))
+	}
+	c.Variants = []Variant{VariantCrafted}
+	if len(c.variants()) != 1 || c.variants()[0] != VariantCrafted {
+		t.Errorf("custom variants = %v, want [VariantCrafted]", c.variants())
+	}
+}
+

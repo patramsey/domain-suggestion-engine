@@ -33,6 +33,7 @@ func main() {
 		AlgoEnabled:      envBool("ALGO_ENABLED", true),
 		ActiveGenerators:  envStrings("GENERATORS", "hacks,exact,compounds,affixes"),
 		AllGenerators:     []string{"hacks", "exact", "compounds", "affixes"},
+		LLMVariants:       envStrings("LLM_VARIANTS", "evocative,wordplay,crafted"),
 		CheckAvailability: envBool("CHECK_AVAILABILITY", false),
 		DNSResolverAddr:   envString("DNS_RESOLVER", "1.1.1.1:53"),
 		Version:           version,

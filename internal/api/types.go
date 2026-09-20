@@ -13,6 +13,7 @@ type SuggestRequest struct {
 	UnavailableDomains []string   `json:"unavailable_domains,omitempty"`
 	InspireFrom        []string   `json:"inspire_from,omitempty"`
 	CheckAvailability  bool       `json:"check_availability,omitempty"`
+	Variants           []string   `json:"variants,omitempty"`
 }
 
 type Suggestion struct {
@@ -56,10 +57,11 @@ type HealthResponse struct {
 // Config types
 
 type LLMConfig struct {
-	Model      string  `json:"model"`
-	TimeoutMs  int     `json:"timeout_ms"`
-	LLMShare   float64 `json:"llm_share"`
-	APIKeySet  bool    `json:"api_key_set"`
+	Model      string   `json:"model"`
+	TimeoutMs  int      `json:"timeout_ms"`
+	LLMShare   float64  `json:"llm_share"`
+	APIKeySet  bool     `json:"api_key_set"`
+	Variants   []string `json:"variants"`
 }
 
 type AlgoConfig struct {
