@@ -31,8 +31,8 @@ func main() {
 		LLMShare:         envFloat("LLM_SHARE", 0.60),
 		CommonWordSlots:  envInt("COMMON_WORD_SLOTS", 2),
 		AlgoEnabled:      envBool("ALGO_ENABLED", true),
-		ActiveGenerators: envStrings("GENERATORS", "hacks"),
-		AllGenerators:    []string{"hacks"},
+		ActiveGenerators: envStrings("GENERATORS", "hacks,exact"),
+		AllGenerators:    []string{"hacks", "exact"},
 		Version:          version,
 		BuiltAt:          builtAt,
 	}
