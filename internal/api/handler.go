@@ -38,8 +38,10 @@ type Config struct {
 	ActiveGenerators  []string
 	AllGenerators     []string
 	LLMVariants       []string // creative variants to run, e.g. ["evocative", "wordplay", "crafted"] or ["1"]
-	CheckAvailability bool     // check DNS availability for returned names; default false
+	CheckAvailability bool          // check DNS availability for returned names; default false
 	DNSResolverAddr   string
+	DNSCacheSize      int           // max entries in DNS LRU cache; 0 disables, default 5000
+	DNSCacheTTL       time.Duration // TTL for cached DNS availability outcomes; default 1h
 	Version           string
 	BuiltAt           string
 }
@@ -97,13 +99,28 @@ func NewHandler(cfg Config) (*Handler, error) {
 		resolverAddr = "1.1.1.1:53"
 	}
 
+	var dnsLook dnscheck.Lookup
+	if cfg.DNSCacheSize > 0 {
+		ttl := cfg.DNSCacheTTL
+		if ttl <= 0 {
+			ttl = dnscheck.DefaultCacheTTL
+		}
+		dnsCache, err := dnscheck.NewCache(cfg.DNSCacheSize, ttl)
+		if err != nil {
+			return nil, fmt.Errorf("DNSCache: %w", err)
+		}
+		dnsLook = dnscheck.CachedResolver(resolverAddr, dnsCache)
+	} else {
+		dnsLook = dnscheck.Resolver(resolverAddr)
+	}
+
 	return &Handler{
 		cfg:          cfg,
 		engine:       engine,
 		llm:          llmClient,
 		cache:        c,
 		icannSet:     tlds.DefaultRegistry.ICANNSet(),
-		dnsLookup:    dnscheck.Resolver(resolverAddr),
+		dnsLookup:    dnsLook,
 		variantNames: varNames,
 	}, nil
 }
