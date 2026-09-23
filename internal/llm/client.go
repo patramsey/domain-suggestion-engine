@@ -1,12 +1,10 @@
 package llm
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
 	"log/slog"
 	"math"
 	"net/http"
@@ -331,36 +329,10 @@ func (c *Client) call(ctx context.Context, system, user string) (callResult, err
 		},
 	}
 
-	body, err := json.Marshal(req)
+	respBody, err := c.postGemini(ctx, req)
 	if err != nil {
-		return callResult{}, fmt.Errorf("marshal request: %w", err)
+		return callResult{}, err
 	}
-
-	httpReq, err := http.NewRequestWithContext(ctx, http.MethodPost,
-		c.endpoint()+"?key="+c.apiKey, bytes.NewReader(body))
-	if err != nil {
-		return callResult{}, fmt.Errorf("build request: %w", err)
-	}
-	httpReq.Header.Set("Content-Type", "application/json")
-
-	resp, err := c.httpClient.Do(httpReq)
-	if err != nil {
-		return callResult{}, fmt.Errorf("http: %w", err)
-	}
-	defer resp.Body.Close()
-
-	respBody, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return callResult{}, fmt.Errorf("read response: %w", err)
-	}
-
-	if resp.StatusCode == http.StatusTooManyRequests {
-		return callResult{}, &rateLimitError{msg: fmt.Sprintf("rate limited (429): %s", truncate(string(respBody), 200))}
-	}
-	if resp.StatusCode != http.StatusOK {
-		return callResult{}, fmt.Errorf("gemini API status %d: %s", resp.StatusCode, truncate(string(respBody), 200))
-	}
-
 	return interpretResponse(respBody)
 }
 

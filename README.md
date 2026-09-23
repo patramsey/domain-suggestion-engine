@@ -425,6 +425,15 @@ go run ./cmd/ratings history-add -dir ratings/ -history eval-results/ratings/his
 
 `ratings.json` is an array of `{"id": "r001", "rating": "good"}`. The history file stores past ratings so the same name is never rated twice, and a round never contains two TLD variants of one name.
 
+**LLM judge** (`cmd/judge`) rates names the same way the human page does, for screening ideas without a rating round. It is an eval tool only — the server never calls it.
+
+```bash
+go run ./cmd/judge rate -dir ratings/                 # rates items.json into judge-ratings.json
+go run ./cmd/judge calibrate -examples 60 -n 400      # agreement against eval-results/ratings/history.json
+```
+
+Calibrated against 688 human ratings (2026-09-22), the judge agrees on good-vs-not 60–69% with 60 example ratings in the prompt, and 49% without them — below the 75% you get by calling everything good, and it varies between runs. It reproduced the direction of 3 of 4 past arm comparisons. Treat it as a rough screen for large differences, not as a gate; see `eval-results/README.md`.
+
 **End-to-end checks** (`cmd/suggestcheck`) exercise a running server: both tiers, tier balance, the TLD diversity cap, retries, and the `unavailable_domains` and TLD-filter paths, plus a load test. Disable the cache so every request reaches the model:
 
 ```bash
