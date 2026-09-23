@@ -96,38 +96,128 @@ func (m *gloveModel) vecFor(word string) ([gloveDims]float32, bool) {
 	return v, true
 }
 
-// subWords splits an SLD into known vocabulary sub-words using greedy
-// longest-match, skipping characters that don't start a recognised word.
-// Recognises GloVe vocabulary words (length 3+) and real 2-letter words from SCOWL.
-// Example: "forgeio" → ["forge", "io"].
+// maxSubWord is the longest sub-word considered; no English word in the
+// vocabulary that matters for brand names runs longer.
+const maxSubWord = 14
+
+// isSubWord reports whether cand is a usable sub-word. Words of 3+ letters
+// come from the GloVe vocabulary; 2-letter words must also be in SCOWL or
+// GloVe, and callers restrict where those may be used (see subWords).
+func isSubWord(cand string) bool {
+	if len(cand) < 2 {
+		return false
+	}
+	if _, ok := glove.index[cand]; ok {
+		return true
+	}
+	if len(cand) == 2 {
+		_, ok := wordlist.Level(cand)
+		return ok
+	}
+	return false
+}
+
+// subWords splits an SLD into known vocabulary sub-words.
+//
+// It first looks for a segmentation covering every letter, which is what a
+// real compound looks like ("aidrive" → "ai" + "drive", "duskbrew" → "dusk" +
+// "brew"), preferring the one with the fewest parts. Failing that it falls
+// back to the longest-covering segmentation of 3+ letter words, skipping
+// letters that start nothing recognisable ("iodesk" → "desk").
+//
+// Two-letter parts are only accepted in the full-coverage pass: obscure ones
+// (od, es, qi) would otherwise chop coined names into nonsense and inflate
+// their memorability — see issue #19.
 func subWords(sld string) []string {
-	var result []string
-	i := 0
-	for i < len(sld) {
-		found := false
-		end := min(i+14, len(sld))
-		for l := end - i; l >= 2; l-- {
-			cand := sld[i : i+l]
-			if _, ok := glove.index[cand]; ok {
-				result = append(result, cand)
-				i += l
-				found = true
-				break
-			}
-			if l == 2 {
-				if _, ok := wordlist.Level(cand); ok {
-					result = append(result, cand)
-					i += l
-					found = true
-					break
+	if words, ok := segmentFull(sld); ok {
+		return words
+	}
+	return segmentPartial(sld)
+}
+
+// maxShortParts is how many 2-letter parts a full-coverage segmentation may
+// use. One is enough for real compounds ("ai" + "drive", "go" + "fast");
+// allowing two lets nonsense through, e.g. "asan" as "as" + "an".
+const maxShortParts = 1
+
+// segmentFull returns the fewest-part segmentation that covers all of sld,
+// using at most maxShortParts 2-letter words, or ok=false when there is none.
+func segmentFull(sld string) ([]string, bool) {
+	n := len(sld)
+	if n == 0 {
+		return nil, false
+	}
+	// parts[i][k] = fewest parts covering sld[i:] with k 2-letter words left
+	// to spend; cut[i][k] = where the first of those parts ends.
+	const unreachable = math.MaxInt
+	parts := make([][maxShortParts + 1]int, n+1)
+	cut := make([][maxShortParts + 1]int, n+1)
+	for i := range n {
+		for k := range parts[i] {
+			parts[i][k] = unreachable
+		}
+	}
+	for i := n - 1; i >= 0; i-- {
+		for k := range parts[i] {
+			for l := min(maxSubWord, n-i); l >= 2; l-- {
+				spend := 0
+				if l == 2 {
+					spend = 1
+				}
+				if k < spend || !isSubWord(sld[i:i+l]) {
+					continue
+				}
+				rest := parts[i+l][k-spend]
+				if rest != unreachable && 1+rest < parts[i][k] {
+					parts[i][k], cut[i][k] = 1+rest, i+l
 				}
 			}
 		}
-		if !found {
-			i++
+	}
+	if parts[0][maxShortParts] == unreachable {
+		return nil, false
+	}
+	var out []string
+	for i, k := 0, maxShortParts; i < n; {
+		end := cut[i][k]
+		out = append(out, sld[i:end])
+		if end-i == 2 {
+			k--
+		}
+		i = end
+	}
+	return out, true
+}
+
+// segmentPartial returns the segmentation of 3+ letter words covering the
+// most letters, preferring fewer parts, and skipping the rest.
+func segmentPartial(sld string) []string {
+	n := len(sld)
+	covered := make([]int, n+1)
+	parts := make([]int, n+1)
+	take := make([]int, n+1) // length of the word taken at i, 0 = skip a letter
+	for i := n - 1; i >= 0; i-- {
+		covered[i], parts[i], take[i] = covered[i+1], parts[i+1], 0
+		for l := min(maxSubWord, n-i); l >= 3; l-- {
+			if !isSubWord(sld[i : i+l]) {
+				continue
+			}
+			c, p := l+covered[i+l], 1+parts[i+l]
+			if c > covered[i] || (c == covered[i] && p < parts[i]) {
+				covered[i], parts[i], take[i] = c, p, l
+			}
 		}
 	}
-	return result
+	var out []string
+	for i := 0; i < n; {
+		if take[i] == 0 {
+			i++
+			continue
+		}
+		out = append(out, sld[i:i+take[i]])
+		i += take[i]
+	}
+	return out
 }
 
 // avgVec computes the mean vector over a list of words, ignoring unknowns.
@@ -175,6 +265,17 @@ func memorability(sld string) float64 {
 	n := len(sld)
 	if n == 0 {
 		return 0
+	}
+	// 1-2 letter names are memorable by definition, and too short to split.
+	// This also covers two-letter names missing from the vocabulary, such as
+	// "io" (issue #19).
+	if n <= 2 {
+		return 1
+	}
+	// A whole dictionary word is maximally recognisable, even when the
+	// vocabulary cannot split it ("stillness", "solstice").
+	if _, ok := wordlist.Level(sld); ok {
+		return 1
 	}
 	matched := 0
 	for _, w := range subWords(sld) {
