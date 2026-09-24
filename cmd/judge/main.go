@@ -123,13 +123,16 @@ func rateAllWithSystem(ctx context.Context, c *llm.Client, model, system string,
 	return out, cost, firstErr
 }
 
-func newClient(model string) (*llm.Client, error) {
+// newClient builds the judge's client. thinking is the Gemini thinkingLevel;
+// some models (gemini-3.8-flash) reject "minimal", so it is a flag.
+func newClient(model, thinking string) (*llm.Client, error) {
 	key := os.Getenv("GEMINI_API_KEY")
 	if key == "" {
 		return nil, fmt.Errorf("GEMINI_API_KEY not set")
 	}
 	c := llm.NewClient(key, model)
 	c.Temperature = 0 // a judge should be as repeatable as the API allows
+	c.ThinkingLevel = thinking
 	return c, nil
 }
 
@@ -138,6 +141,7 @@ func runRate(args []string) error {
 	dir := fs.String("dir", "", "directory holding items.json")
 	model := fs.String("model", defaultModel, "model to judge with")
 	size := fs.Int("batch", 20, "names per request")
+	thinking := fs.String("thinking", "minimal", "Gemini thinkingLevel: minimal, low, medium, high")
 	out := fs.String("out", "", "output file (default DIR/judge-ratings.json)")
 	if err := fs.Parse(args); err != nil {
 		return err
@@ -149,7 +153,7 @@ func runRate(args []string) error {
 	if err := readJSON(filepath.Join(*dir, "items.json"), &items); err != nil {
 		return err
 	}
-	c, err := newClient(*model)
+	c, err := newClient(*model, *thinking)
 	if err != nil {
 		return err
 	}
@@ -193,6 +197,7 @@ func runCalibrate(args []string) error {
 	size := fs.Int("batch", 20, "names per request")
 	outDir := fs.String("out", "", "directory to write judge-ratings.json and items.json into")
 	nExamples := fs.Int("examples", 0, "held-out human ratings to show the judge as calibration examples")
+	thinking := fs.String("thinking", "minimal", "Gemini thinkingLevel: minimal, low, medium, high")
 	if err := fs.Parse(args); err != nil {
 		return err
 	}
@@ -239,7 +244,7 @@ func runCalibrate(args []string) error {
 		system += examplesBlock(ex, exRatings)
 		fmt.Fprintf(os.Stderr, "Showing the judge %d example ratings; measuring on the other %d.\n", len(ex), len(items))
 	}
-	c, err := newClient(*model)
+	c, err := newClient(*model, *thinking)
 	if err != nil {
 		return err
 	}
