@@ -121,6 +121,7 @@ func runCompare(args []string) error {
 	model := fs.String("model", defaultModel, "model to judge with")
 	size := fs.Int("batch", 10, "pairs per request")
 	seed := fs.Int64("seed", 1, "pairing seed")
+	thinking := fs.String("thinking", "minimal", "Gemini thinkingLevel: minimal, low, medium, high")
 	if err := fs.Parse(args); err != nil {
 		return err
 	}
@@ -138,7 +139,7 @@ func runCompare(args []string) error {
 	if len(pairs) == 0 {
 		return fmt.Errorf("no shared queries between the two snapshots")
 	}
-	c, err := newClient(*model)
+	c, err := newClient(*model, *thinking)
 	if err != nil {
 		return err
 	}

@@ -437,6 +437,8 @@ go run ./cmd/judge pairs -examples 30 -model gemini-3.5-flash     # agreement on
 go run ./cmd/judge compare -a runA.json -b runB.json -per-query 10 -model gemini-3.5-flash
 ```
 
+Costs per comparison (~480 answers): about $0.17 with `gemini-3.5-flash`, the most accurate judge tested; `gemini-3.8-flash` is half the price but less accurate, and needs `-thinking low` (it rejects `minimal`).
+
 **Use `compare`, not `rate`.** Asked to grade names one at a time, the judge agrees with the human on good-vs-not only 49–69%, worse than calling every name good (75%), and it wanders between runs. Asked which of two names is better, it picks the human's preference 67% of the time with no order bias, and with ~480 answers per comparison (about 10 pairs per query, both orders) it reproduced the human verdicts we have. Costs a few cents per comparison. Calibration data: `eval-results/README.md`.
 
 **End-to-end checks** (`cmd/suggestcheck`) exercise a running server: both tiers, tier balance, the TLD diversity cap, retries, and the `unavailable_domains` and TLD-filter paths, plus a load test. Disable the cache so every request reaches the model:

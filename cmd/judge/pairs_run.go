@@ -88,6 +88,7 @@ func runPairs(args []string) error {
 	history := fs.String("history", "eval-results/ratings/history.json", "human ratings to build pairs from")
 	perQuery := fs.Int("per-query", 6, "pairs per query")
 	seed := fs.Int64("seed", 1, "pairing seed")
+	thinking := fs.String("thinking", "minimal", "Gemini thinkingLevel: minimal, low, medium, high")
 	model := fs.String("model", defaultModel, "model to judge with")
 	size := fs.Int("batch", 10, "pairs per request")
 	nExamples := fs.Int("examples", 0, "held-out settled comparisons to show the judge")
@@ -111,7 +112,7 @@ func runPairs(args []string) error {
 		pairs = pairs[*nExamples:]
 		fmt.Fprintf(os.Stderr, "Showing %d settled comparisons; measuring on the other %d.\n", *nExamples, len(pairs))
 	}
-	c, err := newClient(*model)
+	c, err := newClient(*model, *thinking)
 	if err != nil {
 		return err
 	}

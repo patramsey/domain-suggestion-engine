@@ -515,3 +515,13 @@ Chance is 50%; 67.4% over 184 answers is ≈4.7 standard errors clear of it. Per
 Round 3 was never significant for the human either, so "too close" is the right answer there. Use **10 pairs per query, both orders (~480 answers)**; at 192 the interval is too wide for the differences that matter.
 
 **How to use it:** screen with `judge compare` (a few cents, a few minutes), and spend a human round only on the candidate that survives. `gemini-3.5-flash` has no price in `internal/llm/pricing.go`, so its cost prints as "n/a" — add the rate to see spend.
+
+**Which model to judge with** (same 92 pairs, 30 examples, both orders):
+
+| Model | Picks the human's preference | Cost for 184 answers | Note |
+|---|---|---|---|
+| `gemini-3.5-flash` | 65–67% | $0.065 | best tested; used for comparisons |
+| `gemini-3.8-flash` | 59.8% | $0.029 | cheaper, less accurate; needs `-thinking low` |
+| `gemini-3.5-flash-lite` | 62.0% | $0.015 | fine for a rough screen |
+
+Newer is not better here: 3.8 Flash is half the price of 3.5 Flash and loses ~6 points of agreement. Prices for all of these are now in `internal/llm/pricing.go` (3.6–3.8 Flash are on a promotional rate that doubles on 2027-01-01).

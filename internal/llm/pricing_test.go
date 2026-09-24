@@ -31,3 +31,18 @@ func TestEstimateCostUnknownModel(t *testing.T) {
 		t.Error("IsPriced should be false for an unknown model")
 	}
 }
+
+func TestEstimateCostFlashModels(t *testing.T) {
+	// 1M in + 1M out: 3.5 Flash is the dearest, 3.8 Flash the cheapest of the
+	// full Flash models while its promotional rate lasts (see pricing.go).
+	u := TokenUsage{PromptTokens: 1_000_000, CandidateTokens: 1_000_000}
+	for model, want := range map[string]float64{
+		"gemini-3.5-flash": 10.50,
+		"gemini-3.8-flash": 4.50,
+	} {
+		got, ok := EstimateCost(model, u)
+		if !ok || math.Abs(got-want) > 1e-9 {
+			t.Errorf("%s: cost = %v ok = %v, want %v", model, got, ok, want)
+		}
+	}
+}
