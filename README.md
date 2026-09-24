@@ -432,7 +432,12 @@ go run ./cmd/judge rate -dir ratings/                 # rates items.json into ju
 go run ./cmd/judge calibrate -examples 60 -n 400      # agreement against eval-results/ratings/history.json
 ```
 
-Calibrated against 688 human ratings (2026-09-22), the judge agrees on good-vs-not 60–69% with 60 example ratings in the prompt, and 49% without them — below the 75% you get by calling everything good, and it varies between runs. It reproduced the direction of 3 of 4 past arm comparisons. Treat it as a rough screen for large differences, not as a gate; see `eval-results/README.md`.
+```bash
+go run ./cmd/judge pairs -examples 30 -model gemini-3.5-flash     # agreement on head-to-head preferences
+go run ./cmd/judge compare -a runA.json -b runB.json -per-query 10 -model gemini-3.5-flash
+```
+
+**Use `compare`, not `rate`.** Asked to grade names one at a time, the judge agrees with the human on good-vs-not only 49–69%, worse than calling every name good (75%), and it wanders between runs. Asked which of two names is better, it picks the human's preference 67% of the time with no order bias, and with ~480 answers per comparison (about 10 pairs per query, both orders) it reproduced the human verdicts we have. Costs a few cents per comparison. Calibration data: `eval-results/README.md`.
 
 **End-to-end checks** (`cmd/suggestcheck`) exercise a running server: both tiers, tier balance, the TLD diversity cap, retries, and the `unavailable_domains` and TLD-filter paths, plus a load test. Disable the cache so every request reaches the model:
 

@@ -1,5 +1,11 @@
 package main
 
+import (
+	"fmt"
+
+	"github.com/patlivet/domain-suggestion-engine/internal/llm"
+)
+
 // stats compares the judge's verdicts with the human's over the names both rated.
 type stats struct {
 	N         int                       // names rated by both
@@ -51,4 +57,13 @@ func agreement(human, judge map[string]string) stats {
 		}
 	}
 	return st
+}
+
+// costLabel formats spend, or "n/a" for a model with no price in
+// internal/llm/pricing.go — printing $0.0000 there would read as free.
+func costLabel(model string, cost float64) string {
+	if !llm.IsPriced(model) {
+		return "cost n/a"
+	}
+	return fmt.Sprintf("$%.4f", cost)
 }

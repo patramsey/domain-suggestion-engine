@@ -5,8 +5,13 @@
 //
 //	rate      -dir DIR [-model M] [-batch N] [-out FILE]
 //	          rates DIR/items.json into DIR/judge-ratings.json
-//	calibrate -history FILE [-n N] [-seed S] [-model M]
+//	calibrate -history FILE [-n N] [-seed S] [-model M] [-examples K]
 //	          rates names the human already rated and reports agreement
+//	pairs     -history FILE [-per-query N] [-seed S] [-model M]
+//	          asks which of two rated names is better and scores the answers
+//	          against the human's preference, each pair asked in both orders
+//	compare   -a SNAPSHOT -b SNAPSHOT [-a-variant V] [-b-variant V]
+//	          runs two eval snapshots head to head and reports a win rate
 //
 // The judge is a measuring instrument for evals only: the server never calls it.
 package main
@@ -38,6 +43,10 @@ func main() {
 		err = runRate(os.Args[2:])
 	case "calibrate":
 		err = runCalibrate(os.Args[2:])
+	case "pairs":
+		err = runPairs(os.Args[2:])
+	case "compare":
+		err = runCompare(os.Args[2:])
 	default:
 		usage()
 	}
@@ -50,7 +59,10 @@ func main() {
 func usage() {
 	fmt.Fprint(os.Stderr, `usage:
   judge rate      -dir DIR [-model M] [-batch N] [-out FILE]
-  judge calibrate -history FILE [-n N] [-seed S] [-model M]
+  judge calibrate -history FILE [-n N] [-seed S] [-model M] [-examples K]
+  judge pairs     -history FILE [-per-query N] [-seed S] [-model M]
+  judge compare   -a SNAPSHOT -b SNAPSHOT [-a-variant V] [-b-variant V]
+                  [-top N] [-per-query N] [-model M]
 `)
 	os.Exit(2)
 }
@@ -160,7 +172,7 @@ func runRate(args []string) error {
 	if err := writeJSON(path, rows); err != nil {
 		return err
 	}
-	fmt.Printf("Rated %d of %d names. Cost $%.4f. Wrote %s\n", len(rows), len(items), cost, path)
+	fmt.Printf("Rated %d of %d names. %s. Wrote %s\n", len(rows), len(items), costLabel(*model, cost), path)
 	return nil
 }
 
@@ -263,7 +275,7 @@ func runCalibrate(args []string) error {
 }
 
 func printStats(st stats, model string, cost float64) {
-	fmt.Printf("\n=== JUDGE AGREEMENT (%s, %d names, $%.4f) ===\n\n", model, st.N, cost)
+	fmt.Printf("\n=== JUDGE AGREEMENT (%s, %d names, %s) ===\n\n", model, st.N, costLabel(model, cost))
 	if st.Missing > 0 {
 		fmt.Printf("  %d names came back unrated.\n", st.Missing)
 	}

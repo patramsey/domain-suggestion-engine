@@ -490,3 +490,28 @@ Arm-level replay of past decisions (top-10 names per arm that the human also rat
 3 of 4, with the miss on the closest pair — which was inside human noise anyway. Absolute levels are far too harsh to compare against a fixed bar like "≥ 80% good".
 
 **Verdict:** usable as a cheap screen for large differences (a few cents per 100 names), not as a replacement for a rating round. Next thing worth trying: pairwise A-vs-B judging per query, which usually beats absolute scoring.
+
+### LLM judge, pairwise — 2026-09-23
+
+Asking for a verdict on one name at a time did not work (see above). Asking which of **two** names better suits the business does, because the model only has to rank, not to place an absolute bar.
+
+Agreement with the human's own preference, over pairs built from `history.json` (a name they rated good against one they rated okay or bad, same query, each pair asked in both orders):
+
+| Setup | Picks the human's preferred name | Same answer in both orders |
+|---|---|---|
+| `gemini-3.5-flash-lite`, zero-shot, 122 pairs | 56.6% | 100% |
+| + 30 settled comparisons as examples, 92 pairs | 62.0% | 100% |
+| **`gemini-3.5-flash` + 30 examples, 92 pairs** | **67.4%** | 100% |
+
+Chance is 50%; 67.4% over 184 answers is ≈4.7 standard errors clear of it. Perfect order-consistency means the model is not simply favouring whichever name it sees first.
+
+`judge compare` then runs two eval snapshots head to head. Sample size decides whether it can see a difference:
+
+| Comparison | Human result | Judge, 192 answers | Judge, 480 answers |
+|---|---|---|---|
+| `current` vs `c1-grounded` (round 5) | 96% vs 82% good | 48.4% — too close | **55.4% for `current`** (CI 51.0–59.9) ✓ |
+| 3.1 vs 3.5 untuned (round 3) | 74% vs 84% good, p = 0.32 | 49.0% — too close | 49.6% — too close |
+
+Round 3 was never significant for the human either, so "too close" is the right answer there. Use **10 pairs per query, both orders (~480 answers)**; at 192 the interval is too wide for the differences that matter.
+
+**How to use it:** screen with `judge compare` (a few cents, a few minutes), and spend a human round only on the candidate that survives. `gemini-3.5-flash` has no price in `internal/llm/pricing.go`, so its cost prints as "n/a" — add the rate to see spend.
