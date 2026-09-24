@@ -425,6 +425,20 @@ go run ./cmd/ratings history-add -dir ratings/ -history eval-results/ratings/his
 
 `ratings.json` is an array of `{"id": "r001", "rating": "good"}`. The history file stores past ratings so the same name is never rated twice, and a round never contains two TLD variants of one name.
 
+**LLM judge** (`cmd/judge`) rates names the same way the human page does, for screening ideas without a rating round. It is an eval tool only — the server never calls it.
+
+```bash
+go run ./cmd/judge rate -dir ratings/                 # rates items.json into judge-ratings.json
+go run ./cmd/judge calibrate -examples 60 -n 400      # agreement against eval-results/ratings/history.json
+```
+
+```bash
+go run ./cmd/judge pairs -examples 30 -model gemini-3.5-flash     # agreement on head-to-head preferences
+go run ./cmd/judge compare -a runA.json -b runB.json -per-query 10 -model gemini-3.5-flash
+```
+
+**Use `compare`, not `rate`.** Asked to grade names one at a time, the judge agrees with the human on good-vs-not only 49–69%, worse than calling every name good (75%), and it wanders between runs. Asked which of two names is better, it picks the human's preference 67% of the time with no order bias, and with ~480 answers per comparison (about 10 pairs per query, both orders) it reproduced the human verdicts we have. Costs a few cents per comparison. Calibration data: `eval-results/README.md`.
+
 **End-to-end checks** (`cmd/suggestcheck`) exercise a running server: both tiers, tier balance, the TLD diversity cap, retries, and the `unavailable_domains` and TLD-filter paths, plus a load test. Disable the cache so every request reaches the model:
 
 ```bash

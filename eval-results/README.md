@@ -465,3 +465,53 @@ The LLM was asked for 3 names per name returned, sized when yield was low. Yield
 At 2× the smaller pool left 2 of 28 requests short of `count` after the TLD diversity cap, so the handler now tops up from the pre-cap ranked pool (`backfillToCount`). Server checks after that fix: 32/32 requests, every response full at 20 names, load n=200 c=5 p50 / p95 / p99 = 1241 / 1467 / 1717 ms (3×: 1639 / 1847 / 2135 ms). The top-up also fixes narrow `tld_filter` requests, which the cap had limited to 10 names.
 
 Availability may be 3–5 points lower than at 3× (per-run spread is 52–65%, so this is within noise). Worth re-checking against a registrar if the top-20 registrable share matters more than the 400 ms.
+
+### LLM judge — calibration against 688 human ratings, 2026-09-22
+
+`cmd/judge` asks a model to rate names with the human page's rubric and writes `ratings.json` in the same format, so `cmd/ratings analyze` reads either. Goal: screen prompt and ranking changes without a human round.
+
+| Setup | Exact verdict | Good vs not-good | Judge good-share (human: 75–76%) |
+|---|---|---|---|
+| Zero-shot, 688 names | 44.3% | 49.4% | 42.7% |
+| 60 example ratings in prompt, 340 held-out names | 62.9% | **68.8%** | 67.4% |
+| 60 examples, 628 held-out names | 55.1% | 59.7% | 52.2% |
+
+Few-shot examples of the rater's own verdicts help a lot, but the result is still **below the 75% you get by calling every name good**, and it moves 9 points between runs of the same configuration. Per-name, the judge cannot be trusted as a gate.
+
+Arm-level replay of past decisions (top-10 names per arm that the human also rated):
+
+| Comparison | Human good-share | Judge good-share | Same direction? |
+|---|---|---|---|
+| 3.1 vs 3.5 untuned | 78.3% / 85.3% | 49.6% / 54.4% | yes |
+| current vs c1-grounded | 89.9% / 82.3% | 63.8% / 62.9% | yes (margin 1 pt) |
+| c1-grounded vs c3-concrete | 76.9% / 75.0% | 53.8% / 59.4% | **no** |
+| 3× vs 2× over-request | 79.2% / 70.6% | 70.8% / 64.7% | yes |
+
+3 of 4, with the miss on the closest pair — which was inside human noise anyway. Absolute levels are far too harsh to compare against a fixed bar like "≥ 80% good".
+
+**Verdict:** usable as a cheap screen for large differences (a few cents per 100 names), not as a replacement for a rating round. Next thing worth trying: pairwise A-vs-B judging per query, which usually beats absolute scoring.
+
+### LLM judge, pairwise — 2026-09-23
+
+Asking for a verdict on one name at a time did not work (see above). Asking which of **two** names better suits the business does, because the model only has to rank, not to place an absolute bar.
+
+Agreement with the human's own preference, over pairs built from `history.json` (a name they rated good against one they rated okay or bad, same query, each pair asked in both orders):
+
+| Setup | Picks the human's preferred name | Same answer in both orders |
+|---|---|---|
+| `gemini-3.5-flash-lite`, zero-shot, 122 pairs | 56.6% | 100% |
+| + 30 settled comparisons as examples, 92 pairs | 62.0% | 100% |
+| **`gemini-3.5-flash` + 30 examples, 92 pairs** | **67.4%** | 100% |
+
+Chance is 50%; 67.4% over 184 answers is ≈4.7 standard errors clear of it. Perfect order-consistency means the model is not simply favouring whichever name it sees first.
+
+`judge compare` then runs two eval snapshots head to head. Sample size decides whether it can see a difference:
+
+| Comparison | Human result | Judge, 192 answers | Judge, 480 answers |
+|---|---|---|---|
+| `current` vs `c1-grounded` (round 5) | 96% vs 82% good | 48.4% — too close | **55.4% for `current`** (CI 51.0–59.9) ✓ |
+| 3.1 vs 3.5 untuned (round 3) | 74% vs 84% good, p = 0.32 | 49.0% — too close | 49.6% — too close |
+
+Round 3 was never significant for the human either, so "too close" is the right answer there. Use **10 pairs per query, both orders (~480 answers)**; at 192 the interval is too wide for the differences that matter.
+
+**How to use it:** screen with `judge compare` (a few cents, a few minutes), and spend a human round only on the candidate that survives. `gemini-3.5-flash` has no price in `internal/llm/pricing.go`, so its cost prints as "n/a" — add the rate to see spend.
