@@ -91,7 +91,7 @@ Input (keywords, description, or existing domain like "patspizza.com")
   ▼
 Parser — tokenises, strips stopwords, extracts the SLD from existing domains
   │
-  ├─── LLM tier ──────────────────────────────────────────── ~0.97s
+  ├─── LLM tier ──────────────────────────────────────────── ~1.0-1.4s
   │    Three parallel Gemini 3.5 Flash-Lite calls, each with a different
   │    creative brief to maximise variety:
   │
@@ -131,7 +131,7 @@ Reserve 2 of every 10 results for very common single words, return the top N
 
 | | |
 |---|---|
-| Latency | ~0.97s median, ~1.25s p95 (measured at 5 concurrent requests) |
+| Latency | ~1.0–1.4s median, ~1.3–2.1s p95 (5 concurrent requests; Gemini response times vary by ~30% through the day, so compare configurations back to back, not against a figure recorded earlier) |
 | Cost per request | ~$0.004 at Gemini paid-tier prices |
 | LLM model | `gemini-3.5-flash-lite` (override with `GEMINI_MODEL`) |
 | Throughput | Bounded by your Gemini rate limits |
