@@ -619,3 +619,23 @@ Judged quality is a tie on 1,620 answers, the human round was a tie within noise
 The one metric moving the wrong way is the typo rate, +2.7 points, and the typo flag is the one deterministic metric validated against human ratings. Against that: the server gate measured 4.7% typos in the top 10 after the change, in line with before, so the eval figure may be run-to-run noise. Worth watching in the next eval.
 
 Gates after the change (`cmd/suggestcheck`, `CACHE_SIZE=0`): 32/32 requests, 0 errors, every response full at 20 names; load n=200 c=5, 0% failures, p50 / p95 / p99 = 1279 / 1556 / 1652 ms.
+
+### Which algorithmic generators to run — 2026-10-05
+
+The `exact`, `compounds` and `affixes` generators shipped enabled but unmeasured. The eval harness only runs the LLM tier, so this compared live server output: `cmd/suggestcheck quality -queries all` per configuration, converted to snapshots for `-avail` and `judge compare`.
+
+| Generators | DNS free, top 10 / top 20 | Typo | Common | Mean spec | Top-10 names that are a literal query word |
+|---|---|---|---|---|---|
+| `hacks` only | **57.9% / 57.0%** | 5.3% | 19.1% | 0.078 | 1% |
+| `hacks,compounds,affixes` | 53.8% / 54.6% | 5.0% | 15.9% | 0.099 | 1% |
+| all four (as shipped) | 50.8% / 50.2% | 4.7% | 16.6% | 0.103 | **10%** |
+
+Judge, all four vs `hacks` only: 52.0% to 48.0% over 1,624 answers — the interval spans 50%, so judged quality is a tie.
+
+`exact` returns the query word itself (`meditation.app`, `developer.codes`, `team.management`). Those filled 10% of the top 10, are nearly always registered, and are the least creative thing the engine can say. Removing it recovers ~3 points of availability and takes the literal-word share back to 1%.
+
+`compounds` and `affixes` stay on: they cost nothing, improve specificity (0.078 → 0.099) and lower the common-word rate, for an availability cost inside single-run noise (±5 points).
+
+**Default is now `hacks,compounds,affixes`.** Single runs per configuration, so the availability figures carry ±5 points of noise; the `exact` finding rests on the mechanism and the literal-word count, which are not noisy.
+
+Unrelated oddity spotted in the output: `com.pizza` appeared from `compounds` or `affixes` — worth a look at whether those generators should treat TLD-like fragments as words.

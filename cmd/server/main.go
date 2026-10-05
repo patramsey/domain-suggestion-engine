@@ -31,7 +31,9 @@ func main() {
 		LLMShare:         envFloat("LLM_SHARE", 0.60),
 		CommonWordSlots:  envInt("COMMON_WORD_SLOTS", 2),
 		AlgoEnabled:      envBool("ALGO_ENABLED", true),
-		ActiveGenerators:  envStrings("GENERATORS", "hacks,exact,compounds,affixes"),
+		// exact is off by default: it returns the query word itself (meditation.app),
+		// which filled 10% of the top 10 with names that are nearly always taken.
+		ActiveGenerators:  envStrings("GENERATORS", "hacks,compounds,affixes"),
 		AllGenerators:     []string{"hacks", "exact", "compounds", "affixes"},
 		LLMVariants:       envStrings("LLM_VARIANTS", "evocative,wordplay,crafted"),
 		CheckAvailability: envBool("CHECK_AVAILABILITY", false),

@@ -306,7 +306,7 @@ All configuration is through environment variables.
 | `LLM_SHARE` | `0.60` | Share of result slots reserved for LLM suggestions. |
 | `ALGO_ENABLED` | `true` | `false` turns off the algorithmic tier (LLM-only results). |
 | `COMMON_WORD_SLOTS` | `2` | Results per 10 kept for very common single words, ranked by quality (0–10). `0` ranks them with the full availability penalty, which pushes nearly all of them out. |
-| `GENERATORS` | `hacks,exact,compounds,affixes` | Comma-separated list of active algorithmic generators (`hacks`, `exact`, `compounds`, `affixes`). |
+| `GENERATORS` | `hacks,compounds,affixes` | Active algorithmic generators. `exact` also exists but is off by default: it returns the query word itself (`meditation.app`), which is nearly always registered. |
 | `LLM_VARIANTS` | `evocative,wordplay,crafted` | Comma-separated creative briefs to run concurrently. |
 | `CHECK_AVAILABILITY` | `false` | When `true`, enables live DNS availability check by default on all `/suggest` requests. |
 | `DNS_RESOLVER` | `1.1.1.1:53` | Upstream DNS resolver host:port for live availability lookups. |
