@@ -661,3 +661,19 @@ The cost is input tokens: every call resends the prompt and TLD list, so input d
 Note the typo rate rose 0.9 points. That is the second time a change has nudged typos up (see the concrete brief), so it is worth watching rather than dismissing.
 
 **Default is now `LLM_SHARDS=2`.** Also measured and rejected: trimming the TLD list from the prompt. Requests sent with a 2-TLD filter (≈2,900 fewer input tokens) are no faster than ones sending all 154 — 1380 vs 1424 ms, 1300 vs 1307, 1389 vs 1260 — so the list costs money, not time, and removing it would invite invented TLDs. Gemini context caching would be the right way to cut that cost (cached input is $0.03/M against $0.30/M), but `cachedContentTokenCount` stayed 0 across four identical repeats of a 5,400-token prompt on `gemini-3.5-flash-lite`, and our real calls are ~1,000 tokens — well under the 4,096-token minimum the docs give for the 3.x Flash models. Not available to us today.
+
+### Latency varies with the API, not just with our code — 2026-10-05
+
+After #30, #31 and #32 merged, a combined run on `main` measured p50 1372 ms, against 968 ms for the sharding branch hours earlier. Token counts were effectively identical (prompt 5,992; output 898 vs 921), so nothing in the merge made the engine do more work — Gemini was simply slower at that hour. Two further load runs on the same build gave p50 1280 and 1237 ms, p95 1985 and 2051 ms.
+
+**Only compare latency configurations back to back in one session.** The sharding result (1264 → 966 ms) was measured that way and stands; absolute numbers recorded on different days do not compare. Spread observed so far on the same build: roughly ±30%.
+
+Combined state of `main` after the three merges (32 quality requests, 0 errors, every response full at 20 names; 120 load requests, 0 failures):
+
+| | Value |
+|---|---|
+| Typo / common / specificity, top 10 | 5.0% / 16.6% / 0.094 |
+| DNS free, top 10 / top 20 | 51.2% / 53.8% |
+| Cost per request | $0.00410 |
+
+The typo rate is the number worth noting: two changes each nudged it up in isolation (concrete brief +2.7, sharding +0.9), and the combined build measures 5.0% — no worse than the 4.9% before either. The earlier rises were run-to-run noise.
