@@ -525,3 +525,21 @@ Round 3 was never significant for the human either, so "too close" is the right 
 | `gemini-3.5-flash-lite` | 62.0% | $0.015 | fine for a rough screen |
 
 Newer is not better here: 3.8 Flash is half the price of 3.5 Flash and loses ~6 points of agreement. Prices for all of these are now in `internal/llm/pricing.go` (3.6–3.8 Flash are on a promotional rate that doubles on 2027-01-01).
+
+### Does our own ranking track quality? — 2026-10-04
+
+`judge rankcheck` splits each query's ranked candidates into score bands, pairs names from different bands, and asks the judge which is better. The scorer's own order decides which name is "supposed" to win, so no human labels are needed. Canary pairs with known human answers are mixed into the same batches to show whether the judge was working that run.
+
+Snapshot `run-2026-09-20T035403.336-over2.json` (24 queries, ~29 candidates each), judge `gemini-3.5-flash` with 30 human-settled comparisons as examples:
+
+| Run | Canary accuracy | Band split | Answers | Higher-scored name won |
+|---|---|---|---|---|
+| no examples (discarded) | 52.5% ✗ | quartiles | 384 | — (instrument not working) |
+| 30 examples | 70.0% ✓ | quartiles, gap 1 / 2 / 3 | 210 / 138 / 36 | 47.1% / 42.8% / 55.6% |
+| 30 examples, seed 7 | 57.5% | halves | 480 | **52.3%** (95% CI 47.8–56.8) |
+
+**Finding: no measurable signal, even top half versus bottom half.** This is the second independent measurement to say so — ranking the 688 human-rated names gave AUC ≈ 0.50 (see above). Both agree that among candidates the LLM produced and validation kept, the composite score does not order names by quality.
+
+Two caveats. The pool is already filtered, so the "bottom band" is still a plausible LLM name, not junk — the score clearly does separate names from gibberish, since that is what fills the shortlist. And the canary figure moves between runs (57–70% on 80 answers), so treat a single run's instrument reading as coarse.
+
+Worth noting what this does *not* say: the availability penalty, the diversity cap and the common-word slots all demonstrably change outcomes we care about. It is the four quality signals' relative weighting that shows no measurable effect on judged preference.

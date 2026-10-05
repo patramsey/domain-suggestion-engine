@@ -12,6 +12,9 @@
 //	          against the human's preference, each pair asked in both orders
 //	compare   -a SNAPSHOT -b SNAPSHOT [-a-variant V] [-b-variant V]
 //	          runs two eval snapshots head to head and reports a win rate
+//	rankcheck -snapshot SNAPSHOT [-bands N] [-per-query N] [-canaries N]
+//	          asks whether the scorer's own ordering matches judged preference,
+//	          with canary pairs of known human answer mixed in. No human needed.
 //
 // The judge is a measuring instrument for evals only: the server never calls it.
 package main
@@ -47,6 +50,8 @@ func main() {
 		err = runPairs(os.Args[2:])
 	case "compare":
 		err = runCompare(os.Args[2:])
+	case "rankcheck":
+		err = runRankCheck(os.Args[2:])
 	default:
 		usage()
 	}
@@ -63,6 +68,8 @@ func usage() {
   judge pairs     -history FILE [-per-query N] [-seed S] [-model M]
   judge compare   -a SNAPSHOT -b SNAPSHOT [-a-variant V] [-b-variant V]
                   [-top N] [-per-query N] [-model M]
+  judge rankcheck -snapshot SNAPSHOT [-variant V] [-bands N] [-per-query N]
+                  [-canaries N] [-model M]
 `)
 	os.Exit(2)
 }

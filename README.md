@@ -437,6 +437,12 @@ go run ./cmd/judge pairs -examples 30 -model gemini-3.5-flash     # agreement on
 go run ./cmd/judge compare -a runA.json -b runB.json -per-query 10 -model gemini-3.5-flash
 ```
 
+```bash
+go run ./cmd/judge rankcheck -snapshot run.json -bands 2 -per-query 10   # is our own ranking any good?
+```
+
+`rankcheck` needs no human: it pairs names the scorer ranked far apart and asks the judge which is better, so 50% means the ranking carries no information at that distance. Every run mixes in canary pairs whose human answer is known and prints the judge's accuracy on them first — if that is far below ~65%, ignore the rest of the output.
+
 Costs per comparison (~480 answers): about $0.17 with `gemini-3.5-flash`, the most accurate judge tested; `gemini-3.8-flash` is half the price but less accurate, and needs `-thinking low` (it rejects `minimal`).
 
 **Use `compare`, not `rate`.** Asked to grade names one at a time, the judge agrees with the human on good-vs-not only 49–69%, worse than calling every name good (75%), and it wanders between runs. Asked which of two names is better, it picks the human's preference 67% of the time with no order bias, and with ~480 answers per comparison (about 10 pairs per query, both orders) it reproduced the human verdicts we have. Costs a few cents per comparison. Calibration data: `eval-results/README.md`.
