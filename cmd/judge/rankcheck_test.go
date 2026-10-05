@@ -69,3 +69,28 @@ func TestPairUpSkipsIdenticalNames(t *testing.T) {
 		}
 	}
 }
+
+func TestPairUpRoundsKeepsDistinctPairs(t *testing.T) {
+	a := map[string][]string{"tea": {"a.com", "b.com", "c.com"}}
+	b := map[string][]string{"tea": {"x.com", "y.com", "z.com"}}
+	got := pairUpRounds(a, b, 3, 4, 1)
+	if len(got) <= 3 {
+		t.Fatalf("redrawing should add pairings, got %d", len(got))
+	}
+	seen := map[string]bool{}
+	ids := map[string]bool{}
+	for _, p := range got {
+		k := p.A + "|" + p.B
+		if seen[k] {
+			t.Errorf("duplicate pairing %s", k)
+		}
+		seen[k] = true
+		if ids[p.ID] {
+			t.Errorf("duplicate id %s", p.ID)
+		}
+		ids[p.ID] = true
+	}
+	if len(got) > 9 {
+		t.Errorf("only 9 distinct pairings exist, got %d", len(got))
+	}
+}

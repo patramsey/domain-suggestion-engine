@@ -89,6 +89,7 @@ func main() {
 	l2 := flag.Float64("l2", 1e-3, "L2 regularisation")
 	rescore := flag.String("rescore", "", "eval snapshot to re-rank with the fitted weights")
 	out := flag.String("out", "", "where to write the re-ranked snapshot (with -rescore)")
+	penaltyScale := flag.Float64("penalty-scale", 1, "multiply the availability penalty when re-ranking: the fitted weights favour short real words, which are more often taken, so matching today's availability needs a heavier penalty")
 	flag.Parse()
 
 	switch *modelKind {
@@ -195,7 +196,7 @@ func main() {
 			fmt.Fprintln(os.Stderr, "-rescore needs -out")
 			os.Exit(2)
 		}
-		if err := rescoreSnapshot(*rescore, *out, fitted, *modelKind); err != nil {
+		if err := rescoreSnapshot(*rescore, *out, fitted, *modelKind, *penaltyScale); err != nil {
 			fmt.Fprintf(os.Stderr, "fitweights: %v\n", err)
 			os.Exit(1)
 		}
@@ -216,13 +217,19 @@ func main() {
 // the availability penalty, so the result can be compared head to head with
 // the original ranking (judge compare). The LLM position bonus is dropped
 // from both sides of the comparison because snapshots do not record LLMRank.
-func rescoreSnapshot(path, outPath string, w []float64, kind string) error {
-	raw, err := os.ReadFile(path)
+//
+// The weights are normalised first. Raw logistic weights carry whatever scale
+// training left them at, and at that scale the availability penalty — a fixed
+// 0.05 to 0.35 — would round to nothing, silently removing it from the
+// ranking under test.
+func rescoreSnapshot(path, outPath string, rawWeights []float64, kind string, penaltyScale float64) error {
+	w := normalize(rawWeights)
+	body, err := os.ReadFile(path)
 	if err != nil {
 		return err
 	}
 	var snap map[string]any
-	if err := json.Unmarshal(raw, &snap); err != nil {
+	if err := json.Unmarshal(body, &snap); err != nil {
 		return err
 	}
 	icann := tlds.DefaultRegistry.ICANNSet()
@@ -237,7 +244,7 @@ func rescoreSnapshot(path, outPath string, w []float64, kind string) error {
 			sld, _ := sug["sld"].(string)
 			tld, _ := sug["tld"].(string)
 			f := scorer.Features(algorithmic.Candidate{SLD: sld, TLD: tld}, tokens)
-			sug["score"] = dot(w, vectorise(f, sld, kind)) - f.AvailabilityPenalty
+			sug["score"] = dot(w, vectorise(f, sld, kind)) - penaltyScale*f.AvailabilityPenalty
 		}
 	}
 	b, err := json.MarshalIndent(snap, "", " ")

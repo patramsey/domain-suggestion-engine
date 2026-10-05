@@ -113,6 +113,27 @@ func binomialCI(wins, n int) (lo, hi float64) {
 	return math.Max(0, p-1.96*se), math.Min(1, p+1.96*se)
 }
 
+// pairUpRounds redraws pairs with successive seeds and keeps the distinct
+// ones, so a comparison can buy more answers from the same two top-N pools
+// instead of reaching deeper into the ranking, which would change what is
+// being measured.
+func pairUpRounds(a, b map[string][]string, perQuery, rounds int, seed int64) []pair {
+	seen := map[[3]string]bool{}
+	var out []pair
+	for r := range rounds {
+		for _, p := range pairUp(a, b, perQuery, seed+int64(r)) {
+			k := [3]string{p.Query, p.A, p.B}
+			if seen[k] {
+				continue
+			}
+			seen[k] = true
+			p.ID = fmt.Sprintf("p%04d", len(out))
+			out = append(out, p)
+		}
+	}
+	return out
+}
+
 func runCompare(args []string) error {
 	fs := newFlagSet("compare")
 	aPath := fs.String("a", "", "snapshot JSON for side A")
@@ -124,6 +145,7 @@ func runCompare(args []string) error {
 	model := fs.String("model", defaultModel, "model to judge with")
 	size := fs.Int("batch", 10, "pairs per request")
 	seed := fs.Int64("seed", 1, "pairing seed")
+	rounds := fs.Int("rounds", 1, "redraw pairings this many times for more answers from the same pools")
 	thinking := fs.String("thinking", "minimal", "Gemini thinkingLevel: minimal, low, medium, high")
 	if err := fs.Parse(args); err != nil {
 		return err
@@ -138,7 +160,7 @@ func runCompare(args []string) error {
 	if err := readJSON(*bPath, &sb); err != nil {
 		return err
 	}
-	pairs := pairUp(topNames(sa, *aVar, *top), topNames(sb, *bVar, *top), *perQuery, *seed)
+	pairs := pairUpRounds(topNames(sa, *aVar, *top), topNames(sb, *bVar, *top), *perQuery, *rounds, *seed)
 	if len(pairs) == 0 {
 		return fmt.Errorf("no shared queries between the two snapshots")
 	}

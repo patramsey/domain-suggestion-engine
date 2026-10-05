@@ -577,3 +577,23 @@ Two signals carry almost everything: short, and made of recognisable words. The 
 **Independent check, and it is not conclusive.** Re-ranking a snapshot with the fitted weights and asking the judge to compare the two top-10s: fitted 52.3%, current 47.7% of 478 answers (95% CI 43.2–52.2) — the fitted order is slightly ahead but the interval spans 50%. The judge agrees with the human only ~67% of the time, so it is a coarse instrument for a change this size.
 
 **Next step before shipping:** one blind human round, old ranking versus fitted ranking over the same candidate pool. The offline evidence is strong and the judge is neutral-to-positive; a human round is the deciding test.
+
+**Does the fitted ranking actually produce better results? No.** Re-ranking a snapshot with the fitted `taste` weights and asking the judge to compare top-10s:
+
+| Re-ranked with | Top-10 registrable (DNS) | Judge: fitted order wins | Answers |
+|---|---|---|---|
+| fitted weights, raw scale (**bug**) | 35.9% | 52.3% | 478 |
+| fitted weights, normalised | 43.0% | 51.9% | 1,598 |
+| fitted weights, penalty × 3 (availability matched) | 55.8% | **47.8%** | 1,520 |
+
+Current ranking: 57.4% registrable in the top 10.
+
+The first row was a mistake worth recording: raw logistic weights carry an arbitrary scale, at which the fixed availability penalty (0.05–0.35) rounds to nothing — the re-ranking had silently dropped it. `rescoreSnapshot` now normalises first.
+
+Once the penalty is scaled so availability matches today's (×3), the fitted order is **marginally worse** than the current one. The apparent edge in the first two rows was bought by surfacing nicer names that are already taken.
+
+**Why the offline gain does not transfer.** The ratings were collected under "assume this name is available", so they reward short common words — exactly what the engine must demote to return registrable names. Fitting to those labels reproduces the rater's taste faithfully (70% vs 56%) and then spends the gain on names nobody can buy. The gap between "what the rater likes" and "what the engine should rank first" *is* the availability penalty.
+
+**Conclusion: leave the weights alone.** Within a shortlist of candidates that already passed validation, re-weighting the signals we have does not change judged quality in either direction — three independent measurements now agree (human-label AUC, `rankcheck`, and this comparison). Future gains should come from the candidate pool — prompts and generators, which is where every win so far came from (#5, #7) — not from re-ranking it.
+
+Still worth keeping from this work: `conceptRelevance` fits to ≈ 0 within a query's candidates, and the n-gram phonotactics adds nothing once length and memorability are in. Neither is evidence to remove them (both may be doing work this test cannot see, like excluding off-topic names or gibberish that never reaches the shortlist), but both are candidates for a cheaper scorer if that ever matters.
