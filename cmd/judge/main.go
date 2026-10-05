@@ -12,6 +12,9 @@
 //	          against the human's preference, each pair asked in both orders
 //	compare   -a SNAPSHOT -b SNAPSHOT [-a-variant V] [-b-variant V]
 //	          runs two eval snapshots head to head and reports a win rate
+//	rankcheck -snapshot SNAPSHOT [-bands N] [-per-query N] [-canaries N]
+//	          asks whether the scorer's own ordering matches judged preference,
+//	          with canary pairs of known human answer mixed in. No human needed.
 //
 // The judge is a measuring instrument for evals only: the server never calls it.
 package main
@@ -47,6 +50,8 @@ func main() {
 		err = runPairs(os.Args[2:])
 	case "compare":
 		err = runCompare(os.Args[2:])
+	case "rankcheck":
+		err = runRankCheck(os.Args[2:])
 	default:
 		usage()
 	}
@@ -63,6 +68,8 @@ func usage() {
   judge pairs     -history FILE [-per-query N] [-seed S] [-model M]
   judge compare   -a SNAPSHOT -b SNAPSHOT [-a-variant V] [-b-variant V]
                   [-top N] [-per-query N] [-model M]
+  judge rankcheck -snapshot SNAPSHOT [-variant V] [-bands N] [-per-query N]
+                  [-canaries N] [-model M]
 `)
 	os.Exit(2)
 }
@@ -123,13 +130,16 @@ func rateAllWithSystem(ctx context.Context, c *llm.Client, model, system string,
 	return out, cost, firstErr
 }
 
-func newClient(model string) (*llm.Client, error) {
+// newClient builds the judge's client. thinking is the Gemini thinkingLevel;
+// some models (gemini-3.8-flash) reject "minimal", so it is a flag.
+func newClient(model, thinking string) (*llm.Client, error) {
 	key := os.Getenv("GEMINI_API_KEY")
 	if key == "" {
 		return nil, fmt.Errorf("GEMINI_API_KEY not set")
 	}
 	c := llm.NewClient(key, model)
 	c.Temperature = 0 // a judge should be as repeatable as the API allows
+	c.ThinkingLevel = thinking
 	return c, nil
 }
 
@@ -138,6 +148,7 @@ func runRate(args []string) error {
 	dir := fs.String("dir", "", "directory holding items.json")
 	model := fs.String("model", defaultModel, "model to judge with")
 	size := fs.Int("batch", 20, "names per request")
+	thinking := fs.String("thinking", "minimal", "Gemini thinkingLevel: minimal, low, medium, high")
 	out := fs.String("out", "", "output file (default DIR/judge-ratings.json)")
 	if err := fs.Parse(args); err != nil {
 		return err
@@ -149,7 +160,7 @@ func runRate(args []string) error {
 	if err := readJSON(filepath.Join(*dir, "items.json"), &items); err != nil {
 		return err
 	}
-	c, err := newClient(*model)
+	c, err := newClient(*model, *thinking)
 	if err != nil {
 		return err
 	}
@@ -193,6 +204,7 @@ func runCalibrate(args []string) error {
 	size := fs.Int("batch", 20, "names per request")
 	outDir := fs.String("out", "", "directory to write judge-ratings.json and items.json into")
 	nExamples := fs.Int("examples", 0, "held-out human ratings to show the judge as calibration examples")
+	thinking := fs.String("thinking", "minimal", "Gemini thinkingLevel: minimal, low, medium, high")
 	if err := fs.Parse(args); err != nil {
 		return err
 	}
@@ -239,7 +251,7 @@ func runCalibrate(args []string) error {
 		system += examplesBlock(ex, exRatings)
 		fmt.Fprintf(os.Stderr, "Showing the judge %d example ratings; measuring on the other %d.\n", len(ex), len(items))
 	}
-	c, err := newClient(*model)
+	c, err := newClient(*model, *thinking)
 	if err != nil {
 		return err
 	}

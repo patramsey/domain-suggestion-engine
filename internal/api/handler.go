@@ -38,7 +38,8 @@ type Config struct {
 	ActiveGenerators  []string
 	AllGenerators     []string
 	LLMVariants       []string // creative variants to run, e.g. ["evocative", "wordplay", "crafted"] or ["1"]
-	CheckAvailability bool          // check DNS availability for returned names; default false
+	LLMShards         int      // split each variant across this many parallel calls (0/1 = off)
+	CheckAvailability bool     // check DNS availability for returned names; default false
 	DNSResolverAddr   string
 	DNSCacheSize      int           // max entries in DNS LRU cache; 0 disables, default 5000
 	DNSCacheTTL       time.Duration // TTL for cached DNS availability outcomes; default 1h
@@ -74,6 +75,12 @@ func NewHandler(cfg Config) (*Handler, error) {
 		vars = []llm.Variant{llm.VariantEvocative, llm.VariantWordplay, llm.VariantCrafted}
 	}
 	llmClient.Variants = vars
+	if cfg.LLMShards > 1 {
+		if cfg.LLMShards > 4 {
+			return nil, fmt.Errorf("LLMShards %d: want 1-4", cfg.LLMShards)
+		}
+		llmClient.Shards = cfg.LLMShards
+	}
 	varNames := make([]string, len(vars))
 	for i, v := range vars {
 		varNames[i] = v.String()

@@ -30,6 +30,9 @@ type Client struct {
 	model       string
 	httpClient  *http.Client
 	Temperature float64 // generation temperature; defaults to 0.9 if zero
+	// Shards splits each creative variant across this many parallel calls,
+	// each asking for proportionally fewer names (0 or 1 = no sharding).
+	Shards int
 	// ThinkingLevel is the Gemini thinkingLevel ("minimal", "low", "medium",
 	// "high"); defaults to "minimal" if empty.
 	ThinkingLevel string
@@ -65,6 +68,29 @@ func (c *Client) thinkingLevel() string {
 		return "minimal"
 	}
 	return c.ThinkingLevel
+}
+
+// shards is how many calls each creative variant is split across. Output
+// tokens dominate latency, so halving the names per call shortens the slowest
+// call. Defaults to 1.
+func (c *Client) shards() int {
+	if c.Shards < 1 {
+		return 1
+	}
+	return c.Shards
+}
+
+// shardCount is how many names one call asks for: the per-variant share,
+// divided across its shards.
+func shardCount(count, nVariants, shards int) int {
+	if nVariants < 1 {
+		nVariants = 1
+	}
+	if shards < 1 {
+		shards = 1
+	}
+	perVariant := int(math.Ceil(float64(count) / float64(nVariants)))
+	return int(math.Ceil(float64(perVariant) / float64(shards)))
 }
 
 func (c *Client) variants() []Variant {
@@ -160,7 +186,8 @@ func (c *Client) Generate(ctx context.Context, rawInput string, tokens []string,
 	if len(variantOverrides) > 0 {
 		activeVars = variantOverrides
 	}
-	variantCount := int(math.Ceil(float64(count) / float64(len(activeVars))))
+	shards := c.shards()
+	perCall := shardCount(count, len(activeVars), shards)
 
 	type variantResult struct {
 		pairs []rawPair
@@ -168,21 +195,46 @@ func (c *Client) Generate(ctx context.Context, rawInput string, tokens []string,
 		err   error
 	}
 
-	results := make([]variantResult, len(activeVars))
+	// One result slot per (variant, shard); shards of a variant are merged
+	// below so the rest of the pipeline sees one result per variant.
+	results := make([]variantResult, len(activeVars)*shards)
 	var wg sync.WaitGroup
 
 	for i, v := range activeVars {
-		wg.Add(1)
-		go func(i int, v Variant) {
-			defer wg.Done()
-			system, user := BuildRequest(rawInput, tokens, tlds, variantCount, unavailable, inspireFrom)
-			user += variantInstruction(v)
-			r, err := c.callWithRetry(ctx, system, user)
-			results[i] = variantResult{r.pairs, r.usage, err}
-		}(i, v)
+		for sh := range shards {
+			wg.Add(1)
+			go func(slot int, v Variant) {
+				defer wg.Done()
+				system, user := BuildRequest(rawInput, tokens, tlds, perCall, unavailable, inspireFrom)
+				user += variantInstruction(v)
+				r, err := c.callWithRetry(ctx, system, user)
+				results[slot] = variantResult{r.pairs, r.usage, err}
+			}(i*shards+sh, v)
+		}
 	}
 
 	wg.Wait()
+
+	if shards > 1 {
+		merged := make([]variantResult, len(activeVars))
+		for i := range activeVars {
+			var vr variantResult
+			for sh := range shards {
+				r := results[i*shards+sh]
+				vr.usage = vr.usage.add(r.usage)
+				if r.err != nil {
+					vr.err = r.err // a shard failing loses part of the variant
+					continue
+				}
+				vr.pairs = append(vr.pairs, r.pairs...)
+			}
+			if len(vr.pairs) > 0 {
+				vr.err = nil // some shard answered, so the variant is not lost
+			}
+			merged[i] = vr
+		}
+		results = merged
+	}
 
 	var perVariant [][]rawPair
 	var allPairs []rawPair // used only for the >50% invalid check

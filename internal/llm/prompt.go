@@ -77,10 +77,11 @@ func ParseVariant(s string) (Variant, error) {
 
 // ParseVariants parses a list of variant names or counts.
 // Formats:
-//   "1" -> [VariantEvocative]
-//   "2" -> [VariantEvocative, VariantWordplay]
-//   "3" or "all" -> [VariantEvocative, VariantWordplay, VariantCrafted]
-//   "evocative,crafted" -> [VariantEvocative, VariantCrafted]
+//
+//	"1" -> [VariantEvocative]
+//	"2" -> [VariantEvocative, VariantWordplay]
+//	"3" or "all" -> [VariantEvocative, VariantWordplay, VariantCrafted]
+//	"evocative,crafted" -> [VariantEvocative, VariantCrafted]
 func ParseVariants(s string) ([]Variant, error) {
 	s = strings.TrimSpace(s)
 	switch s {
@@ -124,7 +125,10 @@ func variantInstruction(v Variant) string {
 	case VariantCrafted:
 		// Compounds are rarely registered, and grounding each half in the
 		// concept keeps them specific; see issue #4 in eval-results/README.md.
-		return "\n\nCreative focus for this batch: compound names — two short, ordinary English words joined into one name. One word names something THIS concept makes, does or works with; the other names the feeling, image or quality it should evoke. Both words must be instantly recognisable, and the joined name must read naturally aloud as one word. No invented prefixes or suffixes, and no words so general they could attach to any business."
+		// The second word is concrete rather than an abstract quality: judged
+		// quality is unchanged but ~7 points more of the top 10 is registrable
+		// (eval-results/README.md, 2026-10-05).
+		return "\n\nCreative focus for this batch: compound names — two short, ordinary English words joined into one name. One word names something THIS concept makes, does or works with; the other is a concrete, sensory word — an object, material, place, season, time of day or natural element — that brings the right picture to mind. Avoid abstract words for generic qualities, virtues or feelings that could suit any brand. Both words must be instantly recognisable, and the joined name must read naturally aloud as one word. No invented prefixes or suffixes."
 	}
 	return ""
 }

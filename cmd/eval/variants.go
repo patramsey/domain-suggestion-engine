@@ -57,16 +57,18 @@ var r3Briefs = []string{separatedBriefs[0], separatedBriefs[1], craftedBriefR3}
 // does, one for the feeling it evokes), is now the production crafted brief;
 // c2-mix (a one-line "one in five" request) had no effect and was removed.
 
-// concreteCraftedBrief replaces the crafted brief in c3-concrete. In round 5,
+// abstractCraftedBrief is the previous production crafted brief, kept as a
+// variant to compare against: it asked for the second word to name a feeling
+// or quality, which rated the same but produced fewer registrable names. In round 5,
 // c1-grounded's "okay" compounds paired a concept word with an abstract
 // quality word (a generic virtue or feeling); its "good" ones paired two
 // concrete words. Round 6: more registrable, rated 78% good vs c1's 82%.
-const concreteCraftedBrief = "\n\nCreative focus for this batch: compound names — two short, ordinary English words joined into one name. One word names something THIS concept makes, does or works with; the other is a concrete, sensory word — an object, material, place, season, time of day or natural element — that brings the right picture to mind. Avoid abstract words for generic qualities, virtues or feelings that could suit any brand. Both words must be instantly recognisable, and the joined name must read naturally aloud as one word. No invented prefixes or suffixes."
+const abstractCraftedBrief = "\n\nCreative focus for this batch: compound names — two short, ordinary English words joined into one name. One word names something THIS concept makes, does or works with; the other names the feeling, image or quality it should evoke. Both words must be instantly recognisable, and the joined name must read naturally aloud as one word. No invented prefixes or suffixes, and no words so general they could attach to any business."
 
-// c3Briefs is the production briefs with the concrete crafted brief.
-func c3Briefs() []string {
+// abstractBriefs is the production briefs with the previous crafted brief.
+func abstractBriefs() []string {
 	b := llm.VariantInstructions()
-	b[2] = concreteCraftedBrief
+	b[2] = abstractCraftedBrief
 	return b
 }
 
@@ -81,8 +83,10 @@ var allVariants = []promptVariant{
 	{name: "r2-uncommon", system: llm.SystemPrompt + tldAdherence + commonWordGuidance, temperature: 1.0, variantOverrides: separatedBriefs},
 	// Round 3: r1 with the crafted brief rewritten after the blind-rating failure.
 	{name: "r3-briefs", system: llm.SystemPrompt + tldAdherence, temperature: 1.0, variantOverrides: r3Briefs},
-	// Issue #4: production crafted brief with the second word concrete and sensory, not an abstract quality.
-	{name: "c3-concrete", system: llm.SystemPrompt, temperature: 1.0, variantOverrides: c3Briefs()},
+	// The crafted brief as it was before 2026-10-05: second word an abstract
+	// quality rather than something concrete. Same judged quality, fewer
+	// registrable names.
+	{name: "abstract-crafted", system: llm.SystemPrompt, temperature: 1.0, variantOverrides: abstractBriefs()},
 }
 
 // variants is the selected subset for this invocation (set in main).

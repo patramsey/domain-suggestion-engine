@@ -515,3 +515,149 @@ Chance is 50%; 67.4% over 184 answers is ≈4.7 standard errors clear of it. Per
 Round 3 was never significant for the human either, so "too close" is the right answer there. Use **10 pairs per query, both orders (~480 answers)**; at 192 the interval is too wide for the differences that matter.
 
 **How to use it:** screen with `judge compare` (a few cents, a few minutes), and spend a human round only on the candidate that survives. `gemini-3.5-flash` has no price in `internal/llm/pricing.go`, so its cost prints as "n/a" — add the rate to see spend.
+
+**Which model to judge with** (same 92 pairs, 30 examples, both orders):
+
+| Model | Picks the human's preference | Cost for 184 answers | Note |
+|---|---|---|---|
+| `gemini-3.5-flash` | 65–67% | $0.065 | best tested; used for comparisons |
+| `gemini-3.8-flash` | 59.8% | $0.029 | cheaper, less accurate; needs `-thinking low` |
+| `gemini-3.5-flash-lite` | 62.0% | $0.015 | fine for a rough screen |
+
+Newer is not better here: 3.8 Flash is half the price of 3.5 Flash and loses ~6 points of agreement. Prices for all of these are now in `internal/llm/pricing.go` (3.6–3.8 Flash are on a promotional rate that doubles on 2027-01-01).
+
+### Does our own ranking track quality? — 2026-10-04
+
+`judge rankcheck` splits each query's ranked candidates into score bands, pairs names from different bands, and asks the judge which is better. The scorer's own order decides which name is "supposed" to win, so no human labels are needed. Canary pairs with known human answers are mixed into the same batches to show whether the judge was working that run.
+
+Snapshot `run-2026-09-20T035403.336-over2.json` (24 queries, ~29 candidates each), judge `gemini-3.5-flash` with 30 human-settled comparisons as examples:
+
+| Run | Canary accuracy | Band split | Answers | Higher-scored name won |
+|---|---|---|---|---|
+| no examples (discarded) | 52.5% ✗ | quartiles | 384 | — (instrument not working) |
+| 30 examples | 70.0% ✓ | quartiles, gap 1 / 2 / 3 | 210 / 138 / 36 | 47.1% / 42.8% / 55.6% |
+| 30 examples, seed 7 | 57.5% | halves | 480 | **52.3%** (95% CI 47.8–56.8) |
+
+**Finding: no measurable signal, even top half versus bottom half.** This is the second independent measurement to say so — ranking the 688 human-rated names gave AUC ≈ 0.50 (see above). Both agree that among candidates the LLM produced and validation kept, the composite score does not order names by quality.
+
+Two caveats. The pool is already filtered, so the "bottom band" is still a plausible LLM name, not junk — the score clearly does separate names from gibberish, since that is what fills the shortlist. And the canary figure moves between runs (57–70% on 80 answers), so treat a single run's instrument reading as coarse.
+
+Worth noting what this does *not* say: the availability penalty, the diversity cap and the common-word slots all demonstrably change outcomes we care about. It is the four quality signals' relative weighting that shows no measurable effect on judged preference.
+
+### Fitting the scoring weights to the ratings — 2026-10-04
+
+`cmd/fitweights` pairs every name the rater called good against one they called okay or bad within the same query, and fits a pairwise logistic model on the feature differences. Accuracy is cross-validated over 6 folds split **by query**, so no name trains and tests on the same business. `scorer.Features` now exposes each signal for this.
+
+688 names, 24 queries, 3,509 pairs. Pairwise accuracy (mean over folds):
+
+| Model | Features | Hand weights | Fitted |
+|---|---|---|---|
+| `basic` | today's four signals, re-weighted | 56.1% | 55.2% |
+| `taste` | + ngram, memorability, SLD length, compound, typo | 56.1% | **70.1%** |
+| `full` | + TLD free rate, common-word flag | 56.1% | 71.3% |
+
+Every fold improved under `taste` and `full`. Note the hand weights score 56%, not chance: the AUC ≈ 0.50 measured earlier included the availability penalty, which deliberately demotes names the rater likes. The quality signals alone do carry signal — the weighting is what is wrong.
+
+`taste` is the shippable shape: `full` adds the TLD free rate and the common-word flag, which are availability signals the engine already handles with its own penalty, so fitting them as quality would quietly undo it, for 1.2 points.
+
+Fitted `taste` weights (normalised, all data):
+
+| Feature | Weight | Currently |
+|---|---|---|
+| SLD length (shorter better) | **−0.326** | only via the length curve, 0.15 |
+| Sub-word memorability | **+0.272** | 20% of brandability |
+| Typo flag | −0.146 | not in the score at all |
+| TLD premium | +0.097 | 0.15 |
+| Compound flag | −0.053 | not in the score |
+| Brandability, length curve, ngram | ≈ 0 | 0.40 and 0.15 |
+| **Concept relevance** | **+0.010 ≈ 0** | **0.30** |
+
+Two signals carry almost everything: short, and made of recognisable words. The n-gram phonotactics adds nothing once those are in, and concept relevance — 30% of the score today — is worth about nothing for ranking *within* a query's candidates. (It may still matter for excluding off-topic names, which this test cannot see: every candidate here was already on topic.)
+
+**Independent check, and it is not conclusive.** Re-ranking a snapshot with the fitted weights and asking the judge to compare the two top-10s: fitted 52.3%, current 47.7% of 478 answers (95% CI 43.2–52.2) — the fitted order is slightly ahead but the interval spans 50%. The judge agrees with the human only ~67% of the time, so it is a coarse instrument for a change this size.
+
+**Next step before shipping:** one blind human round, old ranking versus fitted ranking over the same candidate pool. The offline evidence is strong and the judge is neutral-to-positive; a human round is the deciding test.
+
+**Does the fitted ranking actually produce better results? No.** Re-ranking a snapshot with the fitted `taste` weights and asking the judge to compare top-10s:
+
+| Re-ranked with | Top-10 registrable (DNS) | Judge: fitted order wins | Answers |
+|---|---|---|---|
+| fitted weights, raw scale (**bug**) | 35.9% | 52.3% | 478 |
+| fitted weights, normalised | 43.0% | 51.9% | 1,598 |
+| fitted weights, penalty × 3 (availability matched) | 55.8% | **47.8%** | 1,520 |
+
+Current ranking: 57.4% registrable in the top 10.
+
+The first row was a mistake worth recording: raw logistic weights carry an arbitrary scale, at which the fixed availability penalty (0.05–0.35) rounds to nothing — the re-ranking had silently dropped it. `rescoreSnapshot` now normalises first.
+
+Once the penalty is scaled so availability matches today's (×3), the fitted order is **marginally worse** than the current one. The apparent edge in the first two rows was bought by surfacing nicer names that are already taken.
+
+**Why the offline gain does not transfer.** The ratings were collected under "assume this name is available", so they reward short common words — exactly what the engine must demote to return registrable names. Fitting to those labels reproduces the rater's taste faithfully (70% vs 56%) and then spends the gain on names nobody can buy. The gap between "what the rater likes" and "what the engine should rank first" *is* the availability penalty.
+
+**Conclusion: leave the weights alone.** Within a shortlist of candidates that already passed validation, re-weighting the signals we have does not change judged quality in either direction — three independent measurements now agree (human-label AUC, `rankcheck`, and this comparison). Future gains should come from the candidate pool — prompts and generators, which is where every win so far came from (#5, #7) — not from re-ranking it.
+
+Still worth keeping from this work: `conceptRelevance` fits to ≈ 0 within a query's candidates, and the n-gram phonotactics adds nothing once length and memorability are in. Neither is evidence to remove them (both may be doing work this test cannot see, like excluding off-topic names or gibberish that never reaches the shortlist), but both are candidates for a cheaper scorer if that ever matters.
+
+### Concrete second word becomes the production crafted brief — 2026-10-05
+
+`c3-concrete` was parked in September: more registrable, but blind rating round 6 put it at 78% good against 82% for the brief we shipped, below the 80% bar. With `judge compare` that call can now be made on far more evidence.
+
+Fresh run, `-variant current,c3-concrete -runs 3 -queries all -avail` (snapshot `run-2026-10-05T012646.378-c3-rematch.json`):
+
+| | Production brief | `c3-concrete` |
+|---|---|---|
+| DNS free, top 10 | 54.2% (5.4 / query) | **61.0% (6.1 / query)** |
+| DNS free, top 20 | 51.8% (10.3 / query) | **59.3% (11.8 / query)** |
+| Typo, top 10 | 4.9% | 7.6% |
+| Compound, top 10 | 36.2% | 41.1% |
+| Cost / query, median latency | $0.00296, 1277 ms | $0.00292, 1258 ms |
+| **Judge, 1,620 answers** | 51.5% | 48.5% (95% CI spans 50%) |
+| Human round 6 (50 names each) | 82% good | 78% good (p = 0.80) |
+
+Judged quality is a tie on 1,620 answers, the human round was a tie within noise, and availability is ~7 points better — so the concrete second word is now the production crafted brief. The previous wording is kept as the `abstract-crafted` eval variant.
+
+The one metric moving the wrong way is the typo rate, +2.7 points, and the typo flag is the one deterministic metric validated against human ratings. Against that: the server gate measured 4.7% typos in the top 10 after the change, in line with before, so the eval figure may be run-to-run noise. Worth watching in the next eval.
+
+Gates after the change (`cmd/suggestcheck`, `CACHE_SIZE=0`): 32/32 requests, 0 errors, every response full at 20 names; load n=200 c=5, 0% failures, p50 / p95 / p99 = 1279 / 1556 / 1652 ms.
+
+### Which algorithmic generators to run — 2026-10-05
+
+The `exact`, `compounds` and `affixes` generators shipped enabled but unmeasured. The eval harness only runs the LLM tier, so this compared live server output: `cmd/suggestcheck quality -queries all` per configuration, converted to snapshots for `-avail` and `judge compare`.
+
+| Generators | DNS free, top 10 / top 20 | Typo | Common | Mean spec | Top-10 names that are a literal query word |
+|---|---|---|---|---|---|
+| `hacks` only | **57.9% / 57.0%** | 5.3% | 19.1% | 0.078 | 1% |
+| `hacks,compounds,affixes` | 53.8% / 54.6% | 5.0% | 15.9% | 0.099 | 1% |
+| all four (as shipped) | 50.8% / 50.2% | 4.7% | 16.6% | 0.103 | **10%** |
+
+Judge, all four vs `hacks` only: 52.0% to 48.0% over 1,624 answers — the interval spans 50%, so judged quality is a tie.
+
+`exact` returns the query word itself (`meditation.app`, `developer.codes`, `team.management`). Those filled 10% of the top 10, are nearly always registered, and are the least creative thing the engine can say. Removing it recovers ~3 points of availability and takes the literal-word share back to 1%.
+
+`compounds` and `affixes` stay on: they cost nothing, improve specificity (0.078 → 0.099) and lower the common-word rate, for an availability cost inside single-run noise (±5 points).
+
+**Default is now `hacks,compounds,affixes`.** Single runs per configuration, so the availability figures carry ±5 points of noise; the `exact` finding rests on the mechanism and the literal-word count, which are not noisy.
+
+Unrelated oddity spotted in the output: `com.pizza` appeared from `compounds` or `affixes` — worth a look at whether those generators should treat TLD-like fragments as words.
+
+### Splitting each brief across two calls — 2026-10-05
+
+Output tokens dominate latency, so the lever is names per call, not prompt size. `LLM_SHARDS` splits each creative brief into that many parallel calls, each asking for proportionally fewer names. Same server, `CACHE_SIZE=0`, 32 quality requests and 120 load requests per setting:
+
+| | 3 calls (shards 1) | **6 calls (shards 2)** |
+|---|---|---|
+| Latency p50 / p95 / p99 | 1264 / 1514 / 3166 ms | **968 / 1249 / 1796 ms** |
+| Cost per request | $0.00294 | $0.00407 (+38%) |
+| Input / output tokens | 2,999 / 785 | 5,992 / 898 |
+| Names returned | 20.0 | 20.0 |
+| DNS free, top 10 / top 20 | 55.0% / 56.0% | 55.2% / 55.5% |
+| Typo / common / spec, top 10 | 5.3% / 16.6% / 0.098 | 6.2% / 16.2% / 0.094 |
+| **Judge, 1,620 answers** | 45.2% | **54.8% — preferred** (CI clear of 50%) |
+
+23% faster at the median, 18% at p95, and the long tail halves. Availability is unchanged and judged quality is *better*, significantly so: asking for fewer names per call seems to cut the filler each call pads its list with.
+
+The cost is input tokens: every call resends the prompt and TLD list, so input doubles. At $0.0041 per request this is 1.9× `gemini-3.1-flash-lite`'s $0.0022, still inside the "≤ 2× 3.1" ceiling set for the migration.
+
+Note the typo rate rose 0.9 points. That is the second time a change has nudged typos up (see the concrete brief), so it is worth watching rather than dismissing.
+
+**Default is now `LLM_SHARDS=2`.** Also measured and rejected: trimming the TLD list from the prompt. Requests sent with a 2-TLD filter (≈2,900 fewer input tokens) are no faster than ones sending all 154 — 1380 vs 1424 ms, 1300 vs 1307, 1389 vs 1260 — so the list costs money, not time, and removing it would invite invented TLDs. Gemini context caching would be the right way to cut that cost (cached input is $0.03/M against $0.30/M), but `cachedContentTokenCount` stayed 0 across four identical repeats of a 5,400-token prompt on `gemini-3.5-flash-lite`, and our real calls are ~1,000 tokens — well under the 4,096-token minimum the docs give for the 3.x Flash models. Not available to us today.

@@ -31,9 +31,14 @@ func main() {
 		LLMShare:         envFloat("LLM_SHARE", 0.60),
 		CommonWordSlots:  envInt("COMMON_WORD_SLOTS", 2),
 		AlgoEnabled:      envBool("ALGO_ENABLED", true),
-		ActiveGenerators:  envStrings("GENERATORS", "hacks,exact,compounds,affixes"),
+		// exact is off by default: it returns the query word itself (meditation.app),
+		// which filled 10% of the top 10 with names that are nearly always taken.
+		ActiveGenerators:  envStrings("GENERATORS", "hacks,compounds,affixes"),
 		AllGenerators:     []string{"hacks", "exact", "compounds", "affixes"},
 		LLMVariants:       envStrings("LLM_VARIANTS", "evocative,wordplay,crafted"),
+		// 2 shards = 6 parallel calls: ~23% faster and judged better, for ~38%
+		// more cost (eval-results/README.md, 2026-10-05).
+		LLMShards:         envInt("LLM_SHARDS", 2),
 		CheckAvailability: envBool("CHECK_AVAILABILITY", false),
 		DNSResolverAddr:   envString("DNS_RESOLVER", "1.1.1.1:53"),
 		DNSCacheSize:      envInt("DNS_CACHE_SIZE", 5000),

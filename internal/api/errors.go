@@ -6,14 +6,14 @@ import (
 )
 
 const (
-	CodeMissingInput        = "missing_input"
-	CodeInputTooLong        = "input_too_long"
-	CodeAmbiguousTLDFilter  = "ambiguous_tld_filter"
-	CodeUnknownTLD          = "unknown_tld"
-	CodeBothTiersFailed     = "both_tiers_failed"
-	CodeUnknownCategory     = "unknown_category"
-	CodeTooManyUnavailable  = "too_many_unavailable_domains"
-	CodeTooManyInspireFrom  = "too_many_inspire_from"
+	CodeMissingInput       = "missing_input"
+	CodeInputTooLong       = "input_too_long"
+	CodeAmbiguousTLDFilter = "ambiguous_tld_filter"
+	CodeUnknownTLD         = "unknown_tld"
+	CodeBothTiersFailed    = "both_tiers_failed"
+	CodeUnknownCategory    = "unknown_category"
+	CodeTooManyUnavailable = "too_many_unavailable_domains"
+	CodeTooManyInspireFrom = "too_many_inspire_from"
 )
 
 type errorResponse struct {

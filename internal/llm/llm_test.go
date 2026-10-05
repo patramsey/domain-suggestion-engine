@@ -273,7 +273,7 @@ func TestVariantInstructionsMatchBatches(t *testing.T) {
 
 func TestCraftedBriefAsksForGroundedCompounds(t *testing.T) {
 	b := variantInstruction(VariantCrafted)
-	for _, want := range []string{"compound names", "two short, ordinary English words", "No invented prefixes or suffixes"} {
+	for _, want := range []string{"compound names", "two short, ordinary English words", "concrete, sensory word", "No invented prefixes or suffixes"} {
 		if !strings.Contains(b, want) {
 			t.Errorf("crafted brief missing %q", want)
 		}
@@ -316,4 +316,3 @@ func TestClientCustomVariants(t *testing.T) {
 		t.Errorf("custom variants = %v, want [VariantCrafted]", c.variants())
 	}
 }
-
