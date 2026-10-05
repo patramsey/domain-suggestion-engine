@@ -639,3 +639,25 @@ Judge, all four vs `hacks` only: 52.0% to 48.0% over 1,624 answers — the inter
 **Default is now `hacks,compounds,affixes`.** Single runs per configuration, so the availability figures carry ±5 points of noise; the `exact` finding rests on the mechanism and the literal-word count, which are not noisy.
 
 Unrelated oddity spotted in the output: `com.pizza` appeared from `compounds` or `affixes` — worth a look at whether those generators should treat TLD-like fragments as words.
+
+### Splitting each brief across two calls — 2026-10-05
+
+Output tokens dominate latency, so the lever is names per call, not prompt size. `LLM_SHARDS` splits each creative brief into that many parallel calls, each asking for proportionally fewer names. Same server, `CACHE_SIZE=0`, 32 quality requests and 120 load requests per setting:
+
+| | 3 calls (shards 1) | **6 calls (shards 2)** |
+|---|---|---|
+| Latency p50 / p95 / p99 | 1264 / 1514 / 3166 ms | **968 / 1249 / 1796 ms** |
+| Cost per request | $0.00294 | $0.00407 (+38%) |
+| Input / output tokens | 2,999 / 785 | 5,992 / 898 |
+| Names returned | 20.0 | 20.0 |
+| DNS free, top 10 / top 20 | 55.0% / 56.0% | 55.2% / 55.5% |
+| Typo / common / spec, top 10 | 5.3% / 16.6% / 0.098 | 6.2% / 16.2% / 0.094 |
+| **Judge, 1,620 answers** | 45.2% | **54.8% — preferred** (CI clear of 50%) |
+
+23% faster at the median, 18% at p95, and the long tail halves. Availability is unchanged and judged quality is *better*, significantly so: asking for fewer names per call seems to cut the filler each call pads its list with.
+
+The cost is input tokens: every call resends the prompt and TLD list, so input doubles. At $0.0041 per request this is 1.9× `gemini-3.1-flash-lite`'s $0.0022, still inside the "≤ 2× 3.1" ceiling set for the migration.
+
+Note the typo rate rose 0.9 points. That is the second time a change has nudged typos up (see the concrete brief), so it is worth watching rather than dismissing.
+
+**Default is now `LLM_SHARDS=2`.** Also measured and rejected: trimming the TLD list from the prompt. Requests sent with a 2-TLD filter (≈2,900 fewer input tokens) are no faster than ones sending all 154 — 1380 vs 1424 ms, 1300 vs 1307, 1389 vs 1260 — so the list costs money, not time, and removing it would invite invented TLDs. Gemini context caching would be the right way to cut that cost (cached input is $0.03/M against $0.30/M), but `cachedContentTokenCount` stayed 0 across four identical repeats of a 5,400-token prompt on `gemini-3.5-flash-lite`, and our real calls are ~1,000 tokens — well under the 4,096-token minimum the docs give for the 3.x Flash models. Not available to us today.

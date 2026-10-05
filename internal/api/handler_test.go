@@ -657,5 +657,3 @@ func TestSuggestRequestInvalidVariants(t *testing.T) {
 		t.Errorf("want 400 for invalid variants, got %d", w.Code)
 	}
 }
-
-

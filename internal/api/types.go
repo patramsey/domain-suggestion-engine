@@ -57,11 +57,11 @@ type HealthResponse struct {
 // Config types
 
 type LLMConfig struct {
-	Model      string   `json:"model"`
-	TimeoutMs  int      `json:"timeout_ms"`
-	LLMShare   float64  `json:"llm_share"`
-	APIKeySet  bool     `json:"api_key_set"`
-	Variants   []string `json:"variants"`
+	Model     string   `json:"model"`
+	TimeoutMs int      `json:"timeout_ms"`
+	LLMShare  float64  `json:"llm_share"`
+	APIKeySet bool     `json:"api_key_set"`
+	Variants  []string `json:"variants"`
 }
 
 type AlgoConfig struct {
@@ -81,10 +81,10 @@ type CacheConfig struct {
 }
 
 type TLDRegistryConfig struct {
-	PSLDate        string   `json:"psl_date"`
-	ICANNTLDCount  int      `json:"icann_tld_count"`
-	Categories     []string `json:"categories"`
-	DefaultCategory string  `json:"default_category"`
+	PSLDate         string   `json:"psl_date"`
+	ICANNTLDCount   int      `json:"icann_tld_count"`
+	Categories      []string `json:"categories"`
+	DefaultCategory string   `json:"default_category"`
 }
 
 type BuildInfo struct {

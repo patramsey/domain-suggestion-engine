@@ -36,6 +36,9 @@ func main() {
 		ActiveGenerators:  envStrings("GENERATORS", "hacks,compounds,affixes"),
 		AllGenerators:     []string{"hacks", "exact", "compounds", "affixes"},
 		LLMVariants:       envStrings("LLM_VARIANTS", "evocative,wordplay,crafted"),
+		// 2 shards = 6 parallel calls: ~23% faster and judged better, for ~38%
+		// more cost (eval-results/README.md, 2026-10-05).
+		LLMShards:         envInt("LLM_SHARDS", 2),
 		CheckAvailability: envBool("CHECK_AVAILABILITY", false),
 		DNSResolverAddr:   envString("DNS_RESOLVER", "1.1.1.1:53"),
 		DNSCacheSize:      envInt("DNS_CACHE_SIZE", 5000),

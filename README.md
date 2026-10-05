@@ -91,7 +91,7 @@ Input (keywords, description, or existing domain like "patspizza.com")
   ▼
 Parser — tokenises, strips stopwords, extracts the SLD from existing domains
   │
-  ├─── LLM tier ──────────────────────────────────────────── ~1.25s
+  ├─── LLM tier ──────────────────────────────────────────── ~0.97s
   │    Three parallel Gemini 3.5 Flash-Lite calls, each with a different
   │    creative brief to maximise variety:
   │
@@ -123,7 +123,7 @@ Reserve 2 of every 10 results for very common single words, return the top N
 
 **Why two tiers?** The LLM is good at creative, concept-specific names but can't reliably find domain hacks, because it doesn't know which suffixes are real TLDs. The algorithmic tier finds them instantly and deterministically. Each covers the other's blind spot.
 
-**Why three LLM calls?** A single call converges on one creative direction. Three parallel calls with different briefs give breadth without adding latency. The third brief asks for compounds of two ordinary words — one for what the business makes or does, one for the feeling it should evoke (`darkroast`, `lenscraft`) — because such names are rarely registered yet read like real brands.
+**Why six LLM calls?** A single call converges on one creative direction. Three different briefs give breadth without adding latency, and each brief is split across two calls (`LLM_SHARDS`) asking for half the names each — generating fewer names per call is what makes a request fast, since output tokens dominate the wall clock. The third brief asks for compounds of two ordinary words — one for what the business makes or does, one for the feeling it should evoke (`darkroast`, `lenscraft`) — because such names are rarely registered yet read like real brands.
 
 **What if a tier fails?** The response still returns whatever the other tier produced, with `"partial": true`. Only when both fail does the request return an error.
 
@@ -131,8 +131,8 @@ Reserve 2 of every 10 results for very common single words, return the top N
 
 | | |
 |---|---|
-| Latency | ~1.25s median, ~1.45s p95 (measured at 5 concurrent requests) |
-| Cost per request | ~$0.003 at Gemini paid-tier prices |
+| Latency | ~0.97s median, ~1.25s p95 (measured at 5 concurrent requests) |
+| Cost per request | ~$0.004 at Gemini paid-tier prices |
 | LLM model | `gemini-3.5-flash-lite` (override with `GEMINI_MODEL`) |
 | Throughput | Bounded by your Gemini rate limits |
 
@@ -306,6 +306,7 @@ All configuration is through environment variables.
 | `LLM_SHARE` | `0.60` | Share of result slots reserved for LLM suggestions. |
 | `ALGO_ENABLED` | `true` | `false` turns off the algorithmic tier (LLM-only results). |
 | `COMMON_WORD_SLOTS` | `2` | Results per 10 kept for very common single words, ranked by quality (0–10). `0` ranks them with the full availability penalty, which pushes nearly all of them out. |
+| `LLM_SHARDS` | `2` | Split each creative brief across this many parallel calls (1–4). 2 means 6 calls per request: faster, because each call generates fewer names, at more input tokens. |
 | `GENERATORS` | `hacks,compounds,affixes` | Active algorithmic generators. `exact` also exists but is off by default: it returns the query word itself (`meditation.app`), which is nearly always registered. |
 | `LLM_VARIANTS` | `evocative,wordplay,crafted` | Comma-separated creative briefs to run concurrently. |
 | `CHECK_AVAILABILITY` | `false` | When `true`, enables live DNS availability check by default on all `/suggest` requests. |
