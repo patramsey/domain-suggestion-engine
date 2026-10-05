@@ -597,3 +597,25 @@ Once the penalty is scaled so availability matches today's (×3), the fitted ord
 **Conclusion: leave the weights alone.** Within a shortlist of candidates that already passed validation, re-weighting the signals we have does not change judged quality in either direction — three independent measurements now agree (human-label AUC, `rankcheck`, and this comparison). Future gains should come from the candidate pool — prompts and generators, which is where every win so far came from (#5, #7) — not from re-ranking it.
 
 Still worth keeping from this work: `conceptRelevance` fits to ≈ 0 within a query's candidates, and the n-gram phonotactics adds nothing once length and memorability are in. Neither is evidence to remove them (both may be doing work this test cannot see, like excluding off-topic names or gibberish that never reaches the shortlist), but both are candidates for a cheaper scorer if that ever matters.
+
+### Concrete second word becomes the production crafted brief — 2026-10-05
+
+`c3-concrete` was parked in September: more registrable, but blind rating round 6 put it at 78% good against 82% for the brief we shipped, below the 80% bar. With `judge compare` that call can now be made on far more evidence.
+
+Fresh run, `-variant current,c3-concrete -runs 3 -queries all -avail` (snapshot `run-2026-10-05T012646.378-c3-rematch.json`):
+
+| | Production brief | `c3-concrete` |
+|---|---|---|
+| DNS free, top 10 | 54.2% (5.4 / query) | **61.0% (6.1 / query)** |
+| DNS free, top 20 | 51.8% (10.3 / query) | **59.3% (11.8 / query)** |
+| Typo, top 10 | 4.9% | 7.6% |
+| Compound, top 10 | 36.2% | 41.1% |
+| Cost / query, median latency | $0.00296, 1277 ms | $0.00292, 1258 ms |
+| **Judge, 1,620 answers** | 51.5% | 48.5% (95% CI spans 50%) |
+| Human round 6 (50 names each) | 82% good | 78% good (p = 0.80) |
+
+Judged quality is a tie on 1,620 answers, the human round was a tie within noise, and availability is ~7 points better — so the concrete second word is now the production crafted brief. The previous wording is kept as the `abstract-crafted` eval variant.
+
+The one metric moving the wrong way is the typo rate, +2.7 points, and the typo flag is the one deterministic metric validated against human ratings. Against that: the server gate measured 4.7% typos in the top 10 after the change, in line with before, so the eval figure may be run-to-run noise. Worth watching in the next eval.
+
+Gates after the change (`cmd/suggestcheck`, `CACHE_SIZE=0`): 32/32 requests, 0 errors, every response full at 20 names; load n=200 c=5, 0% failures, p50 / p95 / p99 = 1279 / 1556 / 1652 ms.

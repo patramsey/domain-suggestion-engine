@@ -195,16 +195,16 @@ func TestR3BriefsReplacesOnlyCraftedBrief(t *testing.T) {
 	}
 }
 
-func TestConcreteVariantReplacesOnlyCraftedBrief(t *testing.T) {
+func TestAbstractVariantReplacesOnlyCraftedBrief(t *testing.T) {
 	var c3 promptVariant
 	for _, v := range allVariants {
-		if v.name == "c3-concrete" {
+		if v.name == "abstract-crafted" {
 			c3 = v
 		}
 	}
 	prod := llm.VariantInstructions()
 	if c3.system != llm.SystemPrompt || len(c3.variantOverrides) != 3 ||
-		c3.variantOverrides[0] != prod[0] || c3.variantOverrides[1] != prod[1] || c3.variantOverrides[2] != concreteCraftedBrief {
-		t.Error("c3-concrete must keep production briefs 1–2 and replace the crafted brief")
+		c3.variantOverrides[0] != prod[0] || c3.variantOverrides[1] != prod[1] || c3.variantOverrides[2] != abstractCraftedBrief {
+		t.Error("abstract-crafted must keep production briefs 1–2 and replace the crafted brief")
 	}
 }
