@@ -58,3 +58,14 @@ func TestRankAgreementByGap(t *testing.T) {
 		t.Errorf("gap 2: %+v, want 0 of 2", got[2])
 	}
 }
+
+// Two sides of a comparison can hold the same candidate (comparing two
+// rankings of one pool); a name must never be pitted against itself.
+func TestPairUpSkipsIdenticalNames(t *testing.T) {
+	same := map[string][]string{"tea": {"steep.shop", "leafy.io"}}
+	for _, p := range pairUp(same, same, 4, 1) {
+		if p.A == p.B {
+			t.Errorf("pair %s has the same name on both sides: %s", p.ID, p.A)
+		}
+	}
+}

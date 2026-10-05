@@ -543,3 +543,37 @@ Snapshot `run-2026-09-20T035403.336-over2.json` (24 queries, ~29 candidates each
 Two caveats. The pool is already filtered, so the "bottom band" is still a plausible LLM name, not junk — the score clearly does separate names from gibberish, since that is what fills the shortlist. And the canary figure moves between runs (57–70% on 80 answers), so treat a single run's instrument reading as coarse.
 
 Worth noting what this does *not* say: the availability penalty, the diversity cap and the common-word slots all demonstrably change outcomes we care about. It is the four quality signals' relative weighting that shows no measurable effect on judged preference.
+
+### Fitting the scoring weights to the ratings — 2026-10-04
+
+`cmd/fitweights` pairs every name the rater called good against one they called okay or bad within the same query, and fits a pairwise logistic model on the feature differences. Accuracy is cross-validated over 6 folds split **by query**, so no name trains and tests on the same business. `scorer.Features` now exposes each signal for this.
+
+688 names, 24 queries, 3,509 pairs. Pairwise accuracy (mean over folds):
+
+| Model | Features | Hand weights | Fitted |
+|---|---|---|---|
+| `basic` | today's four signals, re-weighted | 56.1% | 55.2% |
+| `taste` | + ngram, memorability, SLD length, compound, typo | 56.1% | **70.1%** |
+| `full` | + TLD free rate, common-word flag | 56.1% | 71.3% |
+
+Every fold improved under `taste` and `full`. Note the hand weights score 56%, not chance: the AUC ≈ 0.50 measured earlier included the availability penalty, which deliberately demotes names the rater likes. The quality signals alone do carry signal — the weighting is what is wrong.
+
+`taste` is the shippable shape: `full` adds the TLD free rate and the common-word flag, which are availability signals the engine already handles with its own penalty, so fitting them as quality would quietly undo it, for 1.2 points.
+
+Fitted `taste` weights (normalised, all data):
+
+| Feature | Weight | Currently |
+|---|---|---|
+| SLD length (shorter better) | **−0.326** | only via the length curve, 0.15 |
+| Sub-word memorability | **+0.272** | 20% of brandability |
+| Typo flag | −0.146 | not in the score at all |
+| TLD premium | +0.097 | 0.15 |
+| Compound flag | −0.053 | not in the score |
+| Brandability, length curve, ngram | ≈ 0 | 0.40 and 0.15 |
+| **Concept relevance** | **+0.010 ≈ 0** | **0.30** |
+
+Two signals carry almost everything: short, and made of recognisable words. The n-gram phonotactics adds nothing once those are in, and concept relevance — 30% of the score today — is worth about nothing for ranking *within* a query's candidates. (It may still matter for excluding off-topic names, which this test cannot see: every candidate here was already on topic.)
+
+**Independent check, and it is not conclusive.** Re-ranking a snapshot with the fitted weights and asking the judge to compare the two top-10s: fitted 52.3%, current 47.7% of 478 answers (95% CI 43.2–52.2) — the fitted order is slightly ahead but the interval spans 50%. The judge agrees with the human only ~67% of the time, so it is a coarse instrument for a change this size.
+
+**Next step before shipping:** one blind human round, old ranking versus fitted ranking over the same candidate pool. The offline evidence is strong and the judge is neutral-to-positive; a human round is the deciding test.

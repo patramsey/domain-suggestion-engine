@@ -64,6 +64,9 @@ func pairUp(a, b map[string][]string, perQuery int, seed int64) []pair {
 		rng.Shuffle(len(an), func(i, j int) { an[i], an[j] = an[j], an[i] })
 		rng.Shuffle(len(bn), func(i, j int) { bn[i], bn[j] = bn[j], bn[i] })
 		for i := 0; i < min(perQuery, min(len(an), len(bn))); i++ {
+			if an[i] == bn[i] {
+				continue // the two sides can share candidates (e.g. a re-ranking)
+			}
 			out = append(out, pair{ID: fmt.Sprintf("p%04d", len(out)), Query: q, A: an[i], B: bn[i]})
 		}
 	}
