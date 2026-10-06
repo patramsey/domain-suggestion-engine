@@ -65,18 +65,19 @@ func Parse(input string, icannTLDs map[string]struct{}) []string {
 		return nil
 	}
 
-	// strip known TLD suffixes from the end using lowercased form
-	sLow := strings.ToLower(s)
-	stripped := stripTLD(sLow, icannTLDs)
-
-	// if TLD was stripped, use the stripped lowercase form; otherwise preserve
-	// original case so camelCase splitting works
-	var base string
-	if stripped != sLow {
-		base = stripped // already lowercase
-	} else {
-		base = s // preserve case for camelCase detection
+	// Strip a known TLD suffix from each whitespace-separated word, not just
+	// from the end of the whole input: a domain mentioned alongside other
+	// words ("patspizza.com please") would otherwise contribute its TLD as a
+	// search token. A word whose TLD was stripped is already lowercase; the
+	// others keep their case so camelCase splitting still works.
+	fields := strings.Fields(s)
+	for i, w := range fields {
+		wLow := strings.ToLower(w)
+		if stripped := stripTLD(wLow, icannTLDs); stripped != wLow {
+			fields[i] = stripped
+		}
 	}
+	base := strings.Join(fields, " ")
 
 	// split on whitespace, hyphens, underscores, dots
 	words := splitOnDelimiters(base)

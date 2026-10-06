@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"slices"
 	"testing"
 )
 
@@ -182,4 +183,27 @@ func TestDomainWithTLDStripped(t *testing.T) {
 	got := tokens("mybrand.com")
 	assertNotContains(t, got, "com")
 	assertContains(t, got, "mybrand")
+}
+
+// A domain alongside other words must lose its TLD too: only the whole input
+// was stripped before, so "patspizza.com please" searched for "com".
+func TestParseStripsTLDFromDomainInsideAPhrase(t *testing.T) {
+	cases := map[string][]string{
+		"patspizza.com please":        {"pat", "pizza", "please"},
+		"like getfitnow.net but cool": {"fit", "now", "cool"},
+		"mybrand.io rebrand":          {"mybrand", "rebrand"},
+	}
+	for in, want := range cases {
+		got := Parse(in, testICANN)
+		for _, w := range want {
+			if !slices.Contains(got, w) {
+				t.Errorf("Parse(%q) = %v, missing %q", in, got, w)
+			}
+		}
+		for _, bad := range []string{"com", "net", "io"} {
+			if slices.Contains(got, bad) {
+				t.Errorf("Parse(%q) = %v, should not contain the TLD %q", in, got, bad)
+			}
+		}
+	}
 }
