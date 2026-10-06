@@ -159,3 +159,32 @@ func TestPromptFingerprintChangesWithInputs(t *testing.T) {
 		t.Error("fingerprint unchanged when variant overrides are supplied")
 	}
 }
+
+// "com.pizza" came back from a real run: com is a fine TLD but a meaningless
+// name. Names that merely happen to be TLDs — bank, coffee, dev — must survive.
+func TestValidatePairRejectsInfrastructureSLDs(t *testing.T) {
+	tldSet := map[string]struct{}{"pizza": {}, "coffee": {}, "io": {}, "com": {}}
+	for _, sld := range []string{"com", "org"} {
+		if got := validatePair(rawPair{SLD: sld, TLD: "pizza"}, tldSet); got != reasonInfraSLD {
+			t.Errorf("%s.pizza: reason %v, want reasonInfraSLD", sld, got)
+		}
+	}
+	// "net" survives: it is a dictionary word (a net), so the word check that
+	// protects bank and coffee protects it too. A weak name, not a broken one.
+	for _, sld := range []string{"net", "bank", "coffee", "dev", "app", "bio", "bot", "duskbrew"} {
+		if got := validatePair(rawPair{SLD: sld, TLD: "pizza"}, tldSet); got != reasonNone {
+			t.Errorf("%s.pizza: reason %v, want it kept", sld, got)
+		}
+	}
+}
+
+func TestFunnelCountsInfraSLD(t *testing.T) {
+	tldSet := map[string]struct{}{"pizza": {}}
+	_, f := rankedCandidatesWithFunnel([][]rawPair{{
+		{SLD: "com", TLD: "pizza"},
+		{SLD: "duskbrew", TLD: "pizza"},
+	}}, tldSet)
+	if f.InfraSLD != 1 || f.Kept != 1 {
+		t.Errorf("funnel = %+v, want 1 infra SLD and 1 kept", f)
+	}
+}

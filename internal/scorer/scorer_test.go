@@ -12,11 +12,11 @@ func cand(sld, tld, source string) algorithmic.Candidate {
 
 func TestKnownGoodNamesScoreHighly(t *testing.T) {
 	cases := []struct {
-		sld    string
-		tld    string
-		tokens []string
+		sld      string
+		tld      string
+		tokens   []string
 		minScore float64
-		base   bool // true: assert baseScore (pre-availability-penalty), not the shipped Score
+		base     bool // true: assert baseScore (pre-availability-penalty), not the shipped Score
 	}{
 		{"studio", "io", []string{"studio"}, 0.60, false},
 		// baseScore: "coffee" is SCOWL level 10 (≤ wordlist.CommonMaxLevel=20,
@@ -43,7 +43,7 @@ func TestGarbageScoresLow(t *testing.T) {
 	// Good names should consistently outscore garbage.
 	good := Score(cand("coffee", "com", "llm"), []string{"coffee"})
 	garbage := []struct{ sld, tld string }{
-		{"xktzpqvbw", "com"},   // all consonants, unpronounceable
+		{"xktzpqvbw", "com"},        // all consonants, unpronounceable
 		{"aaaaaaaaaaaaaaaa", "com"}, // too long + all vowels
 	}
 	for _, g := range garbage {

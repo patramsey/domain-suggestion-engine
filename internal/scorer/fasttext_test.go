@@ -105,4 +105,3 @@ func TestConceptRelevanceFastTextEnrichment(t *testing.T) {
 		t.Errorf("expected ConceptRelevance(techify, technology) (%f) > ConceptRelevance(techify, banana) (%f)", relTech, relBanana)
 	}
 }
-

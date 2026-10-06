@@ -3,6 +3,8 @@ package llm
 import (
 	"crypto/sha256"
 	"encoding/hex"
+	"github.com/patlivet/domain-suggestion-engine/internal/scorer"
+	"github.com/patlivet/domain-suggestion-engine/internal/wordlist"
 	"math"
 
 	"github.com/patlivet/domain-suggestion-engine/internal/algorithmic"
@@ -22,6 +24,7 @@ type Funnel struct {
 	BadFormat         int `json:"bad_format"`          // SLD fails the 3–14 lowercase letters rule
 	Truncated         int `json:"truncated"`           // SLD looks like a mid-word fragment
 	UnknownTLD        int `json:"unknown_tld"`         // TLD not in the allowed set
+	InfraSLD          int `json:"infra_sld"`           // SLD is an infrastructure TLD (com, net, org)
 	DupInVariant      int `json:"dup_in_variant"`      // SLD repeated within one variant's response
 	DupAcrossVariants int `json:"dup_across_variants"` // SLD already kept from an earlier variant
 	Kept              int `json:"kept"`
@@ -39,6 +42,7 @@ func (a Funnel) Add(b Funnel) Funnel {
 		BadFormat:         a.BadFormat + b.BadFormat,
 		Truncated:         a.Truncated + b.Truncated,
 		UnknownTLD:        a.UnknownTLD + b.UnknownTLD,
+		InfraSLD:          a.InfraSLD + b.InfraSLD,
 		DupInVariant:      a.DupInVariant + b.DupInVariant,
 		DupAcrossVariants: a.DupAcrossVariants + b.DupAcrossVariants,
 		Kept:              a.Kept + b.Kept,
@@ -55,7 +59,27 @@ const (
 	reasonBadFormat
 	reasonTruncated
 	reasonUnknownTLD
+	reasonInfraSLD
 )
+
+// infraAdoptionThreshold separates the infrastructure TLDs from ordinary
+// ones by adoption: com .82, org .77, net .74, then a gap to dev at .63.
+// Such a word is meaningless as a name ("com.pizza") but fine as a TLD.
+const infraAdoptionThreshold = 0.70
+
+// isInfraSLD reports whether an SLD is one of the heavily-adopted TLDs and
+// not an English word. The word check keeps real names that happen to be
+// TLDs too — bank, coffee, studio — and the threshold keeps dev, app, bio.
+// It also keeps "net", which is a dictionary word: weak as a name, but not
+// the meaningless case this rule is for.
+func isInfraSLD(sld string) bool {
+	adoption, ok := scorer.AdoptionScore(sld)
+	if !ok || adoption < infraAdoptionThreshold {
+		return false
+	}
+	_, isWord := wordlist.Level(sld)
+	return !isWord
+}
 
 // validatePair applies the per-pair checks used by parseAndValidate.
 func validatePair(p rawPair, tldSet map[string]struct{}) rejectReason {
@@ -67,6 +91,9 @@ func validatePair(p rawPair, tldSet map[string]struct{}) rejectReason {
 	}
 	if _, ok := tldSet[p.TLD]; !ok {
 		return reasonUnknownTLD
+	}
+	if isInfraSLD(p.SLD) {
+		return reasonInfraSLD
 	}
 	return reasonNone
 }
@@ -88,6 +115,8 @@ func rankedCandidatesWithFunnel(perVariant [][]rawPair, tldSet map[string]struct
 				f.Truncated++
 			case reasonUnknownTLD:
 				f.UnknownTLD++
+			case reasonInfraSLD:
+				f.InfraSLD++
 			}
 		}
 		f.DupInVariant += len(pairs) - len(valid) - len(invalid)

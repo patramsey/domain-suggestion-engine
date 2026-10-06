@@ -52,3 +52,13 @@ func Features(c algorithmic.Candidate, tokens []string) FeatureSet {
 	}
 	return f
 }
+
+// AdoptionScore is a TLD's real-world adoption score from the generated
+// table, derived from the Majestic Million and the IANA root zone. ok is
+// false for a TLD missing from the table. Callers use it to tell the
+// infrastructure TLDs (com .82, org .77, net .74) from ordinary ones — the
+// next-highest is dev at .63, so a threshold of 0.70 sits in that gap.
+func AdoptionScore(tld string) (float64, bool) {
+	s, ok := tldScores[tld]
+	return s, ok
+}
