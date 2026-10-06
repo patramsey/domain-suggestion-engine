@@ -482,7 +482,6 @@ internal/
 data/tlds/           Vendored Public Suffix List and hand-maintained category files
 examples/            Shell scripts exercising the API
 eval-results/        Experiment history, methodology, rating history and selected snapshots
-RESEARCH.md          Background research: naming theory, scoring signals, data sources
 openapi.yaml         OpenAPI 3.1 spec
 ```
 
