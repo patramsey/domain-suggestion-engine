@@ -38,3 +38,17 @@ func TestFeaturesFlags(t *testing.T) {
 		t.Errorf("SLDLen = %d, want 5", algo.SLDLen)
 	}
 }
+
+func TestAdoptionScore(t *testing.T) {
+	com, ok := AdoptionScore("com")
+	if !ok || com < 0.8 {
+		t.Errorf("com adoption = %v, ok = %v; want the highest in the table", com, ok)
+	}
+	dev, _ := AdoptionScore("dev")
+	if dev >= com {
+		t.Errorf("dev %v should rank below com %v", dev, com)
+	}
+	if _, ok := AdoptionScore("zzz-not-a-tld"); ok {
+		t.Error("unknown TLD should report ok=false")
+	}
+}

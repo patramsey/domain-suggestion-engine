@@ -356,8 +356,8 @@ func percentile(sorted []int64, p float64) int64 {
 // printFunnel shows, per variant, where the names the model returned were lost.
 func printFunnel(variantOrder []string, byVariant map[string][]queryResult) {
 	fmt.Printf("\n\n=== YIELD FUNNEL (totals across all queries and runs) ===\n\n")
-	fmt.Printf("%-20s  %9s  %8s  %8s  %7s  %7s  %8s  %8s  %8s  %6s  %7s  %7s  %7s\n",
-		"Variant", "Requested", "Returned", "BadFmt", "Trunc", "BadTLD", "DupInVar", "DupAcross", "Kept", "Kept%", "Failed", "Partial", "MaxTok")
+	fmt.Printf("%-20s  %9s  %8s  %8s  %7s  %7s  %7s  %8s  %8s  %8s  %6s  %7s  %7s  %7s\n",
+		"Variant", "Requested", "Returned", "BadFmt", "Trunc", "BadTLD", "InfraSLD", "DupInVar", "DupAcross", "Kept", "Kept%", "Failed", "Partial", "MaxTok")
 	fmt.Println(strings.Repeat("-", 124))
 	for _, vName := range variantOrder {
 		var f llm.Funnel
@@ -368,8 +368,8 @@ func printFunnel(variantOrder []string, byVariant map[string][]queryResult) {
 		if f.Requested > 0 {
 			keptPct = float64(f.Kept) / float64(f.Requested) * 100
 		}
-		fmt.Printf("%-20s  %9d  %8d  %8d  %7d  %7d  %8d  %8d  %8d  %5.0f%%  %7d  %7d  %7d\n",
-			vName, f.Requested, f.Returned, f.BadFormat, f.Truncated, f.UnknownTLD,
+		fmt.Printf("%-20s  %9d  %8d  %8d  %7d  %7d  %7d  %8d  %8d  %8d  %5.0f%%  %7d  %7d  %7d\n",
+			vName, f.Requested, f.Returned, f.BadFormat, f.Truncated, f.UnknownTLD, f.InfraSLD,
 			f.DupInVariant, f.DupAcrossVariants, f.Kept, keptPct,
 			f.FailedCalls, f.PartialParses, f.MaxTokenStops)
 	}

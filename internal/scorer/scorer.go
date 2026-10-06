@@ -11,10 +11,12 @@ import (
 
 // baseScore computes a composite quality score [0.0, 1.0] for a candidate,
 // before the availability penalty is applied. Weights (sum = 1.0):
-//   brandability     0.40 — n-gram phonotactics (80%) + sub-word memorability (20%)
-//   conceptRelevance 0.30 — GloVe semantic similarity to query
-//   tldPremium       0.15 — IANA adoption + word-likeness + semantic match
-//   length           0.15 — SLD length curve
+//
+//	brandability     0.40 — n-gram phonotactics (80%) + sub-word memorability (20%)
+//	conceptRelevance 0.30 — GloVe semantic similarity to query
+//	tldPremium       0.15 — IANA adoption + word-likeness + semantic match
+//	length           0.15 — SLD length curve
+//
 // LLM-sourced candidates receive a position-scaled bonus: +0.03 base for all
 // LLM suggestions, plus up to +0.04 for the LLM's top-ranked picks (LLMRank=1.0).
 // The LLM sorts its output best-first, so position is a free quality signal.
@@ -168,7 +170,6 @@ func semanticMatch(sld, tld string, tokens []string) bool {
 	}
 	return false
 }
-
 
 func clamp(v float64) float64 {
 	if v < 0 {

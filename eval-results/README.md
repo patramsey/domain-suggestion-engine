@@ -677,3 +677,20 @@ Combined state of `main` after the three merges (32 quality requests, 0 errors, 
 | Cost per request | $0.00410 |
 
 The typo rate is the number worth noting: two changes each nudged it up in isolation (concrete brief +2.7, sharding +0.9), and the combined build measures 5.0% — no worse than the 4.9% before either. The earlier rises were run-to-run noise.
+
+### Generator defaults, measured properly — 2026-10-05
+
+Issue #36: the generator default had been chosen on one run each, where `hacks` alone looked ~4 points more available. Three runs per configuration, live server, `CACHE_SIZE=0`:
+
+| | Availability, top 10 / 20 | Per-run top 10 | Typo | Common | Mean spec |
+|---|---|---|---|---|---|
+| `hacks` only | 54.8% / 54.8% | 53.6 / 56.3 / 54.6% | ~6.0% | 18.8% | 0.069 |
+| `hacks,compounds,affixes` | 53.6% / 53.7% | 54.2 / 52.9 / 53.8% | ~6.5% | 16.9% | 0.099 |
+
+The availability gap was noise: 1.2 points between configurations, against a 2.7-point spread between runs of the same one.
+
+Judge, `hacks` only vs the three-generator default: **53.2% to 46.8% over 1,686 answers, interval clear of 50% — `hacks` alone is preferred.**
+
+That contradicts the deterministic metrics, which favour the three-generator set on specificity (0.099 vs 0.069) and common-word rate. Specificity is the metric we have twice measured as *not* tracking human ratings, so the judge wins the argument: **default is now `hacks` alone.**
+
+Worth keeping in mind for future generator work: `compounds` and `affixes` cost nothing to run, and that was the original argument for them. Free output that people rank lower is not free.

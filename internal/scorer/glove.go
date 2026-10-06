@@ -289,10 +289,10 @@ func memorability(sld string) float64 {
 // recognizable subwords).
 //
 // Hybrid Architecture:
-// 1. Attempts exact GloVe subword lookup on the SLD and query tokens.
-// 2. If any part cannot be resolved (coined brand names, neologisms, or OOV
-//    query tokens), it falls back to FastText quantized subword character
-//    n-grams to compute embeddings in the same coordinate space.
+//  1. Attempts exact GloVe subword lookup on the SLD and query tokens.
+//  2. If any part cannot be resolved (coined brand names, neologisms, or OOV
+//     query tokens), it falls back to FastText quantized subword character
+//     n-grams to compute embeddings in the same coordinate space.
 func ConceptRelevance(sld string, tokens []string) (float64, bool) {
 	if len(tokens) == 0 {
 		return 0, false
@@ -342,4 +342,3 @@ func conceptRelevance(sld string, tokens []string) float64 {
 	}
 	return 0.5
 }
-

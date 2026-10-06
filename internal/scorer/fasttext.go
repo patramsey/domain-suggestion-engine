@@ -144,18 +144,21 @@ func (m *QuantizedFastText) EmbedTokens(tokens []string) ([gloveDims]float32, bo
 //
 // Comparison Note (FastText vs. GloVe 50d):
 // 1. Vocabulary Coverage:
-//    - GloVe 50d: Limited to ~20,000 exact words. Coined names (Spotify, Zapier, Lumora)
-//      are missing and receive neutral 0.50 scores.
-//    - FastText: Full subword coverage. Any coined word inherits the semantic orientation
-//      of its component morphemes.
+//   - GloVe 50d: Limited to ~20,000 exact words. Coined names (Spotify, Zapier, Lumora)
+//     are missing and receive neutral 0.50 scores.
+//   - FastText: Full subword coverage. Any coined word inherits the semantic orientation
+//     of its component morphemes.
+//
 // 2. Misspellings & Creative Alterations:
-//    - GloVe: "lyft" or "fiverr" fail dictionary lookup.
-//    - FastText: "lyft" shares n-grams with "lift"; "fiverr" shares n-grams with "five".
+//   - GloVe: "lyft" or "fiverr" fail dictionary lookup.
+//   - FastText: "lyft" shares n-grams with "lift"; "fiverr" shares n-grams with "five".
+//
 // 3. Runtime Performance:
-//    - Both run in pure Go in microseconds (vector summation + cosine similarity).
+//   - Both run in pure Go in microseconds (vector summation + cosine similarity).
+//
 // 4. Memory Footprint:
-//    - GloVe 50d: ~1.0 MB (20,000 words × 50 dims @ int8).
-//    - FastText (quantized): ~8–12 MB with 50,000 n-gram buckets.
+//   - GloVe 50d: ~1.0 MB (20,000 words × 50 dims @ int8).
+//   - FastText (quantized): ~8–12 MB with 50,000 n-gram buckets.
 type SubwordModel struct {
 	dims    int
 	minN    int
