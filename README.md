@@ -307,7 +307,7 @@ All configuration is through environment variables.
 | `ALGO_ENABLED` | `true` | `false` turns off the algorithmic tier (LLM-only results). |
 | `COMMON_WORD_SLOTS` | `2` | Results per 10 kept for very common single words, ranked by quality (0–10). `0` ranks them with the full availability penalty, which pushes nearly all of them out. |
 | `LLM_SHARDS` | `2` | Split each creative brief across this many parallel calls (1–4). 2 means 6 calls per request: faster, because each call generates fewer names, at more input tokens. |
-| `GENERATORS` | `hacks,compounds,affixes` | Active algorithmic generators. `exact` also exists but is off by default: it returns the query word itself (`meditation.app`), which is nearly always registered. |
+| `GENERATORS` | `hacks` | Active algorithmic generators. `exact`, `compounds` and `affixes` also exist but are off by default — measured, they do not improve the names people prefer (see `eval-results/README.md`). |
 | `LLM_VARIANTS` | `evocative,wordplay,crafted` | Comma-separated creative briefs to run concurrently. |
 | `CHECK_AVAILABILITY` | `false` | When `true`, enables live DNS availability check by default on all `/suggest` requests. |
 | `DNS_RESOLVER` | `1.1.1.1:53` | Upstream DNS resolver host:port for live availability lookups. |

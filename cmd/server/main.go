@@ -31,9 +31,11 @@ func main() {
 		LLMShare:         envFloat("LLM_SHARE", 0.60),
 		CommonWordSlots:  envInt("COMMON_WORD_SLOTS", 2),
 		AlgoEnabled:      envBool("ALGO_ENABLED", true),
-		// exact is off by default: it returns the query word itself (meditation.app),
-		// which filled 10% of the top 10 with names that are nearly always taken.
-		ActiveGenerators:  envStrings("GENERATORS", "hacks,compounds,affixes"),
+		// Only hacks by default. Measured over 3 runs each, compounds and
+		// affixes improve specificity but the judge prefers hacks alone
+		// (53.2% of 1686 answers), and specificity does not track human
+		// ratings. exact is worse still: it returns the query word itself.
+		ActiveGenerators:  envStrings("GENERATORS", "hacks"),
 		AllGenerators:     []string{"hacks", "exact", "compounds", "affixes"},
 		LLMVariants:       envStrings("LLM_VARIANTS", "evocative,wordplay,crafted"),
 		// 2 shards = 6 parallel calls: ~23% faster and judged better, for ~38%
