@@ -7,8 +7,10 @@ import (
 	"fmt"
 	"log/slog"
 	"math"
+	"math/rand/v2"
 	"net/http"
 	"regexp"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -20,9 +22,58 @@ import (
 const geminiBase = "https://generativelanguage.googleapis.com/v1beta/models/"
 
 // rateLimitError is returned by call() when Gemini responds with HTTP 429.
-type rateLimitError struct{ msg string }
+type rateLimitError struct {
+	msg        string
+	retryAfter time.Duration // from the Retry-After header; 0 if absent
+}
 
 func (e *rateLimitError) Error() string { return e.msg }
+
+// statusError is a non-200, non-429 reply from Gemini.
+type statusError struct {
+	code int
+	msg  string
+}
+
+func (e *statusError) Error() string { return fmt.Sprintf("gemini API status %d: %s", e.code, e.msg) }
+
+// retryable reports whether a failed call could succeed if tried again: rate
+// limits, server errors and transport failures can; other 4xx replies — a bad
+// key (400), depleted credits (402), no permission (403) — cannot.
+func retryable(err error) bool {
+	var se *statusError
+	if errors.As(err, &se) {
+		return se.code >= 500
+	}
+	return true
+}
+
+// parseRetryAfter reads a Retry-After header given in seconds.
+func parseRetryAfter(v string) time.Duration {
+	if n, err := strconv.Atoi(strings.TrimSpace(v)); err == nil && n >= 0 {
+		return time.Duration(n) * time.Second
+	}
+	return 0
+}
+
+// maxRetryWait bounds how long one Retry-After is honoured for.
+const maxRetryWait = 5 * time.Second
+
+// backoff is the wait before retry number attempt (1-based): the server's
+// Retry-After when it sent one, otherwise exponential with jitter so that
+// every request hit by the same rate limit does not retry in lockstep.
+func backoff(attempt int, lastErr error) time.Duration {
+	var rl *rateLimitError
+	if errors.As(lastErr, &rl) && rl.retryAfter > 0 {
+		return min(rl.retryAfter, maxRetryWait)
+	}
+	base := 250 * time.Millisecond
+	if errors.As(lastErr, &rl) {
+		base = 500 * time.Millisecond
+	}
+	d := base << (attempt - 1)
+	return d/2 + time.Duration(rand.Int64N(int64(d/2)+1)) // half fixed, half jitter
+}
 
 // Client calls the Gemini API to generate domain name suggestions.
 type Client struct {
@@ -30,6 +81,9 @@ type Client struct {
 	model       string
 	httpClient  *http.Client
 	Temperature float64 // generation temperature; defaults to 0.9 if zero
+	// sem caps in-flight Gemini calls across everything using this client
+	// (see SetMaxConcurrent). nil means unlimited.
+	sem chan struct{}
 	// BaseURL overrides the Gemini endpoint prefix (default geminiBase). For
 	// tests: point it at an httptest server so nothing leaves the machine.
 	BaseURL string
@@ -343,17 +397,15 @@ func (c *Client) callWithRetry(ctx context.Context, system, user string) (callRe
 	var lastErr error
 	for attempt := 0; attempt < 3; attempt++ {
 		if attempt > 0 {
-			var delay time.Duration
-			if errors.As(lastErr, new(*rateLimitError)) {
-				delay = time.Duration(500<<(attempt-1)) * time.Millisecond // 500ms, 1s
-			} else {
-				if attempt > 1 {
-					break // non-429: only one retry
-				}
-				delay = 100 * time.Millisecond
+			if !retryable(lastErr) {
+				break
+			}
+			// Rate limits get two retries; other retryable errors one.
+			if attempt > 1 && !errors.As(lastErr, new(*rateLimitError)) {
+				break
 			}
 			select {
-			case <-time.After(delay):
+			case <-time.After(backoff(attempt, lastErr)):
 			case <-ctx.Done():
 				return callResult{usage: totalUsage}, ctx.Err()
 			}
@@ -658,4 +710,16 @@ func interleave(lists [][]rawPair) []rawPair {
 			return out
 		}
 	}
+}
+
+// SetMaxConcurrent caps how many Gemini calls this client has in flight at
+// once; further calls wait (or give up when their context ends). Each request
+// fans out to six calls, so without a cap a burst of traffic multiplies
+// straight into the API quota. n <= 0 removes the cap.
+func (c *Client) SetMaxConcurrent(n int) {
+	if n <= 0 {
+		c.sem = nil
+		return
+	}
+	c.sem = make(chan struct{}, n)
 }

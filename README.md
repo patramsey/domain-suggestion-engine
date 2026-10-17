@@ -309,6 +309,7 @@ All configuration is through environment variables.
 | `LLM_SHARE` | `0.60` | Share of result slots reserved for LLM suggestions. |
 | `ALGO_ENABLED` | `true` | `false` turns off the algorithmic tier (LLM-only results). |
 | `COMMON_WORD_SLOTS` | `2` | Results per 10 kept for very common single words, ranked by quality (0–10). `0` ranks them with the full availability penalty, which pushes nearly all of them out. |
+| `GEMINI_MAX_CONCURRENT` | `48` | Process-wide cap on in-flight Gemini calls; requests beyond it wait. Each request makes 6 calls, so 48 is eight concurrent requests. `0` removes the cap. |
 | `LLM_SHARDS` | `2` | Split each creative brief across this many parallel calls (1–4). 2 means 6 calls per request: faster, because each call generates fewer names, at more input tokens. |
 | `GENERATORS` | `hacks` | Active algorithmic generators. `exact`, `compounds` and `affixes` also exist but are off by default — measured, they do not improve the names people prefer (see `eval-results/README.md`). |
 | `LLM_VARIANTS` | `evocative,wordplay,crafted` | Comma-separated creative briefs to run concurrently. |

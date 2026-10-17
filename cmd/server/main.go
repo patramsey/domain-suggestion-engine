@@ -41,13 +41,15 @@ func main() {
 		LLMVariants:      envStrings("LLM_VARIANTS", "evocative,wordplay,crafted"),
 		// 2 shards = 6 parallel calls: ~23% faster and judged better, for ~38%
 		// more cost (eval-results/README.md, 2026-10-05).
-		LLMShards:         envInt("LLM_SHARDS", 2),
-		CheckAvailability: envBool("CHECK_AVAILABILITY", false),
-		DNSResolverAddr:   envString("DNS_RESOLVER", "1.1.1.1:53"),
-		DNSCacheSize:      envInt("DNS_CACHE_SIZE", 5000),
-		DNSCacheTTL:       envDuration("DNS_CACHE_TTL", 1*time.Hour),
-		Version:           version,
-		BuiltAt:           builtAt,
+		LLMShards: envInt("LLM_SHARDS", 2),
+		// 48 in-flight Gemini calls is eight requests' worth of six calls each.
+		GeminiMaxConcurrent: envInt("GEMINI_MAX_CONCURRENT", 48),
+		CheckAvailability:   envBool("CHECK_AVAILABILITY", false),
+		DNSResolverAddr:     envString("DNS_RESOLVER", "1.1.1.1:53"),
+		DNSCacheSize:        envInt("DNS_CACHE_SIZE", 5000),
+		DNSCacheTTL:         envDuration("DNS_CACHE_TTL", 1*time.Hour),
+		Version:             version,
+		BuiltAt:             builtAt,
 	}
 
 	if len(configErrs) > 0 {

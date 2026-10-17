@@ -32,22 +32,23 @@ const maxInspireFrom = 5
 
 // Config holds all runtime configuration for the handler.
 type Config struct {
-	GeminiAPIKey      string
-	GeminiModel       string
-	CacheSize         int
-	LLMShare          float64
-	CommonWordSlots   int // results per 10 reserved for very common single words; 0 disables
-	AlgoEnabled       bool
-	ActiveGenerators  []string
-	AllGenerators     []string
-	LLMVariants       []string // creative variants to run, e.g. ["evocative", "wordplay", "crafted"] or ["1"]
-	LLMShards         int      // split each variant across this many parallel calls (0/1 = off)
-	CheckAvailability bool     // check DNS availability for returned names; default false
-	DNSResolverAddr   string
-	DNSCacheSize      int           // max entries in DNS LRU cache; 0 disables, default 5000
-	DNSCacheTTL       time.Duration // TTL for cached DNS availability outcomes; default 1h
-	Version           string
-	BuiltAt           string
+	GeminiAPIKey        string
+	GeminiModel         string
+	CacheSize           int
+	LLMShare            float64
+	CommonWordSlots     int // results per 10 reserved for very common single words; 0 disables
+	AlgoEnabled         bool
+	ActiveGenerators    []string
+	AllGenerators       []string
+	LLMVariants         []string // creative variants to run, e.g. ["evocative", "wordplay", "crafted"] or ["1"]
+	LLMShards           int      // split each variant across this many parallel calls (0/1 = off)
+	GeminiMaxConcurrent int      // process-wide cap on in-flight Gemini calls; 0 = unlimited
+	CheckAvailability   bool     // check DNS availability for returned names; default false
+	DNSResolverAddr     string
+	DNSCacheSize        int           // max entries in DNS LRU cache; 0 disables, default 5000
+	DNSCacheTTL         time.Duration // TTL for cached DNS availability outcomes; default 1h
+	Version             string
+	BuiltAt             string
 }
 
 // Handler handles all API routes.
@@ -78,6 +79,10 @@ func NewHandler(cfg Config) (*Handler, error) {
 		vars = []llm.Variant{llm.VariantEvocative, llm.VariantWordplay, llm.VariantCrafted}
 	}
 	llmClient.Variants = vars
+	if cfg.GeminiMaxConcurrent < 0 {
+		return nil, fmt.Errorf("GeminiMaxConcurrent %d: want 0 or more", cfg.GeminiMaxConcurrent)
+	}
+	llmClient.SetMaxConcurrent(cfg.GeminiMaxConcurrent)
 	if cfg.LLMShards > 1 {
 		if cfg.LLMShards > 4 {
 			return nil, fmt.Errorf("LLMShards %d: want 1-4", cfg.LLMShards)

@@ -30,6 +30,9 @@ func newTestHandler(t *testing.T) *Handler {
 	if err != nil {
 		t.Fatalf("NewHandler: %v", err)
 	}
+	// Point the LLM client at a local fake so no test reaches the real API.
+	srv, _, _ := fakeGemini(t)
+	h.llm.BaseURL = srv.URL + "/"
 	return h
 }
 
