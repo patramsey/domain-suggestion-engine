@@ -404,7 +404,7 @@ make eval ARGS="-model gemini-3.1-flash-lite -thinking low"
 | `-thinking` | `minimal` | Gemini `thinkingLevel`: `minimal`, `low`, `medium`, `high` |
 | `-temperature` | per variant | Override the generation temperature (0–2) |
 | `-runs` | `1` | Repeat each query; with 2+, the report shows per-run numbers and noise bands |
-| `-queries` | `core` | `core` (16 queries), `hard` (short, vague, non-English, long, niche) or `all` |
+| `-queries` | `core` | `core` (16 queries), `hard` (short, vague, non-English, long, niche), `all` (both — the tuning set) or `holdout` (28 queries never used for tuning: run once, on the change you intend to ship) |
 | `-variant` | `current` | Prompt variants to run, comma-separated, or `all` |
 | `-label` | — | Appended to the snapshot filename |
 | `-rescore` | — | Re-annotate an existing snapshot with quality metrics, without API calls |

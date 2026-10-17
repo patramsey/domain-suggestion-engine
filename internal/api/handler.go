@@ -387,44 +387,21 @@ func (h *Handler) handleSuggest(w http.ResponseWriter, r *http.Request) {
 	// 9. Score
 	ranked := scorer.Rank(merged, tokens)
 
-	// 10. TLD diversity cap applied to the full pool before tier-selection,
-	//     so tierBalance can find non-homogeneous candidates.
-	scored := diversityCap(ranked, req.Count, len(resolvedTLDs))
-	afterDiversityCap := len(scored)
-
-	// 11. Tier balance: 60/40 LLM/algo split
+	// 10-14. Diversity cap, tier balance, SLD dedup, unavailable filter,
+	//        backfill and common-word slots (see Shape).
 	effectiveLLMShare := h.cfg.LLMShare
 	if !algoEnabled {
 		effectiveLLMShare = 1.0
 	}
-	final := tierBalance(scored, req.Count, effectiveLLMShare)
-	afterTierBalance := len(final)
-
-	// 12. SLD dedup (no repeated SLD across suggestions)
-	final = sldDedup(final)
-	afterSLDDedup := len(final)
-	sort.Slice(final, func(i, j int) bool { return final[i].Score > final[j].Score })
-
-	// 13. Filter unavailable domains
-	if len(unavailable) > 0 {
-		ranked = filterUnavailable(ranked, unavailable)
-		final = filterUnavailable(final, unavailable)
-	}
-
-	// 13b. Top up from the pre-cap pool if the cap left the result short.
-	final = backfillToCount(final, ranked, req.Count)
-
-	// 14. Reserve slots for very common single words: great names that are
-	//     usually taken, ranked by quality instead of being demoted out.
-	if h.cfg.CommonWordSlots > 0 {
-		pool := scored
-		if len(unavailable) > 0 {
-			pool = filterUnavailable(scored, unavailable)
-		}
-		final = reserveCommonWords(final, pool, req.Count, h.cfg.CommonWordSlots, func(c algorithmic.Candidate) float64 {
-			return scorer.ScoreWithoutCommonWordPenalty(c, tokens)
-		})
-	}
+	final, shaped := Shape(ranked, ShapeOptions{
+		Count:           req.Count,
+		NumTLDs:         len(resolvedTLDs),
+		LLMShare:        effectiveLLMShare,
+		CommonWordSlots: h.cfg.CommonWordSlots,
+		Unavailable:     unavailable,
+		Tokens:          tokens,
+	})
+	afterDiversityCap, afterTierBalance, afterSLDDedup := shaped.AfterDiversityCap, shaped.AfterTierBalance, shaped.AfterSLDDedup
 
 	// 15. Log pipeline metrics
 	algoUnique := countSource("algorithmic", merged)

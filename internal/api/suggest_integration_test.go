@@ -5,7 +5,6 @@ package api
 import (
 	"context"
 	"os"
-	"sort"
 	"strings"
 	"testing"
 	"time"
@@ -61,13 +60,11 @@ func integrationSuggest(t *testing.T, input string, count int) []Suggestion {
 	}
 
 	merged := merge(llmCands, algoCands)
-	scored := scorer.Rank(merged, tokens)
-	scored = diversityCap(scored, count, len(resolvedTLDs))
-	final := tierBalance(scored, count, 0.60)
-	final = sldDedup(final)
-	sort.Slice(final, func(i, j int) bool { return final[i].Score > final[j].Score })
-	final = reserveCommonWords(final, scored, count, 2, func(c algorithmic.Candidate) float64 {
-		return scorer.ScoreWithoutCommonWordPenalty(c, tokens)
+	ranked := scorer.Rank(merged, tokens)
+	// The same post-scoring pipeline the handler runs.
+	final, _ := Shape(ranked, ShapeOptions{
+		Count: count, NumTLDs: len(resolvedTLDs), LLMShare: 0.60,
+		CommonWordSlots: 2, Tokens: tokens,
 	})
 
 	_ = c

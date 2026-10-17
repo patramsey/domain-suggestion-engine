@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"math"
 	"math/rand"
 	"os"
 	"sort"
@@ -73,44 +72,37 @@ func pairUp(a, b map[string][]string, perQuery int, seed int64) []pair {
 	return out
 }
 
-// comparePairs asks each pair in both orders and returns how often side A won.
-// Asking both ways cancels the model's preference for whichever name it sees
-// first; disagreements between the two orders are counted as half a win each.
-func comparePairs(ctx context.Context, c *llm.Client, model string, pairs []pair, size, conc int) (aWins, answers int, cost float64, err error) {
+// comparePairs asks each pair in both orders and scores each pair once, from
+// side A's view. Asking both ways cancels the model's preference for
+// whichever name it sees first.
+func comparePairs(ctx context.Context, c *llm.Client, model string, pairs []pair, size, conc int) ([]pairOutcome, float64, error) {
 	ask := make([]pair, 0, len(pairs)*2)
 	for _, p := range pairs {
 		ask = append(ask, p, swapped(p))
 	}
 	winners, cost, err := askPairs(ctx, c, model, ask, size, conc)
 	if err != nil {
-		return 0, 0, cost, err
+		return nil, cost, err
 	}
-	for _, p := range pairs {
-		if w, ok := winners[p.ID]; ok {
-			answers++
-			if w == "a" {
-				aWins++
-			}
-		}
-		if w, ok := winners[p.ID+"r"]; ok {
-			answers++
-			if w == "b" { // reversed: "b" is the original A
-				aWins++
-			}
-		}
-	}
-	return aWins, answers, cost, nil
+	return outcomes(pairs, winners), cost, nil
 }
 
-// binomialCI is a 95% Wald interval on the win rate, enough to see whether a
-// result clears a coin flip.
-func binomialCI(wins, n int) (lo, hi float64) {
-	if n == 0 {
-		return 0, 0
+// printVerdict reports a pair-level win rate with its query-bootstrap
+// interval, and whether it clears 50%.
+func printVerdict(labelA, labelB string, st summary) {
+	fmt.Printf("  %s wins %.1f%% of %d pairs across %d queries (95%% CI %.1f–%.1f%%, bootstrap by query)\n",
+		labelA, st.rate*100, st.pairs, st.queries, st.lo*100, st.hi*100)
+	fmt.Printf("  %s wins %.1f%%\n", labelB, (1-st.rate)*100)
+	switch {
+	case st.lo > 0.5:
+		fmt.Printf("\n  %s is preferred.\n", labelA)
+	case st.hi < 0.5:
+		fmt.Printf("\n  %s is preferred.\n", labelB)
+	default:
+		fmt.Printf("\n  Too close to call: the interval spans 50%%.\n")
 	}
-	p := float64(wins) / float64(n)
-	se := math.Sqrt(p * (1 - p) / float64(n))
-	return math.Max(0, p-1.96*se), math.Min(1, p+1.96*se)
+	fmt.Println("  Each pair is one observation (both orders together); a judge that agrees with")
+	fmt.Println("  the human ~65% of the time also shrinks real differences, so a tie is weak evidence.")
 }
 
 // pairUpRounds redraws pairs with successive seeds and keeps the distinct
@@ -134,6 +126,38 @@ func pairUpRounds(a, b map[string][]string, perQuery, rounds int, seed int64) []
 	return out
 }
 
+// onlyDifferences keeps, per query, the names that appear in one side's
+// list but not the other's. In a paired comparison (cmd/pairgen) both sides
+// share most of their LLM names; comparing shared names against each other
+// adds noise and no information about the configurations.
+func onlyDifferences(a, b map[string][]string) (map[string][]string, map[string][]string) {
+	da, db := map[string][]string{}, map[string][]string{}
+	for q, an := range a {
+		bn, ok := b[q]
+		if !ok {
+			continue
+		}
+		inA, inB := map[string]bool{}, map[string]bool{}
+		for _, n := range an {
+			inA[n] = true
+		}
+		for _, n := range bn {
+			inB[n] = true
+		}
+		for _, n := range an {
+			if !inB[n] {
+				da[q] = append(da[q], n)
+			}
+		}
+		for _, n := range bn {
+			if !inA[n] {
+				db[q] = append(db[q], n)
+			}
+		}
+	}
+	return da, db
+}
+
 func runCompare(args []string) error {
 	fs := newFlagSet("compare")
 	aPath := fs.String("a", "", "snapshot JSON for side A")
@@ -146,6 +170,7 @@ func runCompare(args []string) error {
 	size := fs.Int("batch", 10, "pairs per request")
 	seed := fs.Int64("seed", 1, "pairing seed")
 	rounds := fs.Int("rounds", 1, "redraw pairings this many times for more answers from the same pools")
+	diffOnly := fs.Bool("diff-only", false, "compare only names that are in one side's top N and not the other's (for paired runs from cmd/pairgen)")
 	thinking := fs.String("thinking", "minimal", "Gemini thinkingLevel: minimal, low, medium, high")
 	if err := fs.Parse(args); err != nil {
 		return err
@@ -160,7 +185,11 @@ func runCompare(args []string) error {
 	if err := readJSON(*bPath, &sb); err != nil {
 		return err
 	}
-	pairs := pairUpRounds(topNames(sa, *aVar, *top), topNames(sb, *bVar, *top), *perQuery, *rounds, *seed)
+	ta, tb := topNames(sa, *aVar, *top), topNames(sb, *bVar, *top)
+	if *diffOnly {
+		ta, tb = onlyDifferences(ta, tb)
+	}
+	pairs := pairUpRounds(ta, tb, *perQuery, *rounds, *seed)
 	if len(pairs) == 0 {
 		return fmt.Errorf("no shared queries between the two snapshots")
 	}
@@ -170,23 +199,12 @@ func runCompare(args []string) error {
 	}
 	labelA, labelB := label(*aPath, *aVar), label(*bPath, *bVar)
 	fmt.Fprintf(os.Stderr, "Comparing %s vs %s over %d pairs, both orders ...\n", labelA, labelB, len(pairs))
-	aWins, answers, cost, err := comparePairs(context.Background(), c, *model, pairs, *size, 3)
+	outs, cost, err := comparePairs(context.Background(), c, *model, pairs, *size, 3)
 	if err != nil {
 		return err
 	}
-	rate := share(aWins, answers)
-	lo, hi := binomialCI(aWins, answers)
 	fmt.Printf("\n=== PAIRWISE COMPARISON (%s, %s) ===\n\n", *model, costLabel(*model, cost))
-	fmt.Printf("  %s wins %.1f%% of %d answers (95%% CI %.1f–%.1f%%)\n", labelA, rate*100, answers, lo*100, hi*100)
-	fmt.Printf("  %s wins %.1f%%\n", labelB, (1-rate)*100)
-	switch {
-	case lo > 0.5:
-		fmt.Printf("\n  %s is preferred.\n", labelA)
-	case hi < 0.5:
-		fmt.Printf("\n  %s is preferred.\n", labelB)
-	default:
-		fmt.Printf("\n  Too close to call: the interval spans 50%%.\n")
-	}
+	printVerdict(labelA, labelB, pairStats(outs, *seed))
 	return nil
 }
 
