@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log/slog"
 	"math"
+	"net"
 	"net/http"
 	"sort"
 	"strings"
@@ -90,6 +91,25 @@ func NewHandler(cfg Config) (*Handler, error) {
 
 	if cfg.CommonWordSlots < 0 || cfg.CommonWordSlots > 10 {
 		return nil, fmt.Errorf("CommonWordSlots %d: want 0–10", cfg.CommonWordSlots)
+	}
+	// An out-of-range share panics in tierBalance on every request; catch it
+	// here so a typo like LLM_SHARE=60 stops the server instead.
+	if cfg.LLMShare < 0 || cfg.LLMShare > 1 {
+		return nil, fmt.Errorf("LLMShare %v: want 0–1", cfg.LLMShare)
+	}
+	known := make(map[string]bool, len(allGen))
+	for _, g := range allGen {
+		known[g.Name()] = true
+	}
+	for _, name := range cfg.ActiveGenerators {
+		if !known[name] {
+			return nil, fmt.Errorf("generator %q: unknown (have %v)", name, generatorNames(allGen))
+		}
+	}
+	if cfg.DNSResolverAddr != "" {
+		if _, _, err := net.SplitHostPort(cfg.DNSResolverAddr); err != nil {
+			return nil, fmt.Errorf("DNSResolverAddr %q: want host:port: %w", cfg.DNSResolverAddr, err)
+		}
 	}
 
 	// CacheSize 0 disables the response cache (used by pipeline checks that
@@ -178,7 +198,7 @@ func (h *Handler) handleSuggest(w http.ResponseWriter, r *http.Request) {
 				fmt.Sprintf("request body must be %d bytes or fewer", maxBodyBytes))
 			return
 		}
-		WriteError(w, http.StatusBadRequest, CodeMissingInput, "invalid request body")
+		WriteError(w, http.StatusBadRequest, CodeInvalidJSON, "request body is not valid JSON")
 		return
 	}
 	if req.Input == "" {
@@ -231,7 +251,7 @@ func (h *Handler) handleSuggest(w http.ResponseWriter, r *http.Request) {
 				"one or more TLDs not recognized", ute.TLDs...)
 			return
 		}
-		WriteError(w, http.StatusBadRequest, CodeUnknownCategory, err.Error())
+		WriteError(w, http.StatusUnprocessableEntity, CodeUnknownCategory, err.Error())
 		return
 	}
 
@@ -264,12 +284,13 @@ func (h *Handler) handleSuggest(w http.ResponseWriter, r *http.Request) {
 		if isStream {
 			var resp SuggestResponse
 			if err := json.Unmarshal(cached, &resp); err == nil {
-				h.streamSuggest(w, r, resp.Suggestions, false, resp.Partial, resp.TLDsUsed, debug)
+				// The cache key includes check_availability, so honour it here
+				// too: passing false dropped the avail events a caller asked for.
+				h.streamSuggest(w, r, resp.Suggestions, checkAvail, resp.Partial, resp.TLDsUsed, debug)
 				return
 			}
 		}
 		w.Header().Set("Content-Type", "application/json")
-		w.Header().Set("Age", "1")
 		w.Write(cached)
 		return
 	}
@@ -454,16 +475,20 @@ func (h *Handler) handleSuggest(w http.ResponseWriter, r *http.Request) {
 		for i, s := range suggestions {
 			names[i] = s.Name
 		}
-		outcomes := dnscheck.CheckAll(r.Context(), names, h.dnsLookup, 10)
+		// One deadline for the whole check: a slow or blocked resolver would
+		// otherwise hold the request past the server's write timeout.
+		actx, acancel := context.WithTimeout(r.Context(), availabilityBudget)
+		outcomes := dnscheck.CheckAll(actx, names, h.dnsLookup, 10)
+		acancel()
 		for i, s := range suggestions {
 			if o, ok := outcomes[s.Name]; ok {
 				switch o {
 				case dnscheck.Free:
 					avail := true
-					suggestions[i].Available = &avail
+					suggestions[i].IsAvailable = &avail
 				case dnscheck.Delegated:
 					avail := false
-					suggestions[i].Available = &avail
+					suggestions[i].IsAvailable = &avail
 				}
 			}
 		}
@@ -527,23 +552,25 @@ func (h *Handler) streamSuggest(w http.ResponseWriter, r *http.Request, suggesti
 	}
 
 	type availEvent struct {
-		Name      string `json:"name"`
-		Available bool   `json:"available"`
+		Name        string `json:"name"`
+		IsAvailable bool   `json:"is_available"`
 	}
 
 	var mu sync.Mutex
-	dnscheck.CheckAllStream(r.Context(), names, h.dnsLookup, 10, func(name string, o dnscheck.Outcome) {
+	sctx, scancel := context.WithTimeout(r.Context(), streamAvailabilityBudget)
+	defer scancel()
+	dnscheck.CheckAllStream(sctx, names, h.dnsLookup, 10, func(name string, o dnscheck.Outcome) {
 		if o == dnscheck.Unknown {
 			return
 		}
 		avail := (o == dnscheck.Free)
-		data, err := json.Marshal(availEvent{Name: name, Available: avail})
+		data, err := json.Marshal(availEvent{Name: name, IsAvailable: avail})
 		if err != nil {
 			return
 		}
 		mu.Lock()
 		defer mu.Unlock()
-		fmt.Fprintf(w, "event: availability\ndata: %s\n\n", data)
+		fmt.Fprintf(w, "event: avail\ndata: %s\n\n", data)
 		flusher.Flush()
 	})
 
@@ -823,6 +850,14 @@ func filterUnavailable(scored []scorer.ScoredCandidate, unavailable []string) []
 		if _, skip := unavailSet[sc.Name()]; !skip {
 			out = append(out, sc)
 		}
+	}
+	return out
+}
+
+func generatorNames(gens []algorithmic.Generator) []string {
+	out := make([]string, len(gens))
+	for i, g := range gens {
+		out[i] = g.Name()
 	}
 	return out
 }

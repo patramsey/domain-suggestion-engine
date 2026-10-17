@@ -17,12 +17,13 @@ type SuggestRequest struct {
 }
 
 type Suggestion struct {
-	Name      string  `json:"name"`
-	SLD       string  `json:"sld"`
-	TLD       string  `json:"tld"`
-	Score     float64 `json:"score"`
-	Source    string  `json:"source"`
-	Available *bool   `json:"available,omitempty"`
+	Name   string  `json:"name"`
+	SLD    string  `json:"sld"`
+	TLD    string  `json:"tld"`
+	Score  float64 `json:"score"`
+	Source string  `json:"source"`
+	// IsAvailable is null unless availability was checked (check_availability).
+	IsAvailable *bool `json:"is_available"`
 }
 
 type SuggestResponse struct {

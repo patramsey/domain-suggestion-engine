@@ -15,6 +15,7 @@ const (
 	CodeTooManyUnavailable = "too_many_unavailable_domains"
 	CodeTooManyInspireFrom = "too_many_inspire_from"
 	CodeInvalidDomain      = "invalid_domain"
+	CodeInvalidJSON        = "invalid_json"
 	CodeRequestTooLarge    = "request_too_large"
 )
 

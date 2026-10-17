@@ -2,6 +2,7 @@ package cache
 
 import (
 	"crypto/sha256"
+	"encoding/json"
 	"fmt"
 	"sort"
 	"strings"
@@ -57,12 +58,11 @@ func Key(input string, count int, debug, checkAvailability bool, tlds, unavailab
 	if checkAvailability {
 		availStr = "1"
 	}
-	raw := fmt.Sprintf("%s\x00%d\x00%s\x00%s\x00%s\x00%s\x00%s\x00%s",
-		normalized, count, debugStr, availStr,
-		strings.Join(sorted, ","),
-		strings.Join(unavailSorted, ","),
-		strings.Join(inspireSorted, ","),
-		strings.Join(varsSorted, ","),
+	// Lists are JSON-encoded rather than joined, so an entry containing the
+	// separator cannot make two different lists look the same.
+	lists, _ := json.Marshal([][]string{sorted, unavailSorted, inspireSorted, varsSorted})
+	raw := fmt.Sprintf("%s\x00%d\x00%s\x00%s\x00%s",
+		normalized, count, debugStr, availStr, lists,
 	)
 	sum := sha256.Sum256([]byte(raw))
 	return fmt.Sprintf("%x", sum)

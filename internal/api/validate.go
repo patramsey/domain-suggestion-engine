@@ -1,6 +1,9 @@
 package api
 
-import "strings"
+import (
+	"strings"
+	"time"
+)
 
 // maxBodyBytes bounds a /suggest request. The largest legitimate body — 500
 // characters of input, 40 unavailable domains and 5 inspire_from domains of
@@ -52,3 +55,11 @@ func plausibleDomain(s string) bool {
 	}
 	return true
 }
+
+// Availability-check budgets. Unresolved names are reported as null rather
+// than held for: the non-stream response must beat the server's 15-second
+// write timeout with time to spare, and a stream should not hang either.
+const (
+	availabilityBudget       = 2 * time.Second
+	streamAvailabilityBudget = 8 * time.Second
+)
