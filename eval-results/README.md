@@ -694,3 +694,27 @@ Judge, `hacks` only vs the three-generator default: **53.2% to 46.8% over 1,686 
 That contradicts the deterministic metrics, which favour the three-generator set on specificity (0.099 vs 0.069) and common-word rate. Specificity is the metric we have twice measured as *not* tracking human ratings, so the judge wins the argument: **default is now `hacks` alone.**
 
 Worth keeping in mind for future generator work: `compounds` and `affixes` cost nothing to run, and that was the original argument for them. Free output that people rank lower is not free.
+
+## Methodology corrections after the October review — 2026-10-17
+
+An independent review found three flaws in how the judge-based decisions above were measured. All three are now fixed in the tools; one decision is reopened.
+
+**1. The judge's confidence intervals were too narrow.** `judge compare` reported a binomial interval over *answers*, but each pair is asked in both orders and the judge answered both identically every time, so a pair is one observation, not two. Pairs from the same query also share names and the same LLM output, so they are not independent either. `judge compare` and `rankcheck` now score each pair once and bootstrap by query, reporting pairs and queries.
+
+Re-reading earlier decisions with the pair-count correction alone (√2 wider; the query bootstrap would widen them further):
+
+| Decision | Reported | Corrected (pairs) | Still holds? |
+|---|---|---|---|
+| Six calls per request (#32) | 54.8% of 1,620 answers | ~51.4–58.2% | yes |
+| `hacks`-only generators (#38) | 53.2% of 1,686 answers | **~49.8–56.6%** | **no — spans 50%** |
+| Concrete brief (#30) | 48.5% vs 51.5%, a tie | still a tie | yes (it was shipped on availability) |
+
+**2. Generator comparisons were not paired.** Each arm was a separate server run, so the LLM — most of every top 10 — was a different random sample in each, and its noise could produce the whole difference. `cmd/pairgen` re-ranks one recorded LLM pool under two configurations through the production pipeline (`api.Shape`), and `judge compare -diff-only` compares only the names that differ.
+
+Paired re-run of #38 on `run-2026-10-05T012646.378-c3-rematch.json`: 70% of top-10 slots are identical between `hacks` and `hacks,compounds,affixes`. Where they differ, the three-generator set substitutes affix patterns (`gomeditation.app`, `meditationco.app`, `mymeditation.app`, `legallab.ai`, `thelegal.ai`) for LLM names (`gentletide.net`, `seren.ee`, `litigate.run`). Availability: top 10 46.6% vs 45.8%, top 20 46.6% vs 50.7%. **The judge comparison of those 71 differing names is pending** — the Gemini account's prepaid credits are exhausted (402). Until it runs, `hacks`-only stays the default, but on the qualitative pattern rather than a significant result.
+
+**3. Everything was tuned on the same 24 queries.** A 28-query `holdout` set now exists (`-queries holdout`), disjoint from the tuning set by test, covering new verticals and four non-English inputs. Its rule: run it once, at the end, on the change you mean to ship.
+
+Two further points from the review stand as caveats rather than fixes:
+- A judge that agrees with the human ~65% of the time shrinks every real difference by roughly a factor of 0.3, so "no signal" from `rankcheck` is weak evidence. The fitweights result (70% vs 56% on held-out queries, human labels) is positive evidence that taste signals exist — the ranking work concluded only that re-weighting does not help *at matched availability*.
+- The judge is Gemini rating Gemini output. Where an arm swaps LLM names for algorithmic ones, self-preference is a possible confound. A judge from another model family would remove it.

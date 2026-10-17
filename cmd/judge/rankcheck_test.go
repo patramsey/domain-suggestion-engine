@@ -42,20 +42,20 @@ func TestCrossBandPairsRecordTheGap(t *testing.T) {
 	}
 }
 
-func TestRankAgreementByGap(t *testing.T) {
+func TestRankOutcomesByGap(t *testing.T) {
 	pairs := []bandPair{
-		{pair: pair{ID: "s0", A: "hi", B: "lo", Better: "hi"}, Gap: 1},
-		{pair: pair{ID: "s1", A: "lo2", B: "hi2", Better: "hi2"}, Gap: 2},
+		{pair: pair{ID: "s0", Query: "q", A: "hi", B: "lo", Better: "hi"}, Gap: 1},
+		{pair: pair{ID: "s1", Query: "q", A: "lo2", B: "hi2", Better: "hi2"}, Gap: 2},
 	}
 	// s0: both orders back the higher-scored name (A forward, B reversed).
 	// s1: both orders back the lower-scored one, which sits at A forward.
 	winners := map[string]string{"s0": "a", "s0r": "b", "s1": "a", "s1r": "b"}
-	got := rankAgreement(pairs, winners)
-	if got[1].Answers != 2 || got[1].Correct != 2 {
-		t.Errorf("gap 1: %+v, want 2 of 2", got[1])
+	got := rankOutcomes(pairs, winners)
+	if len(got[1]) != 1 || got[1][0].score != 1 {
+		t.Errorf("gap 1: %+v, want one pair scoring 1", got[1])
 	}
-	if got[2].Answers != 2 || got[2].Correct != 0 {
-		t.Errorf("gap 2: %+v, want 0 of 2", got[2])
+	if len(got[2]) != 1 || got[2][0].score != 0 {
+		t.Errorf("gap 2: %+v, want one pair scoring 0", got[2])
 	}
 }
 

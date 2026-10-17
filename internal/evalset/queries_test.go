@@ -31,3 +31,30 @@ func TestAllQuerySetIsCorePlusHardWithoutDuplicates(t *testing.T) {
 		seen[q] = true
 	}
 }
+
+// The holdout set must share nothing with the tuning set, or it stops being
+// a holdout.
+func TestHoldoutIsDisjointFromTuningQueries(t *testing.T) {
+	all, _ := Queries("all")
+	holdout, err := Queries("holdout")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(holdout) < 25 {
+		t.Errorf("holdout has %d queries; it needs enough to resolve real differences", len(holdout))
+	}
+	tuning := map[string]bool{}
+	for _, q := range all {
+		tuning[q] = true
+	}
+	seen := map[string]bool{}
+	for _, q := range holdout {
+		if tuning[q] {
+			t.Errorf("holdout query %q is also a tuning query", q)
+		}
+		if seen[q] {
+			t.Errorf("duplicate holdout query %q", q)
+		}
+		seen[q] = true
+	}
+}

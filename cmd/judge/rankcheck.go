@@ -75,35 +75,20 @@ func crossBandPairs(ranked map[string][]string, nBands, perQuery int, seed int64
 	return out
 }
 
-// gapResult counts answers for one band gap.
-type gapResult struct {
-	Answers, Correct int
-}
-
-func (g gapResult) Rate() float64 { return share(g.Correct, g.Answers) }
-
-// rankAgreement reports, per band gap, how often the judge preferred the name
-// the scorer ranked higher. 50% means the scorer's order carries no
-// information at that distance.
-func rankAgreement(pairs []bandPair, winners map[string]string) map[int]gapResult {
-	out := map[int]gapResult{}
+// rankOutcomes scores each cross-band pair once by how often the judge chose
+// the name the scorer ranked higher, grouped by band gap. 50% means the
+// scorer's order carries no information at that distance.
+func rankOutcomes(pairs []bandPair, winners map[string]string) map[int][]pairOutcome {
+	out := map[int][]pairOutcome{}
 	for _, p := range pairs {
-		for _, suffix := range []string{"", "r"} {
-			w, ok := winners[p.ID+suffix]
-			if !ok {
-				continue
-			}
-			pick := p.A
-			if (suffix == "" && w == "b") || (suffix == "r" && w == "a") {
-				pick = p.B
-			}
-			g := out[p.Gap]
-			g.Answers++
-			if pick == p.Better {
-				g.Correct++
-			}
-			out[p.Gap] = g
+		o := outcomes([]pair{p.pair}, winners)
+		if len(o) == 0 {
+			continue
 		}
+		if p.Better == p.B { // outcomes scores side A
+			o[0].score = 1 - o[0].score
+		}
+		out[p.Gap] = append(out[p.Gap], o[0])
 	}
 	return out
 }
@@ -186,23 +171,22 @@ func runRankCheck(args []string) error {
 		fmt.Printf("  judge vs human on %d canary pairs: %.1f%% (expect ~65-70%%; much lower means do not trust the rest)\n\n",
 			cr.N, cr.Accuracy()*100)
 	}
-	byGap := rankAgreement(pairs, winners)
+	byGap := rankOutcomes(pairs, winners)
 	gaps := make([]int, 0, len(byGap))
 	for g := range byGap {
 		gaps = append(gaps, g)
 	}
 	sort.Ints(gaps)
-	fmt.Printf("  %-10s %9s %9s   %s\n", "band gap", "answers", "scorer", "")
+	fmt.Printf("  %-10s %7s %8s %9s   %s\n", "band gap", "pairs", "queries", "scorer", "")
 	for _, g := range gaps {
-		r := byGap[g]
-		lo, hi := binomialCI(r.Correct, r.Answers)
+		st := pairStats(byGap[g], *seed)
 		verdict := "no signal (interval spans 50%)"
-		if lo > 0.5 {
+		if st.lo > 0.5 {
 			verdict = "scorer order agrees with the judge"
-		} else if hi < 0.5 {
+		} else if st.hi < 0.5 {
 			verdict = "scorer order is BACKWARDS here"
 		}
-		fmt.Printf("  %-10d %9d %8.1f%%   %s (95%% CI %.1f-%.1f%%)\n", g, r.Answers, r.Rate()*100, verdict, lo*100, hi*100)
+		fmt.Printf("  %-10d %7d %8d %8.1f%%   %s (95%% CI %.1f-%.1f%%)\n", g, st.pairs, st.queries, st.rate*100, verdict, st.lo*100, st.hi*100)
 	}
 	fmt.Println("\n  Band gap 1 compares neighbouring quartiles; the largest gap compares the top band with the bottom.")
 	return nil
