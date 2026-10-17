@@ -59,6 +59,8 @@ paths:
                 $ref: "#/components/schemas/SuggestResponse"
         "400":
           $ref: "#/components/responses/Error"
+        "413":
+          $ref: "#/components/responses/Error"
         "422":
           $ref: "#/components/responses/Error"
         "500":
@@ -90,6 +92,8 @@ paths:
               schema:
                 type: string
         "400":
+          $ref: "#/components/responses/Error"
+        "413":
           $ref: "#/components/responses/Error"
         "422":
           $ref: "#/components/responses/Error"
@@ -414,6 +418,9 @@ components:
             - unknown_category
             - too_many_unavailable_domains
             - too_many_inspire_from
+            - invalid_domain
+            - invalid_json
+            - request_too_large
             - both_tiers_failed
         details:
           type: array

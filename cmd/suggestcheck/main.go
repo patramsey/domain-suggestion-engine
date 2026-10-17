@@ -30,7 +30,7 @@ func main() {
 	mode := os.Args[1]
 	fs := flag.NewFlagSet(mode, flag.ExitOnError)
 	url := fs.String("url", "http://localhost:8080", "base URL of the running server")
-	set := fs.String("queries", "all", "query set: core, hard or all")
+	set := fs.String("queries", "all", "query set: core, hard, all or holdout (holdout is for a final check only)")
 	out := fs.String("out", "", "write raw results and summary as JSON to this file")
 	extra := fs.Int("extra", 4, "quality: queries that also get unavailable_domains and TLD-filter requests")
 	n := fs.Int("n", 200, "load: total requests")

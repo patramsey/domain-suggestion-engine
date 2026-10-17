@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log/slog"
 	"math"
+	"net"
 	"net/http"
 	"sort"
 	"strings"
@@ -31,22 +32,23 @@ const maxInspireFrom = 5
 
 // Config holds all runtime configuration for the handler.
 type Config struct {
-	GeminiAPIKey      string
-	GeminiModel       string
-	CacheSize         int
-	LLMShare          float64
-	CommonWordSlots   int // results per 10 reserved for very common single words; 0 disables
-	AlgoEnabled       bool
-	ActiveGenerators  []string
-	AllGenerators     []string
-	LLMVariants       []string // creative variants to run, e.g. ["evocative", "wordplay", "crafted"] or ["1"]
-	LLMShards         int      // split each variant across this many parallel calls (0/1 = off)
-	CheckAvailability bool     // check DNS availability for returned names; default false
-	DNSResolverAddr   string
-	DNSCacheSize      int           // max entries in DNS LRU cache; 0 disables, default 5000
-	DNSCacheTTL       time.Duration // TTL for cached DNS availability outcomes; default 1h
-	Version           string
-	BuiltAt           string
+	GeminiAPIKey        string
+	GeminiModel         string
+	CacheSize           int
+	LLMShare            float64
+	CommonWordSlots     int // results per 10 reserved for very common single words; 0 disables
+	AlgoEnabled         bool
+	ActiveGenerators    []string
+	AllGenerators       []string
+	LLMVariants         []string // creative variants to run, e.g. ["evocative", "wordplay", "crafted"] or ["1"]
+	LLMShards           int      // split each variant across this many parallel calls (0/1 = off)
+	GeminiMaxConcurrent int      // process-wide cap on in-flight Gemini calls; 0 = unlimited
+	CheckAvailability   bool     // check DNS availability for returned names; default false
+	DNSResolverAddr     string
+	DNSCacheSize        int           // max entries in DNS LRU cache; 0 disables, default 5000
+	DNSCacheTTL         time.Duration // TTL for cached DNS availability outcomes; default 1h
+	Version             string
+	BuiltAt             string
 }
 
 // Handler handles all API routes.
@@ -77,6 +79,10 @@ func NewHandler(cfg Config) (*Handler, error) {
 		vars = []llm.Variant{llm.VariantEvocative, llm.VariantWordplay, llm.VariantCrafted}
 	}
 	llmClient.Variants = vars
+	if cfg.GeminiMaxConcurrent < 0 {
+		return nil, fmt.Errorf("GeminiMaxConcurrent %d: want 0 or more", cfg.GeminiMaxConcurrent)
+	}
+	llmClient.SetMaxConcurrent(cfg.GeminiMaxConcurrent)
 	if cfg.LLMShards > 1 {
 		if cfg.LLMShards > 4 {
 			return nil, fmt.Errorf("LLMShards %d: want 1-4", cfg.LLMShards)
@@ -90,6 +96,25 @@ func NewHandler(cfg Config) (*Handler, error) {
 
 	if cfg.CommonWordSlots < 0 || cfg.CommonWordSlots > 10 {
 		return nil, fmt.Errorf("CommonWordSlots %d: want 0–10", cfg.CommonWordSlots)
+	}
+	// An out-of-range share panics in tierBalance on every request; catch it
+	// here so a typo like LLM_SHARE=60 stops the server instead.
+	if cfg.LLMShare < 0 || cfg.LLMShare > 1 {
+		return nil, fmt.Errorf("LLMShare %v: want 0–1", cfg.LLMShare)
+	}
+	known := make(map[string]bool, len(allGen))
+	for _, g := range allGen {
+		known[g.Name()] = true
+	}
+	for _, name := range cfg.ActiveGenerators {
+		if !known[name] {
+			return nil, fmt.Errorf("generator %q: unknown (have %v)", name, generatorNames(allGen))
+		}
+	}
+	if cfg.DNSResolverAddr != "" {
+		if _, _, err := net.SplitHostPort(cfg.DNSResolverAddr); err != nil {
+			return nil, fmt.Errorf("DNSResolverAddr %q: want host:port: %w", cfg.DNSResolverAddr, err)
+		}
 	}
 
 	// CacheSize 0 disables the response cache (used by pipeline checks that
@@ -178,7 +203,7 @@ func (h *Handler) handleSuggest(w http.ResponseWriter, r *http.Request) {
 				fmt.Sprintf("request body must be %d bytes or fewer", maxBodyBytes))
 			return
 		}
-		WriteError(w, http.StatusBadRequest, CodeMissingInput, "invalid request body")
+		WriteError(w, http.StatusBadRequest, CodeInvalidJSON, "request body is not valid JSON")
 		return
 	}
 	if req.Input == "" {
@@ -231,7 +256,7 @@ func (h *Handler) handleSuggest(w http.ResponseWriter, r *http.Request) {
 				"one or more TLDs not recognized", ute.TLDs...)
 			return
 		}
-		WriteError(w, http.StatusBadRequest, CodeUnknownCategory, err.Error())
+		WriteError(w, http.StatusUnprocessableEntity, CodeUnknownCategory, err.Error())
 		return
 	}
 
@@ -264,12 +289,13 @@ func (h *Handler) handleSuggest(w http.ResponseWriter, r *http.Request) {
 		if isStream {
 			var resp SuggestResponse
 			if err := json.Unmarshal(cached, &resp); err == nil {
-				h.streamSuggest(w, r, resp.Suggestions, false, resp.Partial, resp.TLDsUsed, debug)
+				// The cache key includes check_availability, so honour it here
+				// too: passing false dropped the avail events a caller asked for.
+				h.streamSuggest(w, r, resp.Suggestions, checkAvail, resp.Partial, resp.TLDsUsed, debug)
 				return
 			}
 		}
 		w.Header().Set("Content-Type", "application/json")
-		w.Header().Set("Age", "1")
 		w.Write(cached)
 		return
 	}
@@ -361,44 +387,21 @@ func (h *Handler) handleSuggest(w http.ResponseWriter, r *http.Request) {
 	// 9. Score
 	ranked := scorer.Rank(merged, tokens)
 
-	// 10. TLD diversity cap applied to the full pool before tier-selection,
-	//     so tierBalance can find non-homogeneous candidates.
-	scored := diversityCap(ranked, req.Count, len(resolvedTLDs))
-	afterDiversityCap := len(scored)
-
-	// 11. Tier balance: 60/40 LLM/algo split
+	// 10-14. Diversity cap, tier balance, SLD dedup, unavailable filter,
+	//        backfill and common-word slots (see Shape).
 	effectiveLLMShare := h.cfg.LLMShare
 	if !algoEnabled {
 		effectiveLLMShare = 1.0
 	}
-	final := tierBalance(scored, req.Count, effectiveLLMShare)
-	afterTierBalance := len(final)
-
-	// 12. SLD dedup (no repeated SLD across suggestions)
-	final = sldDedup(final)
-	afterSLDDedup := len(final)
-	sort.Slice(final, func(i, j int) bool { return final[i].Score > final[j].Score })
-
-	// 13. Filter unavailable domains
-	if len(unavailable) > 0 {
-		ranked = filterUnavailable(ranked, unavailable)
-		final = filterUnavailable(final, unavailable)
-	}
-
-	// 13b. Top up from the pre-cap pool if the cap left the result short.
-	final = backfillToCount(final, ranked, req.Count)
-
-	// 14. Reserve slots for very common single words: great names that are
-	//     usually taken, ranked by quality instead of being demoted out.
-	if h.cfg.CommonWordSlots > 0 {
-		pool := scored
-		if len(unavailable) > 0 {
-			pool = filterUnavailable(scored, unavailable)
-		}
-		final = reserveCommonWords(final, pool, req.Count, h.cfg.CommonWordSlots, func(c algorithmic.Candidate) float64 {
-			return scorer.ScoreWithoutCommonWordPenalty(c, tokens)
-		})
-	}
+	final, shaped := Shape(ranked, ShapeOptions{
+		Count:           req.Count,
+		NumTLDs:         len(resolvedTLDs),
+		LLMShare:        effectiveLLMShare,
+		CommonWordSlots: h.cfg.CommonWordSlots,
+		Unavailable:     unavailable,
+		Tokens:          tokens,
+	})
+	afterDiversityCap, afterTierBalance, afterSLDDedup := shaped.AfterDiversityCap, shaped.AfterTierBalance, shaped.AfterSLDDedup
 
 	// 15. Log pipeline metrics
 	algoUnique := countSource("algorithmic", merged)
@@ -454,16 +457,20 @@ func (h *Handler) handleSuggest(w http.ResponseWriter, r *http.Request) {
 		for i, s := range suggestions {
 			names[i] = s.Name
 		}
-		outcomes := dnscheck.CheckAll(r.Context(), names, h.dnsLookup, 10)
+		// One deadline for the whole check: a slow or blocked resolver would
+		// otherwise hold the request past the server's write timeout.
+		actx, acancel := context.WithTimeout(r.Context(), availabilityBudget)
+		outcomes := dnscheck.CheckAll(actx, names, h.dnsLookup, 10)
+		acancel()
 		for i, s := range suggestions {
 			if o, ok := outcomes[s.Name]; ok {
 				switch o {
 				case dnscheck.Free:
 					avail := true
-					suggestions[i].Available = &avail
+					suggestions[i].IsAvailable = &avail
 				case dnscheck.Delegated:
 					avail := false
-					suggestions[i].Available = &avail
+					suggestions[i].IsAvailable = &avail
 				}
 			}
 		}
@@ -527,23 +534,25 @@ func (h *Handler) streamSuggest(w http.ResponseWriter, r *http.Request, suggesti
 	}
 
 	type availEvent struct {
-		Name      string `json:"name"`
-		Available bool   `json:"available"`
+		Name        string `json:"name"`
+		IsAvailable bool   `json:"is_available"`
 	}
 
 	var mu sync.Mutex
-	dnscheck.CheckAllStream(r.Context(), names, h.dnsLookup, 10, func(name string, o dnscheck.Outcome) {
+	sctx, scancel := context.WithTimeout(r.Context(), streamAvailabilityBudget)
+	defer scancel()
+	dnscheck.CheckAllStream(sctx, names, h.dnsLookup, 10, func(name string, o dnscheck.Outcome) {
 		if o == dnscheck.Unknown {
 			return
 		}
 		avail := (o == dnscheck.Free)
-		data, err := json.Marshal(availEvent{Name: name, Available: avail})
+		data, err := json.Marshal(availEvent{Name: name, IsAvailable: avail})
 		if err != nil {
 			return
 		}
 		mu.Lock()
 		defer mu.Unlock()
-		fmt.Fprintf(w, "event: availability\ndata: %s\n\n", data)
+		fmt.Fprintf(w, "event: avail\ndata: %s\n\n", data)
 		flusher.Flush()
 	})
 
@@ -823,6 +832,14 @@ func filterUnavailable(scored []scorer.ScoredCandidate, unavailable []string) []
 		if _, skip := unavailSet[sc.Name()]; !skip {
 			out = append(out, sc)
 		}
+	}
+	return out
+}
+
+func generatorNames(gens []algorithmic.Generator) []string {
+	out := make([]string, len(gens))
+	for i, g := range gens {
+		out[i] = g.Name()
 	}
 	return out
 }

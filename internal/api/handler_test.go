@@ -30,6 +30,9 @@ func newTestHandler(t *testing.T) *Handler {
 	if err != nil {
 		t.Fatalf("NewHandler: %v", err)
 	}
+	// Point the LLM client at a local fake so no test reaches the real API.
+	srv, _, _ := fakeGemini(t)
+	h.llm.BaseURL = srv.URL + "/"
 	return h
 }
 
@@ -156,14 +159,17 @@ func TestCategoriesCacheHeader(t *testing.T) {
 
 func TestHealthEndpointDegraded(t *testing.T) {
 	// handler with no API key set should report llm_key check failed
-	h, _ := NewHandler(Config{
+	h, err := NewHandler(Config{
 		GeminiAPIKey:     "", // intentionally empty
 		GeminiModel:      "gemini-2.5-flash-lite-preview-06-17",
 		CacheSize:        10,
 		AlgoEnabled:      true,
-		ActiveGenerators: []string{"direct"},
-		AllGenerators:    []string{"direct"},
+		ActiveGenerators: []string{"hacks"},
+		AllGenerators:    []string{"hacks"},
 	})
+	if err != nil {
+		t.Fatal(err)
+	}
 	w := get(h, "/health")
 	if w.Code != http.StatusServiceUnavailable {
 		t.Errorf("want 503 when API key missing, got %d", w.Code)
@@ -307,8 +313,8 @@ func TestTLDFilterByCategory(t *testing.T) {
 func TestTLDFilterUnknownCategory(t *testing.T) {
 	h := newTestHandler(t)
 	w := post(h, `{"input":"coffee","tld_filter":{"category":"nonexistentcategory999"}}`, "")
-	if w.Code != http.StatusBadRequest {
-		t.Errorf("unknown category should return 400, got %d", w.Code)
+	if w.Code != http.StatusUnprocessableEntity {
+		t.Errorf("unknown category should return 422 (README, openapi.yaml), got %d", w.Code)
 	}
 }
 
@@ -386,7 +392,7 @@ func TestHealthChecksAllPresent(t *testing.T) {
 }
 
 func TestAlgoDisabledHealth(t *testing.T) {
-	h, _ := NewHandler(Config{
+	h, err := NewHandler(Config{
 		GeminiAPIKey:     "test-key",
 		GeminiModel:      "gemini-2.5-flash-lite",
 		CacheSize:        10,
@@ -394,6 +400,9 @@ func TestAlgoDisabledHealth(t *testing.T) {
 		ActiveGenerators: []string{}, // enabled but no generators → degraded
 		AllGenerators:    []string{"hacks"},
 	})
+	if err != nil {
+		t.Fatal(err)
+	}
 	w := get(h, "/health")
 	var resp HealthResponse
 	json.Unmarshal(w.Body.Bytes(), &resp)
@@ -532,7 +541,7 @@ func TestCheckAvailabilityFlagDisabledByDefault(t *testing.T) {
 	w := post(h, `{"input":"coffee shop"}`, "")
 	var resp SuggestResponse
 	json.Unmarshal(w.Body.Bytes(), &resp)
-	if len(resp.Suggestions) > 0 && resp.Suggestions[0].Available != nil {
+	if len(resp.Suggestions) > 0 && resp.Suggestions[0].IsAvailable != nil {
 		t.Error("expected available field to be nil when check_availability is false")
 	}
 }
@@ -546,11 +555,11 @@ func TestCheckAvailabilityFlagEnabled(t *testing.T) {
 	var resp SuggestResponse
 	json.Unmarshal(w.Body.Bytes(), &resp)
 	if len(resp.Suggestions) > 0 {
-		if resp.Suggestions[0].Available == nil {
+		if resp.Suggestions[0].IsAvailable == nil {
 			t.Fatal("expected available field to be non-nil when check_availability is true")
 		}
-		if !*resp.Suggestions[0].Available {
-			t.Errorf("expected available to be true, got %v", *resp.Suggestions[0].Available)
+		if !*resp.Suggestions[0].IsAvailable {
+			t.Errorf("expected available to be true, got %v", *resp.Suggestions[0].IsAvailable)
 		}
 	}
 }
@@ -581,7 +590,7 @@ func TestStreamSuggestWithoutDNSCheck(t *testing.T) {
 	if !strings.Contains(body, "event: done") {
 		t.Error("expected done event in stream output")
 	}
-	if strings.Contains(body, "event: availability") {
+	if strings.Contains(body, "event: avail\n") {
 		t.Error("did not expect availability events when check_availability is false")
 	}
 	if dnsCalled {
@@ -607,7 +616,7 @@ func TestStreamSuggestWithDNSCheckEnabled(t *testing.T) {
 	if !strings.Contains(body, "event: suggestions") {
 		t.Error("expected suggestions event in stream output")
 	}
-	if !strings.Contains(body, "event: availability") {
+	if !strings.Contains(body, "event: avail\n") {
 		t.Error("expected availability events when check_availability is true")
 	}
 	if !strings.Contains(body, "event: done") {

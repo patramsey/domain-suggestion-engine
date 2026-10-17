@@ -52,7 +52,62 @@ var hardQueries = []string{
 	"nonprofit that plants trees in cities",
 }
 
-// Queries returns the queries for a named set: core, hard or all.
+// holdoutQueries are for confirming a decision, never for making one. Every
+// prompt, parser and ranking change so far was tuned and measured on core and
+// hard, so results there are optimistic. These cover verticals and input
+// shapes those sets do not, including other languages.
+//
+// Rules: do not look at holdout output while iterating on a change, do not
+// edit this list to make a result look better, and do not add queries because
+// a change happened to do well on them. Run it once, at the end, on the
+// candidate you intend to ship. Keep "all" as core + hard so it stays a
+// tuning set.
+var holdoutQueries = []string{
+	// services and trades
+	"mobile dog grooming van in austin",
+	"residential solar panel installation company",
+	"emergency plumber available 24/7",
+	"wedding photography duo who shoot on film",
+	"bookkeeping for independent restaurants",
+
+	// health
+	"pediatric dental clinic",
+	"physical therapy for runners",
+	"telehealth app for managing type 2 diabetes",
+
+	// consumer products
+	"handmade ceramic dinnerware",
+	"plant-based protein bars for endurance athletes",
+	"refillable laundry detergent delivered by bike",
+	"luxury dog beds",
+
+	// software and B2B
+	"open source observability for kubernetes",
+	"contract management for construction subcontractors",
+	"AI note taker for therapy sessions",
+	"fleet maintenance scheduling for trucking companies",
+
+	// education, culture, community
+	"after school coding club for teenage girls",
+	"independent bookstore and cafe",
+	"local history walking tours",
+	"esports team for college students",
+
+	// short, vague or awkward inputs
+	"bakery",
+	"consulting",
+	"cool name for my startup",
+	"brightpath.io",
+
+	// not English
+	"cervecería artesanal en monterrey",
+	"boulangerie bio à lyon",
+	"nachhaltige mode aus berlin",
+	"école de yoga à montréal",
+}
+
+// Queries returns the queries for a named set: core, hard, all (core + hard,
+// the tuning set) or holdout (for a final check only — see holdoutQueries).
 func Queries(set string) ([]string, error) {
 	switch set {
 	case "core":
@@ -61,6 +116,8 @@ func Queries(set string) ([]string, error) {
 		return hardQueries, nil
 	case "all":
 		return append(append([]string{}, coreQueries...), hardQueries...), nil
+	case "holdout":
+		return holdoutQueries, nil
 	}
-	return nil, fmt.Errorf("unknown query set %q: want core, hard or all", set)
+	return nil, fmt.Errorf("unknown query set %q: want core, hard, all or holdout", set)
 }
