@@ -13,6 +13,15 @@ import (
 // postGemini sends one generateContent request and returns the raw response
 // body. Shared by the suggestion path and Complete.
 func (c *Client) postGemini(ctx context.Context, req geminiRequest) ([]byte, error) {
+	// Every Gemini call in the process passes through this limit.
+	if c.sem != nil {
+		select {
+		case c.sem <- struct{}{}:
+			defer func() { <-c.sem }()
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		}
+	}
 	body, err := json.Marshal(req)
 	if err != nil {
 		return nil, fmt.Errorf("marshal request: %w", err)
@@ -37,10 +46,13 @@ func (c *Client) postGemini(ctx context.Context, req geminiRequest) ([]byte, err
 		return nil, fmt.Errorf("read response: %w", err)
 	}
 	if resp.StatusCode == http.StatusTooManyRequests {
-		return nil, &rateLimitError{msg: fmt.Sprintf("rate limited (429): %s", truncate(string(respBody), 200))}
+		return nil, &rateLimitError{
+			msg:        fmt.Sprintf("rate limited (429): %s", truncate(string(respBody), 200)),
+			retryAfter: parseRetryAfter(resp.Header.Get("Retry-After")),
+		}
 	}
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("gemini API status %d: %s", resp.StatusCode, truncate(string(respBody), 200))
+		return nil, &statusError{code: resp.StatusCode, msg: truncate(string(respBody), 200)}
 	}
 	return respBody, nil
 }
