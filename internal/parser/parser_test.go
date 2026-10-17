@@ -2,7 +2,9 @@ package parser
 
 import (
 	"slices"
+	"strings"
 	"testing"
+	"time"
 )
 
 // minimal ICANN set for tests
@@ -206,4 +208,54 @@ func TestParseStripsTLDFromDomainInsideAPhrase(t *testing.T) {
 			}
 		}
 	}
+}
+
+// "pot"+"stop"×k+"q" made the old splitter backtrack exponentially (39s of
+// CPU at 116 bytes, unbounded at the 500-byte input limit).
+func TestParseIsFastOnBacktrackingInput(t *testing.T) {
+	in := "pot" + strings.Repeat("stop", 120) + "q" // ~483 bytes
+	done := make(chan struct{})
+	go func() {
+		Parse(in, testICANN)
+		close(done)
+	}()
+	select {
+	case <-done:
+	case <-time.After(2 * time.Second):
+		t.Fatal("Parse did not finish within 2s on a pathological input")
+	}
+}
+
+// Memoising must not change what the splitter returns.
+func TestGreedySplitResultsUnchanged(t *testing.T) {
+	cases := map[string][]string{
+		"patspizza":  {"pat", "pizza"},
+		"coffeeshop": {"coffee", "shop"},
+	}
+	for in, want := range cases {
+		if got := greedySplit(in, commonWords); !slices.Equal(got, want) {
+			t.Errorf("greedySplit(%q) = %v, want %v", in, got, want)
+		}
+	}
+}
+
+func FuzzParse(f *testing.F) {
+	for _, seed := range []string{"patspizza.com", "coffee shop", "pot" + strings.Repeat("stop", 30) + "q", "MyBrand.io rebrand", ""} {
+		f.Add(seed)
+	}
+	f.Fuzz(func(t *testing.T, in string) {
+		if len(in) > 500 {
+			in = in[:500]
+		}
+		done := make(chan struct{})
+		go func() {
+			Parse(in, testICANN)
+			close(done)
+		}()
+		select {
+		case <-done:
+		case <-time.After(time.Second):
+			t.Fatalf("Parse took over 1s on %q", in)
+		}
+	})
 }

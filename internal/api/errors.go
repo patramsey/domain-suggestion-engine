@@ -14,6 +14,8 @@ const (
 	CodeUnknownCategory    = "unknown_category"
 	CodeTooManyUnavailable = "too_many_unavailable_domains"
 	CodeTooManyInspireFrom = "too_many_inspire_from"
+	CodeInvalidDomain      = "invalid_domain"
+	CodeRequestTooLarge    = "request_too_large"
 )
 
 type errorResponse struct {
