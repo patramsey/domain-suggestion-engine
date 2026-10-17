@@ -1,12 +1,16 @@
 package api
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"sync/atomic"
 	"testing"
+	"time"
+
+	"github.com/patlivet/domain-suggestion-engine/internal/dnscheck"
 )
 
 // fakeGemini answers like the Gemini API with a fixed set of names, or fails
@@ -110,5 +114,55 @@ func TestLLMFailureIsNotCached(t *testing.T) {
 	post(h, body, "")
 	if calls.Load() != before {
 		t.Error("a healthy response should be served from cache")
+	}
+}
+
+// A dead or slow resolver must not hold a request past the availability
+// budget: unresolved names come back as null, the response comes back fast.
+func TestAvailabilityCheckHasATimeBudget(t *testing.T) {
+	srv, _, _ := fakeGemini(t)
+	h := handlerWithFake(t, srv)
+	h.dnsLookup = func(ctx context.Context, name string) dnscheck.Outcome {
+		select { // a resolver that never answers
+		case <-ctx.Done():
+		case <-time.After(30 * time.Second):
+		}
+		return dnscheck.Unknown
+	}
+	start := time.Now()
+	w := post(h, `{"input":"coffee shop","check_availability":true}`, "")
+	if took := time.Since(start); took > availabilityBudget+time.Second {
+		t.Fatalf("request took %v with a hung resolver; budget is %v", took, availabilityBudget)
+	}
+	var resp SuggestResponse
+	json.Unmarshal(w.Body.Bytes(), &resp)
+	for _, s := range resp.Suggestions {
+		if s.IsAvailable != nil {
+			t.Errorf("%s: unresolved name should report null, got %v", s.Name, *s.IsAvailable)
+		}
+	}
+}
+
+// Bad configuration must stop the server at start-up, not panic on every
+// request (LLM_SHARE=60) or quietly run without generators (GENERATORS=hack).
+func TestNewHandlerRejectsBadConfig(t *testing.T) {
+	base := func() Config {
+		return Config{GeminiAPIKey: "k", GeminiModel: "m", LLMShare: 0.6, ActiveGenerators: []string{"hacks"}}
+	}
+	cases := map[string]func(*Config){
+		"LLMShare above 1":   func(c *Config) { c.LLMShare = 60 },
+		"LLMShare negative":  func(c *Config) { c.LLMShare = -0.5 },
+		"unknown generator":  func(c *Config) { c.ActiveGenerators = []string{"hack"} },
+		"resolver sans port": func(c *Config) { c.DNSResolverAddr = "1.1.1.1" },
+	}
+	for name, mutate := range cases {
+		c := base()
+		mutate(&c)
+		if _, err := NewHandler(c); err == nil {
+			t.Errorf("%s: want a start-up error", name)
+		}
+	}
+	if _, err := NewHandler(base()); err != nil {
+		t.Errorf("valid config rejected: %v", err)
 	}
 }

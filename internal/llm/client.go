@@ -231,6 +231,7 @@ func (c *Client) Generate(ctx context.Context, rawInput string, tokens []string,
 		merged := make([]variantResult, len(activeVars))
 		for i := range activeVars {
 			var vr variantResult
+			var lists [][]rawPair
 			for sh := range shards {
 				r := results[i*shards+sh]
 				vr.usage = vr.usage.add(r.usage)
@@ -238,8 +239,11 @@ func (c *Client) Generate(ctx context.Context, rawInput string, tokens []string,
 					vr.err = r.err // a shard failing loses part of the variant
 					continue
 				}
-				vr.pairs = append(vr.pairs, r.pairs...)
+				lists = append(lists, r.pairs)
 			}
+			// Interleave rather than concatenate: LLMRank is assigned by
+			// position, and each shard's list is its own best-first order.
+			vr.pairs = interleave(lists)
 			if len(vr.pairs) > 0 {
 				vr.err = nil // some shard answered, so the variant is not lost
 			}
@@ -636,4 +640,22 @@ func truncate(s string, n int) string {
 		return s
 	}
 	return s[:n] + "..."
+}
+
+// interleave merges best-first lists round-robin: first of each, then second
+// of each, and so on.
+func interleave(lists [][]rawPair) []rawPair {
+	var out []rawPair
+	for i := 0; ; i++ {
+		added := false
+		for _, l := range lists {
+			if i < len(l) {
+				out = append(out, l[i])
+				added = true
+			}
+		}
+		if !added {
+			return out
+		}
+	}
 }

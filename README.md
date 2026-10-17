@@ -10,7 +10,7 @@ curl -s -X POST localhost:8080/suggest -d '{"input": "denver coffee shop that se
 - **Hybrid LLM and algorithmic tiers, unified ranking.** Gemini proposes creative, concept-specific names; deterministic algorithmic generators find domain hacks (`coff.ee`), exact matches (`coffee.bar`), compounds (`brewcraft.coffee`), and affixes (`getcoffee.com`). Both tiers are scored by the same data-driven ranker.
 - **Leans toward registrable names, with optional live verification.** The engine demotes names that are almost certainly taken (common dictionary words, crowded TLDs), but keeps 2 of every 10 results for the best very common single words (`mint.cafe`). When live check is desired, the engine runs concurrent DNS delegation checks or streams real-time availability via SSE.
 - **Iterative.** Pass back names the user liked (`inspire_from`) and names that turned out to be taken (`unavailable_domains`) to steer the next batch.
-- **One self-contained binary.** Quantized FastText and GloVe embeddings, n-gram tables, TLD data and word lists are embedded; the only external runtime dependency is the Gemini API.
+- **One self-contained binary.** GloVe embeddings plus a subword model trained to extend them, n-gram tables, TLD data and word lists are embedded; the only external runtime dependency is the Gemini API.
 
 ## Contents
 
@@ -183,7 +183,7 @@ Together with the compound brief, this makes about half of the LLM's top 20 regi
 
 - **Phonotactic quality** — a character bigram model (a 26×26 table of how often each letter pair appears in English) scores how naturally a name reads aloud. `coffee` is made of common pairs; `xkqvz` isn't.
 - **Sub-word recognisability** — the name is split into known words, preferring a split that covers every letter (`duskbrew` → `dusk` + `brew`, `aidrive` → `ai` + `drive`) and falling back to the best partial cover. A whole dictionary word, or any name of 1–2 letters, counts as fully recognisable. Names built from real words are more memorable. This is a bonus, not a penalty, so coined words aren't punished.
-- **Semantic similarity** — quantized [FastText](https://fasttext.cc/) subword embeddings (`fasttext.bin`) with [GloVe](https://nlp.stanford.edu/projects/glove/) 50d fallback (`glove.bin`) place each word and morpheme as a dense vector, with related words close together (`coffee` near `espresso`, far from `skateboard`). Subword vector representations allow scoring novel coined compounds and affixes even when unseen in vocabulary. The score is the cosine similarity between the name's sub-words and the query's keywords, so `roast.coffee` scores well for "coffee shop".
+- **Semantic similarity** — [GloVe](https://nlp.stanford.edu/projects/glove/) 50d vectors (`glove.bin`) place each word as a dense vector; for words GloVe lacks, a character n-gram model in the FastText style (`fasttext.bin`, trained here by `cmd/gen/fasttext` to reproduce the GloVe vectors — not the fasttext.cc pretrained vectors) estimates one, with related words close together (`coffee` near `espresso`, far from `skateboard`). Subword vector representations allow scoring novel coined compounds and affixes even when unseen in vocabulary. The score is the cosine similarity between the name's sub-words and the query's keywords, so `roast.coffee` scores well for "coffee shop".
 - **TLD quality** — derived from the [Majestic Million](https://majestic.com/reports/majestic-million) and the [IANA root zone database](https://www.iana.org/domains/root/db): TLDs used by many popular sites rank higher, and TLDs that are real words (`.studio`, `.pizza`) get a bonus over letter-soup ones.
 
 ---
@@ -238,20 +238,23 @@ Add `?debug=true` to include `tlds_used` and `active_generators` in the response
 Streams domain suggestions and real-time DNS availability updates over Server-Sent Events (SSE). Accepts the exact same request body as `POST /suggest`.
 
 1. `event: suggestions` — Emits the full candidate list immediately.
-2. `event: avail` — Emits individual DNS results as concurrent workers resolve them (`{"name": "...", "available": true/false}`).
+2. `event: avail` — Emits individual DNS results as concurrent workers resolve them (`{"name": "...", "is_available": true/false}`).
 3. `event: done` — Signals stream completion (`{}`).
 
 **Errors** are returned as `{"error": "...", "code": "..."}`:
 
 | HTTP | `code` | Meaning |
 |---|---|---|
+| 400 | `invalid_json` | The request body is not valid JSON |
 | 400 | `missing_input` | `input` is missing or empty |
 | 400 | `ambiguous_tld_filter` | Both `category` and `list` are set |
-| 422 | `input_too_long` | `input` is over 500 characters |
+| 422 | `input_too_long` | `input` is over 500 characters (counted as characters, not bytes) |
 | 422 | `unknown_tld` | `list` contains a TLD that isn't in the Public Suffix List |
 | 422 | `unknown_category` | `category` isn't a known preset |
 | 422 | `too_many_unavailable_domains` | More than 40 `unavailable_domains` |
 | 422 | `too_many_inspire_from` | More than 5 `inspire_from` |
+| 422 | `invalid_domain` | An `unavailable_domains` or `inspire_from` entry is not a domain name (≤ 253 bytes) |
+| 413 | `request_too_large` | The request body is over 16 KB |
 | 500 | `both_tiers_failed` | The LLM failed and the algorithmic tier produced nothing |
 
 ### `GET /tlds/categories`
@@ -362,7 +365,7 @@ The server has no runtime file dependencies: everything below is compiled in wit
 | `make gen-tld-scores` | `internal/scorer/tld_scores_gen.go` | IANA root zone + Majestic Million |
 | `make gen-ngrams` | `internal/scorer/ngrams_gen.go` | English word corpus |
 | `make gen-glove` | `internal/scorer/data/glove.bin` | GloVe 6B (~860 MB download) |
-| `go run ./cmd/gen/fasttext` | `internal/scorer/data/fasttext.bin` | Quantized FastText English subwords model |
+| `go run ./cmd/gen/fasttext` | `internal/scorer/data/fasttext.bin` | Character n-gram model trained to reproduce the GloVe vectors |
 | `make gen-wordlist` | `internal/wordlist/data/words.txt.gz` | SCOWL 2020.12.07 (see `internal/wordlist/data/NOTICE`) |
 | `make gen-tld-crowding` | `internal/scorer/tld_crowding_gen.go` | Live DNS lookups of probe words on each TLD |
 

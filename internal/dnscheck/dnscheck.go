@@ -1,8 +1,8 @@
 // Package dnscheck tells whether domain names have a DNS delegation, a
 // vendor-neutral proxy for "already registered". A name with no delegation
 // (NXDOMAIN on an NS lookup) is usually available, though it may still be
-// reserved or premium-priced. Used offline and by the eval only — the engine
-// never makes network calls at request time.
+// reserved or premium-priced. Used offline, by the eval, and at request time
+// only when a caller opts in with check_availability (off by default).
 //
 // Checked 2026-09-19 against a registrar availability API on 1,957 names:
 // 94.2% per-name agreement.
@@ -51,7 +51,9 @@ func Resolver(addr string) Lookup {
 	return func(ctx context.Context, name string) Outcome {
 		for range 2 {
 			c, cancel := context.WithTimeout(ctx, 5*time.Second)
-			_, err := r.LookupNS(c, name)
+			// A trailing dot makes the name absolute, so the resolver does not
+			// first try it against the host's search domains (ndots).
+			_, err := r.LookupNS(c, absolute(name))
 			cancel()
 			if err == nil {
 				return Delegated
@@ -60,7 +62,11 @@ func Resolver(addr string) Lookup {
 			if errors.As(err, &de) && de.IsNotFound {
 				return Free
 			}
-			time.Sleep(200 * time.Millisecond)
+			select { // back off, but stop as soon as the caller gives up
+			case <-ctx.Done():
+				return Unknown
+			case <-time.After(200 * time.Millisecond):
+			}
 		}
 		return Unknown
 	}
@@ -99,4 +105,11 @@ func CheckAll(ctx context.Context, names []string, look Lookup, conc int) map[st
 		mu.Unlock()
 	})
 	return out
+}
+
+func absolute(name string) string {
+	if name == "" || name[len(name)-1] == '.' {
+		return name
+	}
+	return name + "."
 }

@@ -50,3 +50,18 @@ func TestCacheTTLAndEviction(t *testing.T) {
 		t.Error("k1 should have expired")
 	}
 }
+
+// Joining lists with "," made ["a.com,b.com"] and ["a.com","b.com"] the same
+// key, so one caller could be served another's results.
+func TestKeyDistinguishesListBoundaries(t *testing.T) {
+	a := Key("coffee", 20, false, false, nil, []string{"a.com,b.com"}, nil, nil)
+	b := Key("coffee", 20, false, false, nil, []string{"a.com", "b.com"}, nil, nil)
+	if a == b {
+		t.Error("different unavailable_domains lists produced the same cache key")
+	}
+	// Order inside a list still does not matter.
+	c := Key("coffee", 20, false, false, nil, []string{"b.com", "a.com"}, nil, nil)
+	if b != c {
+		t.Error("the same list in a different order should share a key")
+	}
+}

@@ -73,3 +73,11 @@ func TestOutcomeString(t *testing.T) {
 		}
 	}
 }
+
+func TestAbsoluteAddsTrailingDot(t *testing.T) {
+	for in, want := range map[string]string{"duskbrew.cafe": "duskbrew.cafe.", "a.com.": "a.com.", "": ""} {
+		if got := absolute(in); got != want {
+			t.Errorf("absolute(%q) = %q, want %q", in, got, want)
+		}
+	}
+}
