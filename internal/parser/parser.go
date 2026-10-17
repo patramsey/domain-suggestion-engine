@@ -167,35 +167,59 @@ func splitOnCase(s string) []string {
 	return parts
 }
 
-// greedySplit attempts a greedy longest-match dictionary split of s.
-func greedySplit(s string, dict map[string]struct{}) []string {
-	return greedySplitAt(s, dict)
-}
+// maxSplitLen caps how long a single word can be before the dictionary split
+// is skipped. Real compounds are far shorter; the cap bounds the work.
+const maxSplitLen = 40
 
-func greedySplitAt(s string, dict map[string]struct{}) []string {
-	if s == "" {
+// greedySplit attempts a greedy longest-match dictionary split of s: at each
+// position it takes the longest dictionary word that lets the rest split too,
+// allowing a skipped "s" junction ("patspizza" → "pat" + "pizza").
+//
+// Results are memoised by position. Without that, words that lose an "s" and
+// stay words (stop/top, spot/pot) made the search backtrack exponentially —
+// 39 seconds of CPU for a 116-byte input. The search order, and so the
+// result, is unchanged.
+func greedySplit(s string, dict map[string]struct{}) []string {
+	if len(s) > maxSplitLen {
 		return nil
 	}
-	// try lengths from longest to shortest
-	for end := len(s); end >= 2; end-- {
-		word := s[:end]
-		if _, ok := dict[word]; ok {
-			rest := s[end:]
-			// direct continuation
-			split := greedySplitAt(rest, dict)
-			if rest == "" || len(split) > 0 {
-				return append([]string{word}, split...)
+	memo := make(map[int][]string, len(s))
+	solved := make(map[int]bool, len(s))
+	var at func(i int) []string
+	at = func(i int) []string {
+		if i >= len(s) {
+			return nil
+		}
+		if solved[i] {
+			return memo[i]
+		}
+		var res []string
+		for end := len(s); end-i >= 2; end-- { // longest word first
+			word := s[i:end]
+			if _, ok := dict[word]; !ok {
+				continue
+			}
+			if end == len(s) {
+				res = []string{word}
+				break
+			}
+			if split := at(end); len(split) > 0 {
+				res = append([]string{word}, split...)
+				break
 			}
 			// 's' junction: "patspizza" → "pat" + skip 's' → "pizza"
-			if len(rest) > 1 && rest[0] == 's' {
-				split = greedySplitAt(rest[1:], dict)
-				if len(split) > 0 {
-					return append([]string{word}, split...)
+			if len(s)-end > 1 && s[end] == 's' {
+				if split := at(end + 1); len(split) > 0 {
+					res = append([]string{word}, split...)
+					break
 				}
 			}
 		}
+		solved[i] = true
+		memo[i] = res
+		return res
 	}
-	return nil
+	return at(0)
 }
 
 func keepAlpha(s string) string {

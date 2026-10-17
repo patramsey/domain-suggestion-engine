@@ -30,6 +30,9 @@ type Client struct {
 	model       string
 	httpClient  *http.Client
 	Temperature float64 // generation temperature; defaults to 0.9 if zero
+	// BaseURL overrides the Gemini endpoint prefix (default geminiBase). For
+	// tests: point it at an httptest server so nothing leaves the machine.
+	BaseURL string
 	// Shards splits each creative variant across this many parallel calls,
 	// each asking for proportionally fewer names (0 or 1 = no sharding).
 	Shards int
@@ -53,7 +56,11 @@ func NewClient(apiKey, model string) *Client {
 }
 
 func (c *Client) endpoint() string {
-	return geminiBase + c.model + ":generateContent"
+	base := geminiBase
+	if c.BaseURL != "" {
+		base = c.BaseURL
+	}
+	return base + c.model + ":generateContent"
 }
 
 func (c *Client) temperature() float64 {
@@ -205,6 +212,11 @@ func (c *Client) Generate(ctx context.Context, rawInput string, tokens []string,
 			wg.Add(1)
 			go func(slot int, v Variant) {
 				defer wg.Done()
+				defer func() {
+					if p := recover(); p != nil {
+						results[slot] = variantResult{err: fmt.Errorf("llm call panic: %v", p)}
+					}
+				}()
 				system, user := BuildRequest(rawInput, tokens, tlds, perCall, unavailable, inspireFrom)
 				user += variantInstruction(v)
 				r, err := c.callWithRetry(ctx, system, user)

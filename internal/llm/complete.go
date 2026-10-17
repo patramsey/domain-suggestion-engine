@@ -17,12 +17,14 @@ func (c *Client) postGemini(ctx context.Context, req geminiRequest) ([]byte, err
 	if err != nil {
 		return nil, fmt.Errorf("marshal request: %w", err)
 	}
-	httpReq, err := http.NewRequestWithContext(ctx, http.MethodPost,
-		c.endpoint()+"?key="+c.apiKey, bytes.NewReader(body))
+	// The key goes in a header, not the URL: transport errors (*url.Error)
+	// print the full URL, and those errors are logged.
+	httpReq, err := http.NewRequestWithContext(ctx, http.MethodPost, c.endpoint(), bytes.NewReader(body))
 	if err != nil {
 		return nil, fmt.Errorf("build request: %w", err)
 	}
 	httpReq.Header.Set("Content-Type", "application/json")
+	httpReq.Header.Set("x-goog-api-key", c.apiKey)
 
 	resp, err := c.httpClient.Do(httpReq)
 	if err != nil {

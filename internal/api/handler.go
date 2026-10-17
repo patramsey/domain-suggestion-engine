@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log/slog"
 	"math"
@@ -11,6 +12,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"unicode/utf8"
 
 	"github.com/patlivet/domain-suggestion-engine/internal/algorithmic"
 	"github.com/patlivet/domain-suggestion-engine/internal/cache"
@@ -165,9 +167,17 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) handleSuggest(w http.ResponseWriter, r *http.Request) {
 	start := time.Now()
 
-	// 1. Decode + validate
+	// 1. Decode + validate. The body is capped: every field ends up in all
+	// six LLM prompts, so an unbounded body is an unbounded bill.
+	r.Body = http.MaxBytesReader(w, r.Body, maxBodyBytes)
 	var req SuggestRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		var tooBig *http.MaxBytesError
+		if errors.As(err, &tooBig) {
+			WriteError(w, http.StatusRequestEntityTooLarge, CodeRequestTooLarge,
+				fmt.Sprintf("request body must be %d bytes or fewer", maxBodyBytes))
+			return
+		}
 		WriteError(w, http.StatusBadRequest, CodeMissingInput, "invalid request body")
 		return
 	}
@@ -175,7 +185,7 @@ func (h *Handler) handleSuggest(w http.ResponseWriter, r *http.Request) {
 		WriteError(w, http.StatusBadRequest, CodeMissingInput, "input is required")
 		return
 	}
-	if len(req.Input) > maxInputLen {
+	if utf8.RuneCountInString(req.Input) > maxInputLen {
 		WriteError(w, http.StatusUnprocessableEntity, CodeInputTooLong, "input must be 500 characters or fewer")
 		return
 	}
@@ -198,6 +208,13 @@ func (h *Handler) handleSuggest(w http.ResponseWriter, r *http.Request) {
 		WriteError(w, http.StatusUnprocessableEntity, CodeTooManyInspireFrom,
 			fmt.Sprintf("inspire_from must contain %d or fewer entries", maxInspireFrom))
 		return
+	}
+	for _, list := range [][]string{req.UnavailableDomains, req.InspireFrom} {
+		if bad := invalidDomains(list); len(bad) > 0 {
+			WriteError(w, http.StatusUnprocessableEntity, CodeInvalidDomain,
+				"unavailable_domains and inspire_from must contain domain names", bad...)
+			return
+		}
 	}
 	debug := r.URL.Query().Get("debug") == "true"
 
@@ -292,9 +309,18 @@ func (h *Handler) handleSuggest(w http.ResponseWriter, r *http.Request) {
 	algoCh := make(chan algoTierResult, 1)
 	llmCh := make(chan llmTierResult, 1)
 
+	// A panic in a spawned goroutine kills the whole process (unlike one in
+	// the handler, which net/http recovers), so each tier recovers its own and
+	// reports it as a failed tier.
 	if algoEnabled {
 		go func() {
 			t0 := time.Now()
+			defer func() {
+				if p := recover(); p != nil {
+					slog.Error("algorithmic tier panic", "panic", p)
+					algoCh <- algoTierResult{dur: time.Since(t0)}
+				}
+			}()
 			cands := h.engine.Run(tokens, resolvedTLDs)
 			algoCh <- algoTierResult{candidates: cands, dur: time.Since(t0)}
 		}()
@@ -304,6 +330,12 @@ func (h *Handler) handleSuggest(w http.ResponseWriter, r *http.Request) {
 
 	go func() {
 		t0 := time.Now()
+		defer func() {
+			if p := recover(); p != nil {
+				slog.Error("llm tier panic", "panic", p)
+				llmCh <- llmTierResult{dur: time.Since(t0), err: fmt.Errorf("llm tier panic: %v", p)}
+			}
+		}()
 		cands, usage, err := h.llm.Generate(ctx, req.Input, tokens, resolvedTLDs, tldSet, req.Count, unavailable, inspireFrom, activeVariants...)
 		llmCh <- llmTierResult{candidates: cands, usage: usage, dur: time.Since(t0), err: err}
 	}()
@@ -448,7 +480,13 @@ func (h *Handler) handleSuggest(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	encoded, _ := json.Marshal(resp)
-	h.cacheSet(cacheKey, encoded)
+	// Never cache a transient failure: an LLM error (timeout, 429, client gone)
+	// would otherwise serve algorithmic-only results to everyone asking the
+	// same thing for the cache's whole TTL. A partial result from all-stopword
+	// input is deterministic and still cached.
+	if llmResult.err == nil && r.Context().Err() == nil {
+		h.cacheSet(cacheKey, encoded)
+	}
 	w.Write(encoded)
 }
 
